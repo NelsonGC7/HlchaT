@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAABqUlEQVRIS+2W7U0CQRCG31lNENSoHWAH2gF0gB1AB1IBUAF2IB1IB9KB14FYgSQqhBh3nDkOsreckluP8EMuIYQbdp6dr3eXsKOHdsRFJvgNqB0AVwycF7Cx6BgY+n7WwDNj7pm5WQDQdTGqMNfdFynwDKgy0XPB0NgdMV+WgfHSdwocp5jocRvgL4n4FBjtwXEG9ql2miyyzK1P6coS0ARR37FNwNybA4NDmX1pzo7Yan6DhjTXZC6jcAFMls6mxvQFdruYE7qrWNte2l5FdEqLkUyJTwg4kuG/diP4ABpE9KDvRGxufGWaLkYyFXUIeC1iAXcFrClVcE/AXS/iJ/lddTcbAtb1I6lxW2uc1FGjXaVS638iNVblgzGdLMkNBf9ZzPbgf35IJMMvX8U/v57HipPh11FpFImWmR+UrW25PjPvXO+ix2JICQAZc7aSyR92pQBr7YtrlnvbWOZ/6EpurLR5IktptL/Q0+xNfnOB1VnWZTArlYWDkz5wD4FITq+6n8qtgJPujy+FIdDcNXajUPiRfNwr66YoN3Z1Hgeh/83dXKEgf903PeLkHzwGWCEAAAAASUVORK5CYII=">
+    <title>L/R</title>
+    <style>
+        *,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: Roboto, -apple-system, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+	background: #3b4465;
+}
+
+.forms-section {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.section-title {
+	font-size: 32px;
+	letter-spacing: 1px;
+	color: #fff;
+}
+
+.forms {
+	display: flex;
+	align-items: flex-start;
+	margin-top: 30px;
+}
+
+.form-wrapper {
+	animation: hideLayer .3s ease-out forwards;
+}
+
+.form-wrapper.is-active {
+	animation: showLayer .3s ease-in forwards;
+}
+
+@keyframes showLayer {
+	50% {
+		z-index: 1;
+	}
+	100% {
+		z-index: 1;
+	}
+}
+
+@keyframes hideLayer {
+	0% {
+		z-index: 1;
+	}
+	49.999% {
+		z-index: 1;
+	}
+}
+
+.switcher {
+	position: relative;
+	cursor: pointer;
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 0;
+	text-transform: uppercase;
+	font-family: inherit;
+	font-size: 16px;
+	letter-spacing: .5px;
+	color: #999;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	transform: translateX(0);
+	transition: all .3s ease-out;
+}
+
+.form-wrapper.is-active .switcher-login {
+	color: #fff;
+	transform: translateX(90px);
+}
+
+.form-wrapper.is-active .switcher-signup {
+	color: #fff;
+	transform: translateX(-90px);
+}
+
+.underline {
+	position: absolute;
+	bottom: -5px;
+	left: 0;
+	overflow: hidden;
+	pointer-events: none;
+	width: 100%;
+	height: 2px;
+}
+
+.underline::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: inherit;
+	display: block;
+	width: inherit;
+	height: inherit;
+	background-color: currentColor;
+	transition: transform .2s ease-out;
+}
+
+.switcher-login .underline::before {
+	transform: translateX(101%);
+}
+
+.switcher-signup .underline::before {
+	transform: translateX(-101%);
+}
+
+.form-wrapper.is-active .underline::before {
+	transform: translateX(0);
+}
+
+.form {
+	overflow: hidden;
+	min-width: 260px;
+	margin-top: 50px;
+	padding: 30px 25px;
+  border-radius: 5px;
+	transform-origin: top;
+}
+
+.form-login {
+	animation: hideLogin .3s ease-out forwards;
+}
+
+.form-wrapper.is-active .form-login {
+	animation: showLogin .3s ease-in forwards;
+}
+
+@keyframes showLogin {
+	0% {
+		background: #d7e7f1;
+		transform: translate(40%, 10px);
+	}
+	50% {
+		transform: translate(0, 0);
+	}
+	100% {
+		background-color: #fff;
+		transform: translate(35%, -20px);
+	}
+}
+
+@keyframes hideLogin {
+	0% {
+		background-color: #fff;
+		transform: translate(35%, -20px);
+	}
+	50% {
+		transform: translate(0, 0);
+	}
+	100% {
+		background: #d7e7f1;
+		transform: translate(40%, 10px);
+	}
+}
+
+.form-signup {
+	animation: hideSignup .3s ease-out forwards;
+}
+
+.form-wrapper.is-active .form-signup {
+	animation: showSignup .3s ease-in forwards;
+}
+
+@keyframes showSignup {
+	0% {
+		background: #d7e7f1;
+		transform: translate(-40%, 10px) scaleY(.8);
+	}
+	50% {
+		transform: translate(0, 0) scaleY(.8);
+	}
+	100% {
+		background-color: #fff;
+		transform: translate(-35%, -20px) scaleY(1);
+	}
+}
+
+@keyframes hideSignup {
+	0% {
+		background-color: #fff;
+		transform: translate(-35%, -20px) scaleY(1);
+	}
+	50% {
+		transform: translate(0, 0) scaleY(.8);
+	}
+	100% {
+		background: #d7e7f1;
+		transform: translate(-40%, 10px) scaleY(.8);
+	}
+}
+
+.form fieldset {
+	position: relative;
+	opacity: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	transition: all .3s ease-out;
+}
+
+.form-login fieldset {
+	transform: translateX(-50%);
+}
+
+.form-signup fieldset {
+	transform: translateX(50%);
+}
+
+.form-wrapper.is-active fieldset {
+	opacity: 1;
+	transform: translateX(0);
+	transition: opacity .4s ease-in, transform .35s ease-in;
+}
+
+.form legend {
+	position: absolute;
+	overflow: hidden;
+	width: 1px;
+	height: 1px;
+	clip: rect(0 0 0 0);
+}
+
+.input-block {
+	margin-bottom: 20px;
+}
+
+.input-block label {
+	font-size: 14px;
+  color: #a1b4b4;
+}
+
+.input-block input {
+	display: block;
+	width: 100%;
+	margin-top: 8px;
+	padding-right: 15px;
+	padding-left: 15px;
+	font-size: 16px;
+	line-height: 40px;
+	color: #3b4465;
+  background: #eef9fe;
+  border: 1px solid #cddbef;
+  border-radius: 2px;
+}
+
+.form [type='submit'] {
+	opacity: 0;
+	display: block;
+	min-width: 120px;
+	margin: 30px auto 10px;
+	font-size: 18px;
+	line-height: 40px;
+	border-radius: 25px;
+	border: none;
+	transition: all .3s ease-out;
+}
+
+.form-wrapper.is-active .form [type='submit'] {
+	opacity: 1;
+	transform: translateX(0);
+	transition: all .4s ease-in;
+}
+
+.btn-login {
+	color: #fbfdff;
+	background:#3b4465;
+	transform: translateX(-30%);
+    cursor: pointer;
+}
+
+.btn-signup {
+	color: #3b4465;
+	background: #fbfdff;
+	box-shadow: inset 0 0 0 2px #3b4465 ;
+	transform: translateX(30%);
+    cursor: pointer;
+}
+
+
+    </style>
+   
+</head>
+<body>
+    <section class="forms-section">
+  <h1 class="section-title">H!ChaT</h1>
+  <div class="forms">
+    <div class="form-wrapper is-active">
+      <button type="button" class="switcher switcher-login">
+        Login
+        <span class="underline"></span>
+      </button>
+
+      <form class="form form-login">
+        <fieldset>
+          <div class="input-block">
+            <label for="login-user">User</label>
+            <input id="login-user" required>
+          </div>
+          <div class="input-block">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" required>
+          </div>
+        </fieldset>
+        <button type="submit" class="btn-login" id="send">Login</button>
+      </form>
+    </div>
+
+
+    <div class="form-wrapper">
+      <button type="button" class="switcher switcher-signup">
+        Sign Up
+        <span class="underline"></span>
+      </button>
+      <form class="form form-signup">
+        <fieldset>
+          <div class="input-block">
+            <label  for="sigup-user">User</label>
+            <input id="sigup-user" required>
+          </div>
+          <div class="input-block">
+            <label for="signup-email">E-mail</label>
+            <input id="signup-email" type="email" required>
+          </div>
+          <div class="input-block">
+            <label for="signup-password">Password</label>
+            <input id="signup-password" type="password" required>
+          </div>
+          <div class="input-block">
+            <label for="signup-password-confirm">Confirm password</label>
+            <input id="signup-password-confirm" type="password" required>
+          </div>
+        </fieldset>
+        <button type="submit" class="btn-signup" id="btn-signup">Continue</button>
+      </form>
+
+    </div>
+  </div>
+</section>
+<script defer>
+    const switchers = [...document.querySelectorAll('.switcher')]
+    switchers.forEach(item => {
+        item.addEventListener('click', function() {
+            switchers.forEach(item => item.parentElement.classList.remove('is-active'))
+            this.parentElement.classList.add('is-active')
+        })
+    })
+
+
+// la parte de el login--------------------------->>--------------------
+
+const input = {
+    user: document.getElementById('login-user'),
+    password: document.getElementById('login-password')
+}
+function validarPass(pass) {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return passwordRegex.test(pass);
+}
+const send = document.getElementById('send');
+
+send.addEventListener('click',(e)=>{
+    e.preventDefault()
+    const newUsuario = {
+        userName: input.user.value,
+        password: input.password.value
+    }
+    if(validarPass(input.password.value) && input.user.value.length > 5){
+        fetch('http://localhost:5000/users',{
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify(newUsuario)
+        })
+        .then(res=>{
+            if(res.status === 203){
+                window.location.href = 'http://127.0.0.1:5500/public/index.html';
+            }
+        }).catch(err=>{
+            input.password.style.border= "1px red solid";
+                input.user.style.border= "1px red solid";
+                setTimeout(()=>{
+                    input.password.style.border= "none";
+                    input.user.style.border= "none" ;
+                },800)
+        })
+        
+    }else{
+        input.password.style.border= "1px red solid";
+        input.user.style.border= "1px red solid";
+                setTimeout(()=>{
+                    input.password.style.border= "none";
+                    input.user.style.border= "none" ;
+                },800)
+    }
+})
+
+// parte de el rejistro--------------------------->>-------------------->>--------
+const inputR = {
+    user: document.getElementById('sigup-user'),
+    correo: document.getElementById('signup-email'),
+    password: document.getElementById('signup-password'),
+    passwordConfirm: document.getElementById('signup-password-confirm')
+}
+const sendR  = document.getElementById('btn-signup');
+
+function validarEmail(email) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+}
+function validarPass(pass) {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return passwordRegex.test(pass);
+}
+
+function validarDobblePass(pass,pass2){
+    return pass === pass2;
+
+}
+sendR.addEventListener('click',(e)=>{
+    e.preventDefault()
+    const newU ={
+        userName: inputR.user.value,
+        email: inputR.correo.value,
+        password: inputR.password.value
+    }
+    if(validarEmail(inputR.correo.value) && validarPass(inputR.password.value) && validarDobblePass(inputR.password.value,inputR.passwordConfirm.value)){
+        fetch('http://localhost:5000/users/new',{
+            method: 'POST',
+            headers:{
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(newU)
+        }).then(res=> {
+            res.status === 201 ? 
+            window.location.href = 'http://127.0.0.1:5000/public/index.html' 
+            : 
+            console.log('error');
+            res.status === 409 ? console.log('User already exist') : console.log('error');
+            
+        })
+            .catch(err => console.log(err));
+    }else{
+        inputR.user.style.border= "1px red solid"
+        inputR.passwordConfirm.style.border= "1px red solid"
+        inputR.password.style.border= "1px red solid"
+        inputR.correo.style.border= "1px red solid"
+        setTimeout(()=>{
+            inputR.user.style.border= "none"
+            inputR.passwordConfirm.style.border= "none"
+            inputR.password.style.border= "none"
+            inputR.correo.style.border= "none" 
+
+        },800)
+    }
+})
+
+</script>
+</body>
+</html>
