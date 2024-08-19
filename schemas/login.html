@@ -444,7 +444,7 @@ sendR.addEventListener('click',(e)=>{
     }
 	console.log(newU)
     if(validarEmail(inputR.correo.value) && validarPass(inputR.password.value) && validarDobblePass(inputR.password.value,inputR.passwordConfirm.value)){
-        fetch('http://localhost:42066/users',{
+        fetch('https://h-chat.onrender.com/users',{
             method: 'POST',
             headers:{
                 'content-type': 'application/json'

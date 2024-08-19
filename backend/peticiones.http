@@ -26,7 +26,18 @@ POST http://localhost:42066/users
 Content-Type: application/json
 
 {
-    "user": "juan25",
-    "correo":"pepte25@hotmail.com",
+    "user": "juan5",
+    "correo":"pepte@hotmail.com",
     "password":"12345hahah"
+}
+
+### creando user en bd desde el servidor
+POST https://h-chat.onrender.com/users
+
+Content-Type: application/json
+
+{
+    "user": "juana6",
+    "correo":"jyana6@hotmail.com",
+    "password":"12345asdfa"
 }
