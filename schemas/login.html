@@ -438,12 +438,13 @@ function validarDobblePass(pass,pass2){
 sendR.addEventListener('click',(e)=>{
     e.preventDefault()
     const newU ={
-        userName: inputR.user.value,
-        email: inputR.correo.value,
+        user: inputR.user.value,
+        correo: inputR.correo.value,
         password: inputR.password.value
     }
+	console.log(newU)
     if(validarEmail(inputR.correo.value) && validarPass(inputR.password.value) && validarDobblePass(inputR.password.value,inputR.passwordConfirm.value)){
-        fetch('http://localhost:5000/users/new',{
+        fetch('http://localhost:42066/users',{
             method: 'POST',
             headers:{
                 'content-type': 'application/json'
@@ -451,11 +452,9 @@ sendR.addEventListener('click',(e)=>{
             body: JSON.stringify(newU)
         }).then(res=> {
             res.status === 201 ? 
-            window.location.href = 'http://127.0.0.1:5000/public/index.html' 
+            console.log('User created')  
             : 
-            console.log('error');
-            res.status === 409 ? console.log('User already exist') : console.log('error');
-            
+            console.log('User not created')
         })
             .catch(err => console.log(err));
     }else{
