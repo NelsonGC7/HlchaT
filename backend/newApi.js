@@ -109,7 +109,9 @@ app.post('/login', async(req,res)=>{
            return res.status(404).json({msg:"user not found"})
         }
         const pass = rows[0].user_pass;
-        let valid = bcrypt.compare(password,pass);
+
+        let valid = await bcrypt.compare(password,pass);
+        
         console.log(valid)
 
         if(valid){
