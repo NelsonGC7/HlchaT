@@ -382,6 +382,7 @@ send.addEventListener('click',(e)=>{
         user: input.user.value,
         password: input.password.value
     }
+	console.log(newUsuario)
     if(validarPass(input.password.value) && input.user.value.length > 5){
         fetch('https://h-chat.onrender.com/login',{
             method: 'POST',
@@ -391,13 +392,11 @@ send.addEventListener('click',(e)=>{
             body:JSON.stringify(newUsuario)
         })
         .then(res=>{
-			console.log("consulta exitosa")
-            setTimeout(()=>{
 				if(res.status === 203){
                 window.location.href = 'https://h-chat.onrender.com/public/index.html';
+				console.log("consulta exitosa")
             }
 
-			},800)
         }).catch(err=>{
             input.password.style.border= "1px red solid";
                 input.user.style.border= "1px red solid";
@@ -455,7 +454,7 @@ sendR.addEventListener('click',(e)=>{
             },
             body: JSON.stringify(newU)
         }).then(res=> {
-            res.status === 201 ? 
+            res.status === 203 ? 
             console.log('User created')  
             : 
             console.log('User not created')
