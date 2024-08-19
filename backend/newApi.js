@@ -78,9 +78,15 @@ const PORT = process.env.PORT || 42066;
 app.use(cors());
 app.use(express.json());
 
+app.get('/Login_rejisteR',(req,res)=>{
+    res.sendFile(process.cwd()+ '/schemas/login.html')
+})
+
 app.post('/users', async(req,res)=>{
-    try{
     const {user,correo,password} = req.body;
+    console.log(user,correo,password)
+    try{
+  
     console.log(user,correo,password)
         const result = await db.execute(
                 {
@@ -93,10 +99,11 @@ app.post('/users', async(req,res)=>{
                 },
         );
         console.log(result)
+        console.log("user")
         res.status(201).json({msg:"user created"});   
     }
     catch(err){
-        console.log("error al tratar de crear usuario")
+        res.status(409).json({msg:"user not created"})
     }
 })
 
