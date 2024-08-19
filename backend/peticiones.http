@@ -22,12 +22,12 @@ Content-Type: application/json
 
 ### teste creando user en db
 
-POST http://localhost:42066/login
+POST https://h-chat.onrender.com/login
 Content-Type: application/json
 
 {
-    "user": "juana66",
-   "password":"12345asdfa"
+    "user": "penanieto26",
+   "password":"Pene123456"
 }
 
 ### creando user en bd desde el local
