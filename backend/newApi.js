@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import bycrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { createClient } from '@libsql/client';
 
 dotenv.config();
@@ -68,11 +68,6 @@ async function createTable(){
 
 }
 
-const userSchema = {
-    user:String,
-    email:String,
-    pass:String,
-}
 const app = express();
 const PORT = process.env.PORT || 42066;
 app.use(cors());
@@ -84,6 +79,7 @@ app.get('/Login_rejisteR',(req,res)=>{
 
 app.post('/users', async(req,res)=>{
     const {user,correo,password} = req.body;
+    const hashedPassword = await bcrypt.hash(password,10);
     console.log(user,correo,password)
     try{
   
@@ -94,16 +90,40 @@ app.post('/users', async(req,res)=>{
                     args:{
                         user:user,
                         correo:correo,
-                        password:password,
+                        password:hashedPassword,
                     },
                 },
         );
-        console.log(result)
-        console.log("user")
         res.status(201).json({msg:"user created"});   
     }
     catch(err){
         res.status(409).json({msg:"user not created"})
+    }
+})
+app.post('/login', async(req,res)=>{
+    const {user,password} = req.body;
+    try{
+        const result = await db.execute(
+            {
+                sql:"SELECT user_pass FROM users WHERE user_name = :user",
+                args:{
+                    user:user,
+                }
+            }
+        )
+        const {rows} = result;
+        const pass = rows[0].user_pass;
+        const valid =  bcrypt.compare(password,pass);
+        if(valid){
+            res.status(200).json({msg:"login success"})
+        }
+        else{
+            res.status(401).json({msg:"login failed"})
+        }
+
+    }
+    catch(err){
+        console.log(err)
     }
 })
 
