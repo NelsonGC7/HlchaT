@@ -26,7 +26,7 @@ POST http://localhost:42066/login
 Content-Type: application/json
 
 {
-    "user": "juana666",
+    "user": "juana66",
    "password":"12345asdfa"
 }
 
@@ -48,4 +48,18 @@ Content-Type: application/json
     "user": "juana6",
     "correo":"jyana6@hotmail.com",
     "password":"12345asdfa"
+}
+
+
+
+###xe
+POST  https://msgchatenshi-default-rtdb.firebaseio.com/mschat.json
+Content-Type: application/json
+
+{
+    "city": "Tampa",
+    "country": "FLORIDA",
+    "msg": "nub",
+    "region": "NY",
+    "user": "[-----]"
 }

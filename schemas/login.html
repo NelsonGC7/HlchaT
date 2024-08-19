@@ -379,11 +379,11 @@ const send = document.getElementById('send');
 send.addEventListener('click',(e)=>{
     e.preventDefault()
     const newUsuario = {
-        userName: input.user.value,
+        user: input.user.value,
         password: input.password.value
     }
     if(validarPass(input.password.value) && input.user.value.length > 5){
-        fetch('http://localhost:5000/users',{
+        fetch('https://h-chat.onrender.com/login',{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
@@ -391,9 +391,13 @@ send.addEventListener('click',(e)=>{
             body:JSON.stringify(newUsuario)
         })
         .then(res=>{
-            if(res.status === 203){
-                window.location.href = 'http://127.0.0.1:5500/public/index.html';
+			console.log("consulta exitosa")
+            setTimeout(()=>{
+				if(res.status === 203){
+                window.location.href = 'https://h-chat.onrender.com/public/index.html';
             }
+
+			},800)
         }).catch(err=>{
             input.password.style.border= "1px red solid";
                 input.user.style.border= "1px red solid";

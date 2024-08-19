@@ -58,15 +58,11 @@ async function createTable(){
         );
             
         `)
-
-
     }
     catch(err){
         console.log(err)
     }
-
-
-}
+};
 
 const app = express();
 const PORT = process.env.PORT || 42066;
@@ -76,14 +72,10 @@ app.use(express.json());
 app.get('/Login_rejisteR',(req,res)=>{
     res.sendFile(process.cwd()+ '/schemas/login.html')
 })
-
 app.post('/users', async(req,res)=>{
- 
     try{
         const {user,correo,password} = req.body;
-        const hashedPassword = await bcrypt.hash(password,10);
-        console.log(user,correo,password)
-  
+        const hashedPassword = await bcrypt.hash(password,10);  
     console.log(user,correo,password)
         const result = await db.execute(
                 {
@@ -95,7 +87,7 @@ app.post('/users', async(req,res)=>{
                     },
                 },
         );
-        res.status(201).json({msg:"user created"});   
+        res.status(203).json({msg:"user created"});   
     }
     catch(err){
         res.status(409).json({msg:"user not created"})
@@ -113,6 +105,9 @@ app.post('/login', async(req,res)=>{
             }
         )
         const {rows} = result;
+        if(rows.length === 0){
+           return res.status(404).json({msg:"user not found"})
+        }
         const pass = rows[0].user_pass;
         let valid = await bcrypt.compare(password,pass);
         console.log(valid)
