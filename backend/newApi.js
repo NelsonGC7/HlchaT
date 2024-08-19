@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import bycrypt from 'bcrypt';
 import { createClient } from '@libsql/client';
 
@@ -74,25 +75,24 @@ const userSchema = {
 }
 const app = express();
 const PORT = process.env.PORT || 42066;
+app.use(cors());
 app.use(express.json());
 
 app.post('/users', async(req,res)=>{
     try{
     const {user,correo,password} = req.body;
+    console.log(user,correo,password)
         const result = await db.execute(
-            [
-            {
-                sql:"INSERT INTO users (user_name,user_email,user_pass) VALUES (:user,:correo,:password)",
-                args:{
-                    user,
-                    correo,
-                    password
+                {
+                    sql:"INSERT INTO users (user_name,user_email,user_pass) VALUES (:user,:correo,:password)",
+                    args:{
+                        user:user,
+                        correo:correo,
+                        password:password,
+                    },
                 },
-            }
-            ],
-            "write"
-
         );
+        console.log(result)
         res.status(201).json({msg:"user created"});   
     }
     catch(err){

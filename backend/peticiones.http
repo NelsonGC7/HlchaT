@@ -2,7 +2,6 @@
 GET http://localhost:3001/users
 
 ### crear un usuario
-
 POST http://localhost:3001/users
 Content-Type: application/json
 
@@ -19,4 +18,15 @@ Content-Type: application/json
 {
     "userName": "pepe24",
     "password":"12345678"
+}
+
+### teste creando user en db
+
+POST http://localhost:42066/users
+Content-Type: application/json
+
+{
+    "user": "juan5",
+    "correo":"pepte@hotmail.com",
+    "password":"12345hahah"
 }
