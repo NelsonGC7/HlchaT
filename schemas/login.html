@@ -392,10 +392,17 @@ send.addEventListener('click',(e)=>{
             body:JSON.stringify(newUsuario)
         })
         .then(res=>{
-				if(res.status === 203){
+				if(res.status === 200){
                 window.location.href = 'https://h-chat.onrender.com/public/index.html';
 				console.log("consulta exitosa")
-            }
+            }else if (res.status === 401){
+				input.password.style.border= "1px red solid";
+				input.user.style.border= "1px red solid";
+				setTimeout(()=>{
+				input.password.style.border= "none";
+				input.user.style.border= "none" 
+			},800)
+			}
 
         }).catch(err=>{
             input.password.style.border= "1px red solid";
