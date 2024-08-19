@@ -78,10 +78,11 @@ app.get('/Login_rejisteR',(req,res)=>{
 })
 
 app.post('/users', async(req,res)=>{
-    const {user,correo,password} = req.body;
-    const hashedPassword = await bcrypt.hash(password,10);
-    console.log(user,correo,password)
+ 
     try{
+        const {user,correo,password} = req.body;
+        const hashedPassword = await bcrypt.hash(password,10);
+        console.log(user,correo,password)
   
     console.log(user,correo,password)
         const result = await db.execute(
@@ -113,7 +114,9 @@ app.post('/login', async(req,res)=>{
         )
         const {rows} = result;
         const pass = rows[0].user_pass;
-        const valid =  bcrypt.compare(password,pass);
+        let valid = await bcrypt.compare(password,pass);
+        console.log(valid)
+
         if(valid){
             res.status(200).json({msg:"login success"})
         }
