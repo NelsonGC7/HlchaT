@@ -6,11 +6,11 @@ import { createClient } from '@libsql/client';
 import  jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import { randomUUID } from 'node:crypto';
-
+dotenv.config();
 
 
 const tknJsn = process.env.JSNTKN;
-dotenv.config();
+
 const db = createClient({
     url:process.env.DBHOST,
     authToken:process.env.DBTOKEN
@@ -113,13 +113,14 @@ app.post('/users', async(req,res)=>{
 async function midelToken(req,res,next){
     const token = req.cookies.access_token;
     const user = req.params.user;
+    if(!token){
+        return res.status(401).send("Access Denied")
+    }
     //console.log("este es token de: "+ user ,token);
     try{
-        if(!token){
-            return res.status(401).send("Access Denied")
-        }
         const data = jwt.verify(token,tknJsn);
-
+        if(!data) return res.status(401).send("Access Denied");
+        req.user = data;
         next();
     }
     catch(err){
@@ -133,7 +134,7 @@ app.post('/login', async(req,res)=>{
     try{
         const result = await db.execute(
             {
-                sql:"SELECT user_pass,user_id FROM users WHERE user_name = :user",
+                sql:"SELECT user_pass,user_id,user_name FROM users WHERE user_name = :user",
                 args:{
                     user:user,
                 }
@@ -144,11 +145,10 @@ app.post('/login', async(req,res)=>{
         if(rows.length > 0){
             const pass = rows[0].user_pass;
             const userId = rows[0].user_id;
-            console.log(userId)
             let valid = bcrypt.compareSync(password,pass);
             if(valid){
                 const tkn = jwt.sign(
-                    {usId:userId,password:password},
+                    {usId:userId,password:pass},
                     tknJsn,
                     {expiresIn:"1h"}
                 );
@@ -156,7 +156,7 @@ app.post('/login', async(req,res)=>{
                 .status(200)
                 .cookie('access_token',tkn,{
                     httpOnly:true,
-                    secure:process.env.NODE_ENV === 'production',
+                    secure:true,
                     sameSite:'strict',
                     maxAge: 60 * 60 * 1000, // 1 hour
                 }).send({msg:"login success"})
@@ -195,10 +195,15 @@ app.use('/h!chat/char',(req,res,next)=>{
     */
 
 app.get('/:user/chat', midelToken, async (req,res)=>{
+    const userValid = req.user
     const user = req.params.user;
     const token = req.cookies.access_token;
-    const userid = Number(req.cookies.user_id);
-    const result = await db.execute(
+
+    const userid = req.cookies.user_id;
+    const data = jwt.verify(token,tknJsn);
+    if(!data) return res.status(401).send("Access denied no token ");
+    if(!userValid) return res.status(403).send("token no coincide con el usuario");
+     const result = await db.execute(
         {
             sql:"SELECT user_name,user_id FROM users WHERE user_name = :user",
             args:{
@@ -207,17 +212,20 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
         }
     )
     const {rows} = result;
-    if(result.rows.length === 0) return res.status(404).json({msg:"user not found in db"});
+
+    if(result.rows.length === 0 ) return res.status(404).send("el usuario no existe");
     const user_id = rows[0].user_id;
     const user_name = rows[0].user_name;
+
     if(!user_id || !user_name) return res.status(404).json({msg:"user not found dbX2 "});
-    if(user_id === userid && user_name === user && token){
+
+    if(data.usId === user_id && data.password === userValid.password && user_id === userValid.usId){
         res.status(200)
         res.sendFile(process.cwd() + '/public/index.html')
        
     }else{
-        console.log("no token")
-        return res.status(401).json({msg:"Access Denied noo token"}) 
+        if(user_id !== data.usId) return res.status(403).send("user no coincide con el token");
+        return res.status(401).json({msg:"Access Denied noo token !!"}) 
     }
 });
 
