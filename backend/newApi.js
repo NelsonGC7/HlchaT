@@ -5,14 +5,16 @@ import bcrypt from 'bcrypt';
 import { createClient } from '@libsql/client';
 import  jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
-dotenv.config();
-const tknJsn = process.env.JSNTKN;
 
+
+
+const tknJsn = process.env.JSNTKN;
+dotenv.config();
 const db = createClient({
     url:process.env.DBHOST,
     authToken:process.env.DBTOKEN
 });
-
+/* creacion de trablas para los usuarios y los mensajes en la base de datos
 async function createTable(){
     try{
         await db.execute(`
@@ -65,10 +67,9 @@ async function createTable(){
         console.log(err)
     }
 };
-
+*/
 const app = express();
 const PORT = process.env.PORT || 42066;
-;
 
 
 app.use(express.json())
@@ -79,13 +80,13 @@ app.use(cors());
 app.get('/',(req,res)=>{
     res.send("started page")
 })
-app.get('/Login_rejisteR',(req,res)=>{
+app.get('/loginre_jister',(req,res)=>{
     res.sendFile(process.cwd()+ '/schemas/login.html')
 })
 app.post('/users', async(req,res)=>{
     try{
         const {user,correo,password} = req.body;
-        const hashedPassword = await bcrypt.hash(password,10);  
+        const hashedPassword = await bcrypt.hash(password,8);  
     console.log(user,correo,password)
         await db.execute(
                 {
@@ -153,7 +154,7 @@ app.post('/login', async(req,res)=>{
                     httpOnly:true,
                     secure:process.env.NODE_ENV === 'production',
                     sameSite:'strict',
-                    maxAge: 1000, // 
+                    maxAge: 60 * 60 *1000 // 
                 })
                 .cookie('access_token',tkn,{
                     httpOnly:true,
@@ -195,7 +196,7 @@ app.use('/h!chat/char',(req,res,next)=>{
 })
     */
 
-app.get('/h!chat/chat/:user', midelToken, async (req,res)=>{
+app.get('/chat/:user', midelToken, async (req,res)=>{
     const user = req.params.user;
     const token = req.cookies.access_token;
     const userid = Number(req.cookies.user_id);
@@ -209,7 +210,6 @@ app.get('/h!chat/chat/:user', midelToken, async (req,res)=>{
     )
     const {rows} = result;
     if(result.rows.length === 0) return res.status(404).json({msg:"user not found in db"});
-
     const user_id = rows[0].user_id;
     const user_name = rows[0].user_name;
     if(!user_id || !user_name) return res.status(404).json({msg:"user not found dbX2 "});
@@ -221,9 +221,8 @@ app.get('/h!chat/chat/:user', midelToken, async (req,res)=>{
         console.log("no token")
         return res.status(401).json({msg:"Access Denied noo token"}) 
     }
-})
-
+});
 
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`)
-})
+});
