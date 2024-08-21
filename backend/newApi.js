@@ -68,8 +68,7 @@ async function createTable(){
 
 const app = express();
 const PORT = process.env.PORT || 42066;
-app.use(cors());
-app.use(express.json());
+;
 const validarTkn = (req,res,next)=>{
 
     const tokken = req.header('Authorization')?.split(' ')[1];
@@ -87,7 +86,8 @@ const validarTkn = (req,res,next)=>{
     }
     next();
 }
-
+app.use(express.json())
+app.use(cors());
 app.get('/',(req,res)=>{
     res.send("started page")
 })
@@ -141,8 +141,7 @@ app.post('/login', async(req,res)=>{
                 tknJsn,
                 {expiresIn:"1h"}
             );
-            
-            window.location.href ='/h!chat/'+user; 
+            console.log(tkn)
             res.status(200).header('Authorization', `Bearer ${tkn}`).send({aut:true,tkn});
             return console.log(rows)
         }
@@ -154,7 +153,6 @@ app.post('/login', async(req,res)=>{
         console.log(err)
     }
 })
-app.get('')
 
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`)
