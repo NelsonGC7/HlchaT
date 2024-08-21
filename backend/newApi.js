@@ -103,16 +103,15 @@ app.post('/users', async(req,res)=>{
         res.status(409).json({msg:"user not created"})
     }
 })
-const midelToken = (req,res,next)=>{
+async function midelToken(req,res,next){
     const token = req.cookies.access_token;
     const user = req.params.user;
     console.log("este es token de: "+ user ,token);
-    if(!token){
-        return res.status(401).send("Access Denied")
-    }
     try{
-        const data = jwt.verify(token,tknJsn);
-        console.log(data)
+        if(!token){
+            return res.status(401).send("Access Denied")
+        }
+            const data = jwt.verify(token,tknJsn);
         next();
     }
     catch(err){
@@ -134,40 +133,46 @@ app.post('/login', async(req,res)=>{
         )
         const {rows} = result;
         
-        if(rows.length === 0)res.status(404).json({msg:"user not found"});
-        const pass = rows[0].user_pass;
-        const userId = rows[0].user_id;
-        let valid = bcrypt.compareSync(password,pass);
-        if(valid){
-            const tkn = jwt.sign(
-                {usId:userId,password:password},
-                tknJsn,
-                {expiresIn:"1h"}
-            );
-            res
-            .status(200)
-            .cookie('user_id',userId,{
-                httpOnly:true,
-                secure:process.env.NODE_ENV === 'production',
-                sameSite:'strict',
-                maxAge: 60, // 1 minute
-            })
-            .cookie('access_token',tkn,{
-                httpOnly:true,
-                secure:process.env.NODE_ENV === 'production',
-                sameSite:'strict',
-                maxAge: 60 * 60 * 1000, // 1 hour
-            }).send({msg:"login success"})
-        }
-        else{
-            res.status(401).json({msg:"password incorrect"});
-        }
+        if(rows.length > 0){
+            const pass = rows[0].user_pass;
+            const userId = rows[0].user_id;
+            console.log(userId)
+            let valid = bcrypt.compareSync(password,pass);
+            if(valid){
+                const tkn = jwt.sign(
+                    {usId:userId,password:password},
+                    tknJsn,
+                    {expiresIn:"1h"}
+                );
+                res
+                .status(200)
+                .cookie('user_id',userId,{
+                    httpOnly:true,
+                    secure:process.env.NODE_ENV === 'production',
+                    sameSite:'strict',
+                    maxAge: 1000, // 
+                })
+                .cookie('access_token',tkn,{
+                    httpOnly:true,
+                    secure:process.env.NODE_ENV === 'production',
+                    sameSite:'strict',
+                    maxAge: 60 * 60 * 1000, // 1 hour
+                }).send({msg:"login success"})
+            }
+            else{
+                res.status(401).json({msg:"password incorrect"});
+            }
+            
+            
+        }else{res.status(404).json({msg:"user not found"})};
+        
+        
     }
     catch(err){
         console.log(err)
     }
 })
-/*
+/* //cree mi propoio middleware para verificar el token el ruta deseada
 app.use('/h!chat/char',(req,res,next)=>{
     const tokken = req.headers.Autorization;
     console.log("este es token ",tokken);
@@ -189,20 +194,30 @@ app.use('/h!chat/char',(req,res,next)=>{
 
 app.get('/h!chat/chat/:user', midelToken, async (req,res)=>{
     const user = req.params.user;
-    const userid = req.cookies.user_id;
-
-  
-    console.log(user)
     const token = req.cookies.access_token;
+    const userid = Number(req.cookies.user_id);
+    const result = await db.execute(
+        {
+            sql:"SELECT user_name,user_id FROM users WHERE user_name = :user",
+            args:{
+                user:user,
+            }
+        }
+    )
+    const {rows} = result;
+    if(result.rows.length === 0) return res.status(404).json({msg:"user not found in db"});
+
+    const user_id = rows[0].user_id;
+    const user_name = rows[0].user_name;
+    if(!user_id || !user_name) return res.status(404).json({msg:"user not found dbX2 "});
+    if(user_id === userid && user_name === user && token){
+        res.status(200)
+        res.sendFile(process.cwd() + '/public/index.html')
        
-    console.log("este es token madre",token);
-    if(!token) {
+    }else{
         console.log("no token")
         return res.status(401).json({msg:"Access Denied noo token"}) 
     }
-    
-    res.sendFile(process.cwd() + '/public/index.html')
-
 })
 
 
