@@ -393,7 +393,7 @@ send.addEventListener('click',(e)=>{
         })
         .then(res=>{
 				if(res.status === 200){
-				window.location.href = `https://h-chat.onrender.com/chat/${newUsuario.user}`;
+				window.location.href = `/${newUsuario.user}/chat`;
             }else if (res.status === 401){
 				input.password.style.border= "1px red solid";
 				input.user.style.border= "1px red solid";

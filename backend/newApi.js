@@ -80,7 +80,7 @@ app.use(cors());
 app.get('/',(req,res)=>{
     res.send("started page")
 })
-app.get('/loginre_jister',(req,res)=>{
+app.get('/loginre',(req,res)=>{
     res.sendFile(process.cwd()+ '/schemas/login.html')
 })
 app.post('/users', async(req,res)=>{
@@ -124,6 +124,7 @@ async function midelToken(req,res,next){
 
 
 } 
+
 app.post('/login', async(req,res)=>{
     const {user,password} = req.body;
     try{
@@ -196,7 +197,7 @@ app.use('/h!chat/char',(req,res,next)=>{
 })
     */
 
-app.get('/chat/:user', midelToken, async (req,res)=>{
+app.get('/:user/chat', midelToken, async (req,res)=>{
     const user = req.params.user;
     const token = req.cookies.access_token;
     const userid = Number(req.cookies.user_id);
