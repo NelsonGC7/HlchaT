@@ -4,7 +4,7 @@ import cors from 'cors';
 import bcrypt from 'bcrypt';
 import { createClient } from '@libsql/client';
 import  jwt from 'jsonwebtoken';
-
+import cookieParser from 'cookie-parser';
 dotenv.config();
 const tknJsn = process.env.JSNTKN;
 
@@ -69,40 +69,25 @@ async function createTable(){
 const app = express();
 const PORT = process.env.PORT || 42066;
 ;
-const validarTkn = (req,res,next)=>{
 
-    const tokken = req.header('Authorization')?.split(' ')[1];
-    console.log(tokken)
-    if(!tokken) return res.status(401).json({msg:"Access Denied"});
-    try{
-        const verified = jwt.verify(tokken,tknJsn);
-        req.user = verified;
-        next();
-    }
 
-    catch(err){
-        console.log(tokken)
-        res.status(400).json({msg:"Invalid token"})
-    }
-    next();
-}
 app.use(express.json())
+app.use(cookieParser())
 app.use(cors());
+
+
 app.get('/',(req,res)=>{
     res.send("started page")
 })
 app.get('/Login_rejisteR',(req,res)=>{
     res.sendFile(process.cwd()+ '/schemas/login.html')
 })
-app.get('/h!chat/:user',validarTkn,(req,res)=>{
-    res.sendFile(process.cwd() + '/public/index.html')
-})
 app.post('/users', async(req,res)=>{
     try{
         const {user,correo,password} = req.body;
         const hashedPassword = await bcrypt.hash(password,10);  
     console.log(user,correo,password)
-        const result = await db.execute(
+        await db.execute(
                 {
                     sql:"INSERT INTO users (user_name,user_email,user_pass) VALUES (:user,:correo,:password)",
                     args:{
@@ -118,12 +103,30 @@ app.post('/users', async(req,res)=>{
         res.status(409).json({msg:"user not created"})
     }
 })
+const midelToken = (req,res,next)=>{
+    const token = req.cookies.access_token;
+    const user = req.params.user;
+    console.log("este es token de: "+ user ,token);
+    if(!token){
+        return res.status(401).send("Access Denied")
+    }
+    try{
+        const data = jwt.verify(token,tknJsn);
+        console.log(data)
+        next();
+    }
+    catch(err){
+        res.status(401).send("Access Denied")
+    }
+
+
+} 
 app.post('/login', async(req,res)=>{
     const {user,password} = req.body;
     try{
         const result = await db.execute(
             {
-                sql:"SELECT user_pass FROM users WHERE user_name = :user",
+                sql:"SELECT user_pass,user_id FROM users WHERE user_name = :user",
                 args:{
                     user:user,
                 }
@@ -133,17 +136,28 @@ app.post('/login', async(req,res)=>{
         
         if(rows.length === 0)res.status(404).json({msg:"user not found"});
         const pass = rows[0].user_pass;
+        const userId = rows[0].user_id;
         let valid = bcrypt.compareSync(password,pass);
         if(valid){
-
             const tkn = jwt.sign(
-                {user:user,password:password},
+                {usId:userId,password:password},
                 tknJsn,
                 {expiresIn:"1h"}
             );
-            console.log(tkn)
-            res.status(200).header('Authorization', `Bearer ${tkn}`).send({aut:true,tkn});
-            return console.log(rows)
+            res
+            .status(200)
+            .cookie('user_id',userId,{
+                httpOnly:true,
+                secure:process.env.NODE_ENV === 'production',
+                sameSite:'strict',
+                maxAge: 60, // 1 minute
+            })
+            .cookie('access_token',tkn,{
+                httpOnly:true,
+                secure:process.env.NODE_ENV === 'production',
+                sameSite:'strict',
+                maxAge: 60 * 60 * 1000, // 1 hour
+            }).send({msg:"login success"})
         }
         else{
             res.status(401).json({msg:"password incorrect"});
@@ -153,6 +167,44 @@ app.post('/login', async(req,res)=>{
         console.log(err)
     }
 })
+/*
+app.use('/h!chat/char',(req,res,next)=>{
+    const tokken = req.headers.Autorization;
+    console.log("este es token ",tokken);
+   
+    console.log(tokken)
+    if(!tokken) return res.status(401).json({msg:"Access Denied"});
+    try{
+        const data = jwt.verify(tokken,tknJsn);
+        res.status(200).json({msg:"valid token"});
+        next();
+    }
+    catch(err){
+        console.log(tokken)
+        res.status(401).send('access no autorized')
+    }
+
+})
+    */
+
+app.get('/h!chat/chat/:user', midelToken, async (req,res)=>{
+    const user = req.params.user;
+    const userid = req.cookies.user_id;
+
+  
+    console.log(user)
+    const token = req.cookies.access_token;
+       
+    console.log("este es token madre",token);
+    if(!token) {
+        console.log("no token")
+        return res.status(401).json({msg:"Access Denied noo token"}) 
+    }
+    
+    res.sendFile(process.cwd() + '/public/index.html')
+
+})
+
 
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`)

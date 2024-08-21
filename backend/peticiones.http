@@ -41,7 +41,7 @@ Content-Type: application/json
 }
 
 ### creando user en bd desde el servidor
-POST https://localhost:42066/login
+POST http://127.0.0.1:42066/login
 Content-Type: application/json
 
 {
@@ -59,6 +59,6 @@ Content-Type: application/json
     "city": "Tampa",
     "country": "FLORIDA",
     "msg": "nub",
-    "region": "NY",
+    "region": "GT",
     "user": "[-----]"
 }
