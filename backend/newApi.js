@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import { createClient } from '@libsql/client';
 import  jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
+import { randomUUID } from 'node:crypto';
 
 
 
@@ -14,7 +15,7 @@ const db = createClient({
     url:process.env.DBHOST,
     authToken:process.env.DBTOKEN
 });
-/* creacion de trablas para los usuarios y los mensajes en la base de datos
+/* creacion de trablas para los usuarios y los mensajes en la base de datos*/
 async function createTable(){
     try{
         await db.execute(`
@@ -24,7 +25,7 @@ async function createTable(){
           // Luego, crear la tabla
           await db.execute(`
             CREATE TABLE users (
-              user_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+              user_id TEXT NOT NULL UNIQUE,
               user_name VARCHAR(25) UNIQUE,
               user_email VARCHAR(100) UNIQUE,
               user_pass VARCHAR(50) NOT NULL,
@@ -67,7 +68,8 @@ async function createTable(){
         console.log(err)
     }
 };
-*/
+
+
 const app = express();
 const PORT = process.env.PORT || 42066;
 
@@ -83,15 +85,16 @@ app.get('/',(req,res)=>{
 app.get('/loginre',(req,res)=>{
     res.sendFile(process.cwd()+ '/schemas/login.html')
 })
+
 app.post('/users', async(req,res)=>{
     try{
         const {user,correo,password} = req.body;
         const hashedPassword = await bcrypt.hash(password,8);  
-    console.log(user,correo,password)
         await db.execute(
                 {
-                    sql:"INSERT INTO users (user_name,user_email,user_pass) VALUES (:user,:correo,:password)",
+                    sql:"INSERT INTO users (user_id,user_name,user_email,user_pass) VALUES (:id,:user,:correo,:password)",
                     args:{
+                        id:randomUUID(),
                         user:user,
                         correo:correo,
                         password:hashedPassword,
@@ -115,7 +118,8 @@ async function midelToken(req,res,next){
         if(!token){
             return res.status(401).send("Access Denied")
         }
-            const data = jwt.verify(token,tknJsn);
+        const data = jwt.verify(token,tknJsn);
+
         next();
     }
     catch(err){
@@ -124,7 +128,6 @@ async function midelToken(req,res,next){
 
 
 } 
-
 app.post('/login', async(req,res)=>{
     const {user,password} = req.body;
     try{
@@ -151,12 +154,6 @@ app.post('/login', async(req,res)=>{
                 );
                 res
                 .status(200)
-                .cookie('user_id',userId,{
-                    httpOnly:true,
-                    secure:process.env.NODE_ENV === 'production',
-                    sameSite:'strict',
-                    maxAge: 60 * 60 *1000 // 
-                })
                 .cookie('access_token',tkn,{
                     httpOnly:true,
                     secure:process.env.NODE_ENV === 'production',
