@@ -3,8 +3,10 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import { createClient } from '@libsql/client';
+import  jwt from 'jsonwebtoken';
 
 dotenv.config();
+const tknJsn = process.env.JSNTKN;
 
 const db = createClient({
     url:process.env.DBHOST,
@@ -22,7 +24,7 @@ async function createTable(){
             CREATE TABLE users (
               user_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
               user_name VARCHAR(25) UNIQUE,
-              user_email VARCHAR(50) UNIQUE,
+              user_email VARCHAR(100) UNIQUE,
               user_pass VARCHAR(50) NOT NULL,
               user_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
             );
@@ -68,9 +70,32 @@ const app = express();
 const PORT = process.env.PORT || 42066;
 app.use(cors());
 app.use(express.json());
+const validarTkn = (req,res,next)=>{
 
+    const tokken = req.header('Authorization')?.split(' ')[1];
+    console.log(tokken)
+    if(!tokken) return res.status(401).json({msg:"Access Denied"});
+    try{
+        const verified = jwt.verify(tokken,tknJsn);
+        req.user = verified;
+        next();
+    }
+
+    catch(err){
+        console.log(tokken)
+        res.status(400).json({msg:"Invalid token"})
+    }
+    next();
+}
+
+app.get('/',(req,res)=>{
+    res.send("started page")
+})
 app.get('/Login_rejisteR',(req,res)=>{
     res.sendFile(process.cwd()+ '/schemas/login.html')
+})
+app.get('/h!chat/:user',validarTkn,(req,res)=>{
+    res.sendFile(process.cwd() + '/public/index.html')
 })
 app.post('/users', async(req,res)=>{
     try{
@@ -105,27 +130,31 @@ app.post('/login', async(req,res)=>{
             }
         )
         const {rows} = result;
-        if(rows.length === 0){
-           return res.status(404).json({msg:"user not found"})
-        }
-        const pass = rows[0].user_pass;
-
-        let valid = await bcrypt.compare(password,pass);
         
-        console.log(valid)
-
+        if(rows.length === 0)res.status(404).json({msg:"user not found"});
+        const pass = rows[0].user_pass;
+        let valid = bcrypt.compareSync(password,pass);
         if(valid){
-            res.status(200).json({msg:"login success"})
+
+            const tkn = jwt.sign(
+                {user:user,password:password},
+                tknJsn,
+                {expiresIn:"1h"}
+            );
+            
+            window.location.href ='/h!chat/'+user; 
+            res.status(200).header('Authorization', `Bearer ${tkn}`).send({aut:true,tkn});
+            return console.log(rows)
         }
         else{
-            res.status(401).json({msg:"login failed"})
+            res.status(401).json({msg:"password incorrect"});
         }
-
     }
     catch(err){
         console.log(err)
     }
 })
+app.get('')
 
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`)

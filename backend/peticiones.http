@@ -41,13 +41,12 @@ Content-Type: application/json
 }
 
 ### creando user en bd desde el servidor
-POST https://h-chat.onrender.com/users
+POST https://localhost:42066/login
 Content-Type: application/json
 
 {
-    "user": "juana6",
-    "correo":"jyana6@hotmail.com",
-    "password":"12345asdfa"
+    "user": "killua",
+    "password":"Somoslejion360"
 }
 
 
