@@ -103,10 +103,13 @@ app.post('/users', async(req,res)=>{
         res.status(409).json({msg:"user not created"})
     }
 })
+
+//creo una funcion middleware para verificar el token
+
 async function midelToken(req,res,next){
     const token = req.cookies.access_token;
     const user = req.params.user;
-    console.log("este es token de: "+ user ,token);
+    //console.log("este es token de: "+ user ,token);
     try{
         if(!token){
             return res.status(401).send("Access Denied")
