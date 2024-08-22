@@ -3,18 +3,51 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import { createClient } from '@libsql/client';
-import  jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import { randomUUID } from 'node:crypto';
+import rateLimit from 'express-rate-limit';
+
+const rejisterLimiter = rateLimit({
+    windowMs: 2 * 60 * 1000, // 2 minutes
+    max:6,
+    message: "too many request from this ip, please try again in 2 minutes"
+
+})
+const loginLimiter = rateLimit({
+    windowMs: 2 * 60 * 1000, // 2 minutes
+    max:6,
+    message: "too many request from this ip, please try again in 2 minutes"
+})
+
+
+//socket requeriments
+import { Server } from 'socket.io';
+import logger  from 'morgan';
+import { createServer } from 'http';
+
+import  { z } from 'zod';
+const userSchema = z.object({
+
+    user:z.string().min(3).max(15),
+    correo:z.string().email(),
+    password:z.string().min(8).max(20)
+})
+
+function validateUser(object){
+    return userSchema.safeParse(object)
+
+}
+
 dotenv.config();
-
-
 const tknJsn = process.env.JSNTKN;
+
 
 const db = createClient({
     url:process.env.DBHOST,
     authToken:process.env.DBTOKEN
 });
+
 /* creacion de trablas para los usuarios y los mensajes en la base de datos*/
 async function createTable(){
     try{
@@ -71,12 +104,13 @@ async function createTable(){
 
 
 const app = express();
+
+
 const PORT = process.env.PORT || 42066;
-
-
+app.use(logger('dev'));
+app.use(cors());
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors());
 
 
 app.get('/',(req,res)=>{
@@ -86,17 +120,21 @@ app.get('/loginre',(req,res)=>{
     res.sendFile(process.cwd()+ '/schemas/login.html')
 })
 
-app.post('/users', async(req,res)=>{
+app.post('/users', rejisterLimiter , async(req,res)=>{
     try{
-        const {user,correo,password} = req.body;
+        const {password} = req.body;
+        const result = validateUser(req.body);
+        if(result.error){
+            return res.status(400).send("invalid data")
+        }
         const hashedPassword = await bcrypt.hash(password,8);  
         await db.execute(
                 {
                     sql:"INSERT INTO users (user_id,user_name,user_email,user_pass) VALUES (:id,:user,:correo,:password)",
                     args:{
                         id:randomUUID(),
-                        user:user,
-                        correo:correo,
+                        user:result.data.user,
+                        correo:result.data.correo,
                         password:hashedPassword,
                     },
                 },
@@ -129,7 +167,7 @@ async function midelToken(req,res,next){
 
 
 } 
-app.post('/login', async(req,res)=>{
+app.post('/login', loginLimiter  ,async(req,res)=>{
     const {user,password} = req.body;
     try{
         const result = await db.execute(
@@ -198,9 +236,8 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
     const userValid = req.user
     const user = req.params.user;
     const token = req.cookies.access_token;
-
-    const userid = req.cookies.user_id;
     const data = jwt.verify(token,tknJsn);
+
     if(!data) return res.status(401).send("Access denied no token ");
     if(!userValid) return res.status(403).send("token no coincide con el usuario");
      const result = await db.execute(
@@ -214,12 +251,16 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
     const {rows} = result;
 
     if(result.rows.length === 0 ) return res.status(404).send("el usuario no existe");
+
     const user_id = rows[0].user_id;
     const user_name = rows[0].user_name;
 
     if(!user_id || !user_name) return res.status(404).json({msg:"user not found dbX2 "});
 
     if(data.usId === user_id && data.password === userValid.password && user_id === userValid.usId){
+        io.on('connection',(Socket)=>{
+            console.log("user connected")
+        });
         res.status(200)
         res.sendFile(process.cwd() + '/public/index.html')
        
@@ -229,6 +270,14 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
     }
 });
 
-app.listen(PORT,()=>{
-    console.log(`Server running on port ${PORT}`)
-});
+
+//sockets de comunicacion
+const socketServer = createServer(app);
+
+const io = new Server(socketServer)
+
+
+socketServer.listen(PORT,()=>{
+    console.log("server started on port: "+PORT)
+    
+})

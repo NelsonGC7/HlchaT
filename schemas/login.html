@@ -384,7 +384,7 @@ send.addEventListener('click',(e)=>{
     }
 	
     if(validarPass(input.password.value) && input.user.value.length > 3){
-        fetch('https://h-chat.onrender.com/login',{
+        fetch('http://127.0.0.1:42066/login',{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
@@ -452,11 +452,10 @@ sendR.addEventListener('click',(e)=>{
         correo: inputR.correo.value,
         password: inputR.password.value
     }
-	console.log(newU)
     if(validarEmail(inputR.correo.value) && validarPass(inputR.password.value) && validarDobblePass(inputR.password.value,inputR.passwordConfirm.value)){
         
 		console.log(newU)
-		fetch('https://h-chat.onrender.com/users',{
+		fetch('http://127.0.0.1:42066/users',{
             method: 'POST',
             headers:{
                 'content-type': 'application/json'
