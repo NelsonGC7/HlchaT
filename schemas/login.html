@@ -384,7 +384,6 @@ send.addEventListener('click',(e)=>{
     }
 	
     if(validarPass(input.password.value) && input.user.value.length > 3){
-		console.log(newUsuario)
         fetch('http://127.0.0.1:42066/login',{
             method: 'POST',
             headers:{
@@ -394,7 +393,8 @@ send.addEventListener('click',(e)=>{
         })
         .then(res=>{
 				if(res.status === 200){
-				window.location.href = `http://127.0.0.1:42066/h!chat/chat/${newUsuario.user}`;
+					console.log('entro')
+				window.location.href = `/${newUsuario.user}/chat`;
             }else if (res.status === 401){
 				input.password.style.border= "1px red solid";
 				input.user.style.border= "1px red solid";
@@ -452,11 +452,10 @@ sendR.addEventListener('click',(e)=>{
         correo: inputR.correo.value,
         password: inputR.password.value
     }
-	console.log(newU)
     if(validarEmail(inputR.correo.value) && validarPass(inputR.password.value) && validarDobblePass(inputR.password.value,inputR.passwordConfirm.value)){
         
 		console.log(newU)
-		fetch('https://h-chat.onrender.com/users',{
+		fetch('http://127.0.0.1:42066/users',{
             method: 'POST',
             headers:{
                 'content-type': 'application/json'
