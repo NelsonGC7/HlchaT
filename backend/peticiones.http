@@ -45,7 +45,7 @@ POST http://127.0.0.1:42066/login
 Content-Type: application/json
 
 {
-    "user": "killua",
+    "user": "piti",
     "password":"Somoslejion360"
 }
 
