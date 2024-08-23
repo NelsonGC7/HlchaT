@@ -22,7 +22,7 @@ const loginLimiter = rateLimit({
 
 
 //socket requeriments
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import logger  from 'morgan';
 import { createServer } from 'http';
 
@@ -104,6 +104,11 @@ async function createTable(){
 
 
 const app = express();
+const socketServer = createServer(app);
+
+const io = new Server(socketServer,{
+    connectionStateRecovery:{},
+});
 
 
 const PORT = process.env.PORT || 42066;
@@ -258,12 +263,10 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
     if(!user_id || !user_name) return res.status(404).json({msg:"user not found dbX2 "});
 
     if(data.usId === user_id && data.password === userValid.password && user_id === userValid.usId){
-        io.on('connection',(Socket)=>{
-            console.log("user connected")
-        });
+
         res.status(200)
-        res.sendFile(process.cwd() + '/public/index.html')
-       
+        res.sendFile(process.cwd() + '/public/index.html');
+        
     }else{
         if(user_id !== data.usId) return res.status(403).send("user no coincide con el token");
         return res.status(401).json({msg:"Access Denied noo token !!"}) 
@@ -272,9 +275,21 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
 
 
 //sockets de comunicacion
-const socketServer = createServer(app);
 
-const io = new Server(socketServer)
+io.on('connection',(socket)=>{
+    console.log(`user connected`);
+
+
+    socket.on('disconnect',()=>{
+     console.log(`user disconnected`);
+    })
+
+    socket.on('chat message',(msg)=>{
+        io.emit('chat message',msg);
+        
+    })
+
+})
 
 
 socketServer.listen(PORT,()=>{
