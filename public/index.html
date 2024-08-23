@@ -57,6 +57,7 @@
             }
         }
         .Contactos .Contactos_users{
+            position: relative;
             display: flex;
             width: 100%;
             height: 100%;
@@ -83,16 +84,70 @@
                 }
             }
             .Contactos_users-search{
-                display: flex;
-                align-items: center;
-                width: 100%;
-                height: 3.8rem;
+                position: absolute;
+                margin: 0 auto;
+                bottom: .5rem;
+                width: 95%;
+                height: 35%;
                 gap: .5rem;
-                background-color: #8b8b8b;
+                background-color: #2b1e1e;
                 border-radius: 1rem;
                 padding: .5rem;
+                display: flex;
+                flex-direction: column;
+                .form-search{
+                    display: flex;
+                    width: 100%;
+                    height: 20%;
+                    gap: .3rem;
+                    input{
+                        width: 80%;
+                        height: 100%;
+                        padding: .5rem;
+                        border: none;
+                        border-radius: .5rem;
+                       outline: none;
+                    }
+                    button{
+                        width: 20%;
+                        height: 100%;
+                        background-color: #f5f5f5;
+                        border: none;
+                        border-radius: .5rem;
+                        cursor: pointer;
+                    }
+                }
+            .Contactos_users-searcheados{
+                width: 98%;
+                height: 100%;
+                background-color: aqua;
+                display: flex;
+                gap: .5rem;
+                padding: .5rem;
+                border-radius: 1rem;
+                background-color: #8b8b8b;
+                .Contactos_users-searcheadoss{
+                    width: 100%;
+                    height: 2.5rem;
+                    display: flex;
+                    align-items: center;
+                    background-color: beige;
+                    border-radius: .5rem;
+                    cursor: pointer;
+                    padding: .3rem;
+                    gap: .3rem;
+                    figure{
+                        width: 2rem;
+                        height: 2rem;
+                        border-radius: 50%;
+                        background-color: blueviolet;
+                    }
+
+                }
+            }
                
             }
+            
         }
 
 
@@ -213,7 +268,21 @@
                 </figure>
                 <h3>Piti</h3>
             </div>
+
             <div class="Contactos_users-search"> 
+                <form class="form-search" >
+                    <input type="text" placeholder="search">
+                    <button>search</button>
+                </form>
+                <div class="Contactos_users-searcheados">
+                    <div class="Contactos_users-searcheadoss">
+                        <figure class="Contactos_user-perfil">
+                            <img src="" alt="">
+                        </figure>
+                        <h3>Piti</h3> 
+                    </div>
+
+                </div>
  
             </div>
 
