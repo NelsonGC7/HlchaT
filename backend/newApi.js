@@ -261,11 +261,10 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
     if(!user_id || !user_name) return res.status(404).json({msg:"user not found dbX2 "});
 
     if(data.usId === user_id && data.password === userValid.password && user_id === userValid.usId){
+
         res.status(200)
         res.sendFile(process.cwd() + '/public/index.html');
-        io.on('connection',(socket)=>{
-        console.log(`user ${user_name} connected`);
-        })
+        
     }else{
         if(user_id !== data.usId) return res.status(403).send("user no coincide con el token");
         return res.status(401).json({msg:"Access Denied noo token !!"}) 
@@ -275,7 +274,21 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
 
 //sockets de comunicacion
 
+io.on('connection',(socket)=>{
+    console.log(`user connected`);
 
+
+    socket.on('disconnect',()=>{
+     console.log(`user disconnected`);
+    })
+
+    socket.on('chat message',(msg)=>{
+        console.log(`message: ${msg}`);
+        io.emit('chat message',msg);
+        
+    })
+
+})
 
 
 socketServer.listen(PORT,()=>{

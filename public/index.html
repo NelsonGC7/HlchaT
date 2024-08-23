@@ -156,9 +156,32 @@
 
         */
         const socket = io();
-        if(socket){
-            console.log('conectado');
-        }
+
+        const formulario = document.querySelector('.Form__messajes');
+        const input = document.querySelector('#input');
+        const mensajes = document.querySelector('#mensajes');
+
+
+
+        formulario.addEventListener('submit',(e)=>{
+            e.preventDefault();
+            if(input.value){
+                socket.emit('chat message', input.value)
+                input.value = '';
+
+            }else{
+                console.log('no hay mensaje')
+            }
+
+        })
+        socket.on('chat message', (msg)=>{
+            const limsg = document.createElement('li');
+            limsg.textContent = msg;
+            mensajes.appendChild(limsg);
+            console.log('mensaje recibido', msg)
+
+        })
+        
   
 
     </script>
@@ -183,6 +206,7 @@
 
     <section class="Messajes">
         <ul id="mensajes"></ul>
+
         <form class="Form__messajes">
             <input  id="input">
             <button id="bton">send</button>
