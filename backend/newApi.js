@@ -106,7 +106,9 @@ async function createTable(){
 const app = express();
 const socketServer = createServer(app);
 
-const io = new Server(socketServer)
+const io = new Server(socketServer,{
+    connectionStateRecovery:{},
+});
 
 
 const PORT = process.env.PORT || 42066;
@@ -283,7 +285,6 @@ io.on('connection',(socket)=>{
     })
 
     socket.on('chat message',(msg)=>{
-        console.log(`message: ${msg}`);
         io.emit('chat message',msg);
         
     })
