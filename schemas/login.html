@@ -384,7 +384,7 @@ send.addEventListener('click',(e)=>{
     }
 	
     if(validarPass(input.password.value) && input.user.value.length > 3){
-        fetch('http://127.0.0.1:42066/login',{
+        fetch('/login',{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
@@ -455,7 +455,7 @@ sendR.addEventListener('click',(e)=>{
     if(validarEmail(inputR.correo.value) && validarPass(inputR.password.value) && validarDobblePass(inputR.password.value,inputR.passwordConfirm.value)){
         
 		console.log(newU)
-		fetch('http://127.0.0.1:42066/users',{
+		fetch('/users',{
             method: 'POST',
             headers:{
                 'content-type': 'application/json'
@@ -463,7 +463,7 @@ sendR.addEventListener('click',(e)=>{
             body: JSON.stringify(newU)
         }).then(res=> {
 			if(res.status === 203){
-				fetch('http://127.0.0.1:42066/login',{
+				fetch('/login',{
 					method: 'POST',
 					headers:{
 						'Content-Type': 'application/json',
