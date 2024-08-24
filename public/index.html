@@ -232,7 +232,8 @@
         const formulario = document.querySelector('.Form__messajes');
         const input = document.querySelector('#input');
         const mensajes = document.querySelector('#mensajes');
-
+        const formSearch = document.querySelector('.form-search');
+        const inputSearch = formSearch.children[0];
         formulario.addEventListener('submit',(e)=>{
             e.preventDefault();
             if(input.value){
@@ -251,6 +252,22 @@
             console.log('mensaje recibido', msg)
 
         })
+        
+        formSearch.addEventListener('submit',(e)=>{
+            e.preventDefault();
+            if(inputSearch.value){
+                fetch('/search',{
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    
+                    },
+                    body: JSON.stringify({userSearch:inputSearch.value})
+                })
+
+            }
+        })
+        
     </script>
 </head>
 <body>
