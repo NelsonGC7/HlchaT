@@ -312,11 +312,11 @@ body {
         <fieldset>
           <div class="input-block">
             <label for="login-user">User</label>
-            <input id="login-user" required>
+            <input id="login-user" required placeholder="Usuario">
           </div>
           <div class="input-block">
             <label for="login-password">Password</label>
-            <input id="login-password" type="password" required>
+            <input id="login-password" type="password" placeholder="A/b numeros" required>
           </div>
         </fieldset>
         <button type="submit" class="btn-login" id="send">Login</button>
@@ -333,19 +333,19 @@ body {
         <fieldset>
           <div class="input-block">
             <label  for="sigup-user">User</label>
-            <input id="sigup-user" required>
+            <input id="sigup-user" placeholder="ingrse un Usuario" required>
           </div>
           <div class="input-block">
             <label for="signup-email">E-mail</label>
-            <input id="signup-email" type="email" required>
+            <input id="signup-email" type="email" placeholder="ingrese correoE" required>
           </div>
           <div class="input-block">
-            <label for="signup-password">Password</label>
-            <input id="signup-password" type="password" required>
+            <label for="signup-password" >Password</label>
+            <input id="signup-password" type="password" placeholder="mayusculas/min/numeros" required>
           </div>
           <div class="input-block">
             <label for="signup-password-confirm">Confirm password</label>
-            <input id="signup-password-confirm" type="password" required>
+            <input id="signup-password-confirm" type="password"  placeholder="mayusculas/min/numeros" required>
           </div>
         </fieldset>
         <button type="submit" class="btn-signup" id="btn-signup">Continue</button>
@@ -384,7 +384,7 @@ send.addEventListener('click',(e)=>{
     }
 	
     if(validarPass(input.password.value) && input.user.value.length > 3){
-        fetch('https://h-chat.onrender.com/login',{
+        fetch('http://127.0.0.1:42066/login',{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
@@ -455,24 +455,41 @@ sendR.addEventListener('click',(e)=>{
     if(validarEmail(inputR.correo.value) && validarPass(inputR.password.value) && validarDobblePass(inputR.password.value,inputR.passwordConfirm.value)){
         
 		console.log(newU)
-		fetch('https://h-chat.onrender.com/users',{
+		fetch('http://127.0.0.1:42066/users',{
             method: 'POST',
             headers:{
                 'content-type': 'application/json'
             },
             body: JSON.stringify(newU)
         }).then(res=> {
-            res.status === 203 ? 
-            console.log('User created')  
-            : 
-            console.log('User not created')
+			if(res.status === 203){
+				fetch('http://127.0.0.1:42066/login',{
+					method: 'POST',
+					headers:{
+						'Content-Type': 'application/json',
+					},
+					body:JSON.stringify({user: newU.user, password: newU.password})
+        		})
+				.then(res=>{
+					if(res.status === 200){
+						console.log('entro')
+						window.location.href = `/${newU.user}/chat`;
+					}else{
+						console.log('User not created1')
+					}
+				})
+				
+
+			}else{
+				console.log('User not created')
+			}
         })
-            .catch(err => console.log(err));
+        .catch(err => console.log(err,"user not created2"));
     }else{
-        inputR.user.style.border= "1px red solid"
-        inputR.passwordConfirm.style.border= "1px red solid"
-        inputR.password.style.border= "1px red solid"
-        inputR.correo.style.border= "1px red solid"
+        inputR.user.style.border= "1px red solid";
+        inputR.passwordConfirm.style.border= "1px red solid";
+        inputR.password.style.border= "1px red solid";
+        inputR.correo.style.border= "1px red solid";
         setTimeout(()=>{
             inputR.user.style.border= "none"
             inputR.passwordConfirm.style.border= "none"

@@ -12,6 +12,54 @@
             padding: 0;
             box-sizing: border-box;
         }
+
+        
+:root {
+
+    /* Colores de fondo */
+    --background-default: #FFFFFF;
+    --background-secondary: #F0F2F5;
+    --background-chat: #E5DED8;
+    --background-message-in: #FFFFFF;
+    --background-message-out: #D9FDD3;
+
+    /* Colores de texto */
+    --text-primary: #3B4A54;
+    --text-secondary: #667781;
+    --text-muted: #8696A0;
+    --text-link: #039BE5;
+
+    /* Colores de iconos */
+    --icon-primary: #54656F;
+    --icon-secondary: #8696A0;
+
+    /* Colores de estado */
+    --status-online: #25D366;
+    --status-away: #FFA500;
+    --status-busy: #FF0000;
+
+    /* Colores de acción */
+    --action-primary: #008069;
+    --action-secondary: #667781;
+
+    /* Colores de borde */
+    --border-list: #E9EDEF;
+    --border-panel: #D1D7DB;
+
+    /* Colores de notificación */
+    --notification-badge: #25D366;
+
+    /* Colores adicionales para personalización */
+    --custom-accent-1: #FF9800;
+    --custom-accent-2: #9C27B0;
+    --custom-accent-3: #3F51B5;
+    --custom-accent-4: #00BCD4;
+
+
+
+
+
+};
         html{
             display: flex;
             align-items: center;
@@ -21,7 +69,7 @@
 
         body{
             font-family: 'Roboto', sans-serif;
-            background-color: #696969;
+            background-color:var(--background-default);
             height: 100vh;
             width: 99%;
             display: flex;
@@ -34,7 +82,7 @@
             width:45%;
             height: 99%;
             border-radius: 1rem 0 0 1rem;
-            background-color: #adadad;
+            background-color: var(--action-secondary);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -48,7 +96,7 @@
             padding: .5rem;
             border-radius: 1rem;
             cursor: pointer;
-            background-color: #dadada;
+            background-color:var(--background-secondary);
             .Contactos_user-perfil{
                 width: 3rem;
                 height: 3rem;
@@ -57,6 +105,7 @@
             }
         }
         .Contactos .Contactos_users{
+            position: relative;
             display: flex;
             width: 100%;
             height: 100%;
@@ -65,13 +114,15 @@
             border-radius: 1rem;
             background-color: #dadada;
             padding: .5rem;
+            overflow-x: scroll;
             .Contactos_users-user{
                 display: flex;
                 align-items: center;
                 width: 100%;
-                height: 3.8rem;
+                min-height: 3rem;
+                height: 3.2rem;
                 gap: .5rem;
-                background-color: #8b8b8b;
+                background-color:var(--background-secondary);
                 border-radius: 1rem;
                 padding: .5rem;
                 cursor: pointer;
@@ -83,16 +134,75 @@
                 }
             }
             .Contactos_users-search{
-                display: flex;
-                align-items: center;
-                width: 100%;
-                height: 3.8rem;
+                position: absolute;
+                margin: 0 auto;
+                bottom: .5rem;
+                width: 95%;
+                height: 35%;
+                min-height: 11.5625rem;
                 gap: .5rem;
-                background-color: #8b8b8b;
+                background-color: #2b1e1e;
                 border-radius: 1rem;
                 padding: .5rem;
+                display: flex;
+                flex-direction: column;
+                .form-search{
+                    display: flex;
+                    width: 100%;
+                    height: 20%;
+                    gap:  .3rem;
+                    input{
+                        width: 80%;
+                        min-height: 2rem;
+                        height: 100%;
+                        padding: .5rem;
+                        border: none;
+                        border-radius: .5rem;
+                       outline: none;
+                    }
+                    button{
+                        width: 20%;
+                        height: 100%;
+                        background-color: #f5f5f5;
+                        border: none;
+                        border-radius: .5rem;
+                        cursor: pointer;
+                    }
+                }
+                .Contactos_users-searcheados{
+                    width: 100%;
+                    height: 100%;
+                    background-color: aqua;
+                    display: flex;
+                    flex-direction: column;
+                    gap: .5rem;
+                    padding: .5rem;
+                    border-radius: .6rem;
+                    background-color: #8b8b8b;
+                    scroll-behavior: smooth;
+                    overflow: scroll;
+                    .Contactos_users-searcheadoss{
+                        width: 100%;
+                        height: 2.5rem;
+                        display: flex;
+                        align-items: center;
+                        background-color: beige;
+                        border-radius: .5rem;
+                        cursor: pointer;
+                        padding: .3rem;
+                        gap: .3rem;
+                        figure{
+                            width: 2rem;
+                            height: 2rem;
+                            border-radius: 50%;
+                            background-color: blueviolet;
+                        }
+
+                    }
+                }
                
             }
+            
         }
 
 
@@ -171,9 +281,9 @@
         const formulario = document.querySelector('.Form__messajes');
         const input = document.querySelector('#input');
         const mensajes = document.querySelector('#mensajes');
-
-
-
+        const formSearch = document.querySelector('.form-search');
+        const inputSearch = formSearch.children[0];
+        const sercheados = document.querySelector('.Contactos_users-searcheados');
         formulario.addEventListener('submit',(e)=>{
             e.preventDefault();
             if(input.value){
@@ -193,8 +303,50 @@
 
         })
         
-  
+        formSearch.addEventListener('submit',(e)=>{
+            e.preventDefault();
+            if(inputSearch.value){
+                fetch('/search',{
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    
+                    },
+                    body: JSON.stringify({userSearch:inputSearch.value})
+                })
+                .then(res =>{
+                    console.log(res)
+                    if(res.status === 206){
+                        res.json()
+                        .then(data => {
+                            console.log(data)
+                        })
+                    }else if(res.status === 226){
+                        res.json()
+                        .then(data => {
+                            data.forEach( user=>{
+                                console.log(user)
+                                const userAdd = 
+                                `
+                                    <div class="Contactos_users-searcheadoss">
+                                        <figure class="Contactos_user-perfil">
+                                            <img src="" alt="">
+                                        </figure>
+                                        <h3>${user.user_name}</h3> 
+                                    </div>
+                                `;
+                                sercheados.insertAdjacentHTML('beforeend', userAdd)
+                                
+                            })
+                        })
+                    }
+       
+                } )
+                .catch(err => console.log(err))
 
+            }
+        })
+        
     </script>
 </head>
 <body>
@@ -213,7 +365,21 @@
                 </figure>
                 <h3>Piti</h3>
             </div>
+
             <div class="Contactos_users-search"> 
+                <form class="form-search" >
+                    <input type="text" placeholder="search">
+                    <button>search</button>
+                </form>
+                <div class="Contactos_users-searcheados">
+                    <div class="Contactos_users-searcheadoss">
+                        <figure class="Contactos_user-perfil">
+                            <img src="" alt="">
+                        </figure>
+                        <h3>Piti</h3> 
+                    </div>
+
+                </div>
  
             </div>
 

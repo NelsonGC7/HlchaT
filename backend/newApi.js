@@ -27,6 +27,7 @@ import logger  from 'morgan';
 import { createServer } from 'http';
 
 import  { z } from 'zod';
+import { Console } from 'node:console';
 const userSchema = z.object({
 
     user:z.string().min(3).max(15),
@@ -157,12 +158,12 @@ async function midelToken(req,res,next){
     const token = req.cookies.access_token;
     const user = req.params.user;
     if(!token){
-        return res.status(401).send("Access Denied")
+        return res.status(401).send("Access Denied desde middleware");
     }
     //console.log("este es token de: "+ user ,token);
     try{
         const data = jwt.verify(token,tknJsn);
-        if(!data) return res.status(401).send("Access Denied");
+        if(!data) return res.status(401).send("Access Denied desde middleware-");
         req.user = data;
         next();
     }
@@ -265,12 +266,57 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
     if(data.usId === user_id && data.password === userValid.password && user_id === userValid.usId){
 
         res.status(200)
-        res.sendFile(process.cwd() + '/public/index.html');
+        .sendFile(process.cwd() + '/public/index.html')
+        res.cookie('access_token',token,{
+            httpOnly:true,
+            secure:true,
+            sameSite:'strict',
+            maxAge: 60 * 60 * 1000, // 1 hour
+        });
+
         
     }else{
         if(user_id !== data.usId) return res.status(403).send("user no coincide con el token");
         return res.status(401).json({msg:"Access Denied noo token !!"}) 
     }
+});
+
+app.post('/search',midelToken,async(req,res)=>{
+    const {userSearch} = req.body;
+    const token = req.cookies.access_token;
+    const data = jwt.verify(token,tknJsn);
+    if(!data) return res.status(401).send("Access denied no token ");
+    if(!userSearch) return res.status(203).send("no search data1");
+    if(userSearch.length < 3) return res.status(400).send("search data too short");
+   try{
+    console.log("buscando a: "+ userSearch);
+    const result = await db.execute(
+        {
+            sql:"SELECT user_name FROM users WHERE user_name LIKE :search",
+            args:{
+                search:`%${userSearch}%`,
+            }
+        }
+        
+    );
+    if(result.rows.length === 0) return res.status(206).json({msg:"no user found"});
+    res.status(226).json(result.rows);
+
+   }
+   catch(err){
+       console.log("error en el TRY search",err)
+   }
+
+})
+
+
+
+
+
+
+app.post('/logout',midelToken,(req,res)=>{
+    res.clearCookie('access_token');
+    res.status(200).send("logout success");
 });
 
 
