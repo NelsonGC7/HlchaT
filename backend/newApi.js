@@ -27,6 +27,7 @@ import logger  from 'morgan';
 import { createServer } from 'http';
 
 import  { z } from 'zod';
+import { Console } from 'node:console';
 const userSchema = z.object({
 
     user:z.string().min(3).max(15),
@@ -280,18 +281,31 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
     }
 });
 
-
-
-
 app.post('/search',midelToken,async(req,res)=>{
     const {userSearch} = req.body;
     const token = req.cookies.access_token;
     const data = jwt.verify(token,tknJsn);
     if(!data) return res.status(401).send("Access denied no token ");
-    if(!userSearch) return res.status(400).send("no search data");
+    if(!userSearch) return res.status(203).send("no search data1");
     if(userSearch.length < 3) return res.status(400).send("search data too short");
+   try{
+    console.log("buscando a: "+ userSearch);
+    const result = await db.execute(
+        {
+            sql:"SELECT user_name FROM users WHERE user_name LIKE :search",
+            args:{
+                search:`%${userSearch}%`,
+            }
+        }
+        
+    );
+    if(result.rows.length === 0) return res.status(206).json({msg:"no user found"});
+    res.status(226).json(result.rows);
 
-
+   }
+   catch(err){
+       console.log("error en el TRY search",err)
+   }
 
 })
 

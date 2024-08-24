@@ -12,6 +12,54 @@
             padding: 0;
             box-sizing: border-box;
         }
+
+        
+:root {
+
+    /* Colores de fondo */
+    --background-default: #FFFFFF;
+    --background-secondary: #F0F2F5;
+    --background-chat: #E5DED8;
+    --background-message-in: #FFFFFF;
+    --background-message-out: #D9FDD3;
+
+    /* Colores de texto */
+    --text-primary: #3B4A54;
+    --text-secondary: #667781;
+    --text-muted: #8696A0;
+    --text-link: #039BE5;
+
+    /* Colores de iconos */
+    --icon-primary: #54656F;
+    --icon-secondary: #8696A0;
+
+    /* Colores de estado */
+    --status-online: #25D366;
+    --status-away: #FFA500;
+    --status-busy: #FF0000;
+
+    /* Colores de acción */
+    --action-primary: #008069;
+    --action-secondary: #667781;
+
+    /* Colores de borde */
+    --border-list: #E9EDEF;
+    --border-panel: #D1D7DB;
+
+    /* Colores de notificación */
+    --notification-badge: #25D366;
+
+    /* Colores adicionales para personalización */
+    --custom-accent-1: #FF9800;
+    --custom-accent-2: #9C27B0;
+    --custom-accent-3: #3F51B5;
+    --custom-accent-4: #00BCD4;
+
+
+
+
+
+};
         html{
             display: flex;
             align-items: center;
@@ -21,7 +69,7 @@
 
         body{
             font-family: 'Roboto', sans-serif;
-            background-color: #696969;
+            background-color:var(--background-default);
             height: 100vh;
             width: 99%;
             display: flex;
@@ -34,7 +82,7 @@
             width:45%;
             height: 99%;
             border-radius: 1rem 0 0 1rem;
-            background-color: #adadad;
+            background-color: var(--action-secondary);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -48,7 +96,7 @@
             padding: .5rem;
             border-radius: 1rem;
             cursor: pointer;
-            background-color: #dadada;
+            background-color:var(--background-secondary);
             .Contactos_user-perfil{
                 width: 3rem;
                 height: 3rem;
@@ -74,7 +122,7 @@
                 min-height: 3rem;
                 height: 3.2rem;
                 gap: .5rem;
-                background-color: #8b8b8b;
+                background-color:var(--background-secondary);
                 border-radius: 1rem;
                 padding: .5rem;
                 cursor: pointer;
@@ -264,6 +312,22 @@
                     },
                     body: JSON.stringify({userSearch:inputSearch.value})
                 })
+                .then(res =>{
+                    console.log(res)
+                    if(res.status === 206){
+                        res.json()
+                        .then(data => {
+                            console.log(data)
+                        })
+                    }else if(res.status === 226){
+                        res.json()
+                        .then(data => {
+                            console.log(data)
+                        })
+                    }
+       
+                } )
+                .catch(err => console.log(err))
 
             }
         })

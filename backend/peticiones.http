@@ -68,5 +68,5 @@ POST http://127.0.0.1:42066/search
 Content-Type: application/json
 
 {
-    "userSearch": "pepe"
+    "userSearch": "pit"
 }
