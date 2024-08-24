@@ -274,6 +274,25 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
 });
 
 
+app.post('/:user/chat',midelToken, async()=>{
+    
+
+
+})
+
+
+
+
+
+
+
+
+app.post('/logout',midelToken,(req,res)=>{
+    res.clearCookie('access_token');
+    res.status(200).send("logout success");
+});
+
+
 //sockets de comunicacion
 
 io.on('connection',(socket)=>{

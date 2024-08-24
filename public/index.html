@@ -66,11 +66,13 @@
             border-radius: 1rem;
             background-color: #dadada;
             padding: .5rem;
+            overflow-x: scroll;
             .Contactos_users-user{
                 display: flex;
                 align-items: center;
                 width: 100%;
-                height: 3.8rem;
+                min-height: 3rem;
+                height: 3.2rem;
                 gap: .5rem;
                 background-color: #8b8b8b;
                 border-radius: 1rem;
@@ -89,6 +91,7 @@
                 bottom: .5rem;
                 width: 95%;
                 height: 35%;
+                min-height: 11.5625rem;
                 gap: .5rem;
                 background-color: #2b1e1e;
                 border-radius: 1rem;
@@ -99,9 +102,10 @@
                     display: flex;
                     width: 100%;
                     height: 20%;
-                    gap: .3rem;
+                    gap:  .3rem;
                     input{
                         width: 80%;
+                        min-height: 2rem;
                         height: 100%;
                         padding: .5rem;
                         border: none;
@@ -117,34 +121,36 @@
                         cursor: pointer;
                     }
                 }
-            .Contactos_users-searcheados{
-                width: 98%;
-                height: 100%;
-                background-color: aqua;
-                display: flex;
-                gap: .5rem;
-                padding: .5rem;
-                border-radius: 1rem;
-                background-color: #8b8b8b;
-                .Contactos_users-searcheadoss{
+                .Contactos_users-searcheados{
                     width: 100%;
-                    height: 2.5rem;
+                    height: 100%;
+                    background-color: aqua;
                     display: flex;
-                    align-items: center;
-                    background-color: beige;
-                    border-radius: .5rem;
-                    cursor: pointer;
-                    padding: .3rem;
-                    gap: .3rem;
-                    figure{
-                        width: 2rem;
-                        height: 2rem;
-                        border-radius: 50%;
-                        background-color: blueviolet;
-                    }
+                    gap: .5rem;
+                    padding: .5rem;
+                    border-radius: .6rem;
+                    background-color: #8b8b8b;
+                    scroll-behavior: smooth;
+                    overflow: scroll;
+                    .Contactos_users-searcheadoss{
+                        width: 100%;
+                        height: 2.5rem;
+                        display: flex;
+                        align-items: center;
+                        background-color: beige;
+                        border-radius: .5rem;
+                        cursor: pointer;
+                        padding: .3rem;
+                        gap: .3rem;
+                        figure{
+                            width: 2rem;
+                            height: 2rem;
+                            border-radius: 50%;
+                            background-color: blueviolet;
+                        }
 
+                    }
                 }
-            }
                
             }
             
@@ -227,8 +233,6 @@
         const input = document.querySelector('#input');
         const mensajes = document.querySelector('#mensajes');
 
-
-
         formulario.addEventListener('submit',(e)=>{
             e.preventDefault();
             if(input.value){
@@ -247,9 +251,6 @@
             console.log('mensaje recibido', msg)
 
         })
-        
-  
-
     </script>
 </head>
 <body>
