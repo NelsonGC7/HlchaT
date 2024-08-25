@@ -27,6 +27,7 @@ import logger  from 'morgan';
 import { createServer } from 'http';
 
 import  { z } from 'zod';
+import { assert } from 'node:console';
 const userSchema = z.object({
 
     user:z.string().min(3).max(15),
@@ -297,7 +298,7 @@ app.post('/search',midelToken,async(req,res)=>{
     if(!userSearch) return res.status(203).send("no search data1");
     if(userSearch.length < 3) return res.status(400).send("search data too short");
    try{
-    console.log("buscando a: "+ userSearch);
+    //console.log("buscando a: "+ userSearch);
     const result = await db.execute(
         {
             sql:"SELECT user_name FROM users WHERE user_name LIKE :search",
@@ -323,8 +324,17 @@ app.post('/addfriend',midelToken, async(req,res)=>{
      const validation = jwt.verify(cokie,tknJsn);
     if(!validation) return res.status(401).json({msg:"Access Denied no token"});  
        
-    console.log(addFriend);
-
+   // console.log(addFriend);
+    const result = await db.execute({
+        sql:"SELECT user_id,user_name FROM users WHERE user_name = :user",
+        args:{
+            user:`${addFriend}`,
+        }
+    });
+    const {user_id}= result.rows[0];
+    if(!user_id) return res.status(404).json({msg:"user not found"});
+    //console.log(result)
+    console.log(user_id)
 
 })
 

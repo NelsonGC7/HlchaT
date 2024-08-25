@@ -70,3 +70,12 @@ Content-Type: application/json
 {
     "userSearch": "pit"
 }
+
+###
+
+POST http://127.0.0.1:42066/addfriend
+Content-Type: application/json
+
+{
+    "userSearch": "piti"
+}
