@@ -334,7 +334,18 @@ app.post('/addfriend',midelToken, async(req,res)=>{
     const {user_id}= result.rows[0];
     if(!user_id) return res.status(404).json({msg:"user not found"});
     //console.log(result)
-    console.log(user_id)
+    const result2 = await db.execute(
+        {
+            sql:"SELECT ab_id FROM friendships WHERE a_id = :sender AND b_id = :reciver",
+            args:{
+                sender:validUser.usId,
+                reciver:user_id,
+            }
+        }
+    )
+    if(result2.rows.length === 0 )return res.status(102).json({msg:"no friendship found"});
+    if(result2.rows.length > 0) return res.status(203).json({msg:"friendship already exist"});
+    
 
 })
 
