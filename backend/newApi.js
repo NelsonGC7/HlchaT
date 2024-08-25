@@ -319,7 +319,7 @@ app.post('/search',midelToken,async(req,res)=>{
 })
 app.post('/addfriend',midelToken, async(req,res)=>{
      const validUser =req.user;
-     const {addFriend,sendFriend} = req.body;
+     const {addFriend} = req.body;
      const cokie = req.cookies.access_token;
      const validation = jwt.verify(cokie,tknJsn);
     if(!validation) return res.status(401).json({msg:"Access Denied no token"});  
@@ -361,7 +361,7 @@ app.post('/addfriend',midelToken, async(req,res)=>{
             },
         }
     )
-    console.log(result3)
+    console.log(result3.rowsAffected)
     if(result3.rowsAffected > 0) return res.status(200).json({msg:"friendship created"});
 
 

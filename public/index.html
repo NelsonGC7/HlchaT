@@ -407,9 +407,16 @@
                     body: JSON.stringify(
                         {
                             addFriend:user,
-                            sendFriend:US[1]
                         })
 
+                })
+                .then(res =>{
+                    console.log(res.status)
+                    if(res.status === 200){
+                        e.target.parentElement.remove();
+                    }else if(res.status === 203){
+                        e.target.parentElement.remove();
+                    }
                 })
                 
             }
