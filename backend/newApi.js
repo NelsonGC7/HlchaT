@@ -27,7 +27,6 @@ import logger  from 'morgan';
 import { createServer } from 'http';
 
 import  { z } from 'zod';
-import { assert } from 'node:console';
 const userSchema = z.object({
 
     user:z.string().min(3).max(15),
@@ -164,7 +163,6 @@ async function midelToken(req,res,next){
         const data = jwt.verify(token,tknJsn);
         if(!data) return res.status(401).send("Access Denied desde middleware-");
         req.user = data;
-
         next();
     }
     catch(err){
@@ -322,9 +320,10 @@ app.post('/addfriend',midelToken, async(req,res)=>{
      const {addFriend} = req.body;
      const cokie = req.cookies.access_token;
      const validation = jwt.verify(cokie,tknJsn);
+     console.log(addFriend)
     if(!validation) return res.status(401).json({msg:"Access Denied no token"});  
-    console.log(validation.usId)
-    console.log(validUser.usId)
+   // console.log(validation.usId)
+    //console.log(validUser.usId)
     if(validUser.usId!== validation.usId) return res.status(402).json({msg:"user not valid"});
        
    // console.log(addFriend);
@@ -334,8 +333,10 @@ app.post('/addfriend',midelToken, async(req,res)=>{
             user:`${addFriend}`,
         }
     });
+    if(result.rows.length === 0) return res.status(404).json({msg:"user not found"});
     const {user_id}= result.rows[0];
     if(!user_id) return res.status(404).json({msg:"user not found"});
+
     //console.log(result)
     const result2 = await db.execute(
         {

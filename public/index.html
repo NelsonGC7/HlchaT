@@ -108,7 +108,7 @@
                 width: .6rem;
                 height: .6rem;
                 top: .1rem;
-                border-radius: 50%;
+                border-radius: 99999px;
                 background-color: rgb(0, 200, 10);
             }
         }
@@ -131,15 +131,51 @@
                 height: 3.2rem;
                 gap: .5rem;
                 background-color:var(--background-secondary);
-                border-radius: 1rem;
+                border-radius: 2rem;
                 padding: .5rem;
-                cursor: pointer;
+                transition: all .5s ease;
+                &:hover{
+                    background-color: #D1D7DB;
+                    border: #fffefe 1px solid;
+                }
                 figure{
-                    width: .6rem;
-                    height: .6rem;
-                    border-radius: 50%;
+                    width: .5rem;
+                    height: .5rem;
+                    border-radius: 99999px;
                     background-color: rgb(4, 0, 252);
                     
+                }
+                .Contactos_user-btns{
+                    width: 46%;
+            
+                    height: 2rem;
+                    gap: .2rem;
+                    display: flex;
+                    flex-basis: 100%;
+                    justify-content: end;
+               
+
+                    button{
+                        width: 30%;
+                        max-width: 1.8rem;
+                        height: 100%;
+                        max-height: 1.8rem;
+                       
+                        background-color: #2b1e1e;
+                        color: white;
+                        border: none;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        display: grid;
+                        place-items: center;
+                        transition: background-color .5s ease;
+                        &:hover{
+                            background-color: #868585;
+                        }
+                    }
+                    
+                   
+
                 }
             }
             .Contactos_users-search{
@@ -168,14 +204,18 @@
                         border: none;
                         border-radius: .5rem;
                        outline: none;
+                       flex-basis: 100%;
                     }
                     button{
                         width: 20%;
+                        max-width: 3rem;
                         height: 100%;
                         background-color: #f5f5f5;
                         border: none;
                         border-radius: .5rem;
                         cursor: pointer;
+                        display: grid;
+                        place-items: center;
                     }
                 }
                 .Contactos_users-searcheados{
@@ -207,18 +247,25 @@
                             background-color: blueviolet;
                         }
                         button{
-                            width: 20%;
-                            height: 80%;
+                            width: 2rem;
+                            height: 2rem;
                             position: absolute;
                             margin: .5rem;
                             right: -4px;
-                            background-color: #2b1e1e;
+                            background-color:#898383 ;
                             color: white;
                             border: none;
-                            border-radius: .5rem;
+                            border-radius: 60%;
                             cursor: pointer;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            
+                            transition: all .5s ease-in-out;
+                       
                             &:hover{
-                                background-color: #493d3d;
+                                background-color: #cac6c6 ;
+                                scale: 1.1;
                                
                             }
                         }
@@ -227,6 +274,7 @@
                 }
                
             }
+            
             
         }
 
@@ -373,7 +421,7 @@
                                             <img src="" alt="">
                                         </figure>
                                         <h3>${user.user_name}</h3> 
-                                        <button class="addfrdn">enviar</button>
+                                        <button class="addfrdn">+</button>
                                     </div>
                                 `;
                                 sercheados.insertAdjacentHTML('beforeend', userAdd)
@@ -399,6 +447,7 @@
         sercheados.addEventListener('click',(e)=>{
             if(e.target.className == 'addfrdn'){
                 const user = e.target.parentElement.children[1].innerText;
+
                 fetch('/addfriend',{
                     method:'POST',
                     headers:{
@@ -413,15 +462,17 @@
                 .then(res =>{
                     console.log(res.status)
                     if(res.status === 200){
+                        console.log(e.target.parentElement)
                         e.target.parentElement.remove();
                     }else if(res.status === 203){
+                        console.log(e.target.parentElement)
                         e.target.parentElement.remove();
                     }
                 })
                 
             }
 
-        })
+        });
 
     </script>
 </head>
@@ -437,27 +488,29 @@
 
             <div class="Contactos_users-user"> 
                 <figure class="Contactos_user-perfil">
-                    <img src="" alt="">
+                   
                 </figure>
                 <h3>Piti</h3>
                 <div class="Contactos_user-btns">
-                    <button>aseptar</button>
-                    <button>eliminar</button>
+                    <button class="check"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(115, 208, 69, 1);"><path d="M7 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7zm4 10.414-2.707-2.707 1.414-1.414L11 12.586l3.793-3.793 1.414 1.414L11 15.414z"></path></svg></button>
+                    <button class="delet"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(220, 51, 51);"><path d="M17 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm-1 8H8v-2h8z"></path></svg></button>
                 </div>
             </div>
 
             <div class="Contactos_users-search"> 
                 <form class="form-search" >
-                    <input type="text" placeholder="search">
-                    <button>search</button>
+                    <input type="text" placeholder="Buscar amigos">
+                    <button class="searchBton"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(12, 32, 1, 1);"><path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path></svg></button>
                 </form>
                 <div class="Contactos_users-searcheados">
+                    <!-- 
                     <div class="Contactos_users-searcheadoss">
                         <figure class="Contactos_user-perfil">
                             <img src="" alt="">
                         </figure>
                         <h3>Piti</h3>
                         <button class="addfrdn">enviar</button> 
+                        -->
                     </div>
 
                 </div>
