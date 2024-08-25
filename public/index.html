@@ -182,6 +182,7 @@
                     scroll-behavior: smooth;
                     overflow: scroll;
                     .Contactos_users-searcheadoss{
+                        position: relative;
                         width: 100%;
                         height: 2.5rem;
                         display: flex;
@@ -196,6 +197,22 @@
                             height: 2rem;
                             border-radius: 50%;
                             background-color: blueviolet;
+                        }
+                        button{
+                            width: 20%;
+                            height: 80%;
+                            position: absolute;
+                            margin: .5rem;
+                            right: -4px;
+                            background-color: #2b1e1e;
+                            color: white;
+                            border: none;
+                            border-radius: .5rem;
+                            cursor: pointer;
+                            &:hover{
+                                background-color: #493d3d;
+                               
+                            }
                         }
 
                     }
@@ -284,6 +301,7 @@
         const formSearch = document.querySelector('.form-search');
         const inputSearch = formSearch.children[0];
         const sercheados = document.querySelector('.Contactos_users-searcheados');
+        //mensajes 
         formulario.addEventListener('submit',(e)=>{
             e.preventDefault();
             if(input.value){
@@ -292,6 +310,7 @@
 
             }else{
                 console.log('no hay mensaje')
+                mensajes.style.border = '1px solid red'
             }
 
         });
@@ -302,9 +321,13 @@
             console.log('mensaje recibido', msg)
 
         })
+        //busqueda
         
         formSearch.addEventListener('submit',(e)=>{
             e.preventDefault();
+            if(sercheados.children.length  != 0){
+                sercheados.innerHTML = '';
+            }
             if(inputSearch.value){
                 fetch('/search',{
                     method:'POST',
@@ -333,17 +356,29 @@
                                             <img src="" alt="">
                                         </figure>
                                         <h3>${user.user_name}</h3> 
+                                        <button>enviar</button>
                                     </div>
                                 `;
+                                console.log(sercheados.children.length)
+                                
+
                                 sercheados.insertAdjacentHTML('beforeend', userAdd)
                                 
                             })
+                            console.log(sercheados)
                         })
+                        .catch(err => console.log(err))
                     }
        
                 } )
                 .catch(err => console.log(err))
 
+            }else{
+                inputSearch.style.border = '1px solid red';
+                setTimeout(()=>{
+                    inputSearch.style.border = 'none';
+
+                },800)
             }
         })
         
@@ -376,7 +411,8 @@
                         <figure class="Contactos_user-perfil">
                             <img src="" alt="">
                         </figure>
-                        <h3>Piti</h3> 
+                        <h3>Piti</h3>
+                        <button>enviar</button> 
                     </div>
 
                 </div>
