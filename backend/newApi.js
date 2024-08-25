@@ -156,7 +156,6 @@ app.post('/users', rejisterLimiter , async(req,res)=>{
 
 async function midelToken(req,res,next){
     const token = req.cookies.access_token;
-    const user = req.params.user;
     if(!token){
         return res.status(401).send("Access Denied desde middleware");
     }
@@ -165,6 +164,7 @@ async function midelToken(req,res,next){
         const data = jwt.verify(token,tknJsn);
         if(!data) return res.status(401).send("Access Denied desde middleware-");
         req.user = data;
+
         next();
     }
     catch(err){
@@ -319,10 +319,13 @@ app.post('/search',midelToken,async(req,res)=>{
 })
 app.post('/addfriend',midelToken, async(req,res)=>{
      const validUser =req.user;
-     const {addFriend} = req.body;
+     const {addFriend,sendFriend} = req.body;
      const cokie = req.cookies.access_token;
      const validation = jwt.verify(cokie,tknJsn);
     if(!validation) return res.status(401).json({msg:"Access Denied no token"});  
+    console.log(validation.usId)
+    console.log(validUser.usId)
+    if(validUser.usId!== validation.usId) return res.status(402).json({msg:"user not valid"});
        
    // console.log(addFriend);
     const result = await db.execute({
@@ -336,10 +339,10 @@ app.post('/addfriend',midelToken, async(req,res)=>{
     //console.log(result)
     const result2 = await db.execute(
         {
-            sql:"SELECT ab_id FROM friendships WHERE a_id = :sender AND b_id = :reciver",
+            sql:"SELECT ab_id FROM friendships WHERE a_id = :sender AND b_id = :recive",
             args:{
                 sender:validUser.usId,
-                reciver:user_id,
+                recive:user_id,
             }
         }
     )
@@ -359,12 +362,15 @@ app.post('/addfriend',midelToken, async(req,res)=>{
         }
     )
     console.log(result3)
+    if(result3.rowsAffected > 0) return res.status(200).json({msg:"friendship created"});
 
 
 })
 
 
 app.post('/logout',midelToken,(req,res)=>{
+    const token = req.cookies.access_token;
+    if(!token) return res.status(401).send("Access Denied no token");
     res.clearCookie('access_token');
     res.status(200).send("logout success");
 });
