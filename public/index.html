@@ -360,7 +360,7 @@
                                             <img src="" alt="">
                                         </figure>
                                         <h3>${user.user_name}</h3> 
-                                        <button>enviar</button>
+                                        <button class="addfrdn">enviar</button>
                                     </div>
                                 `;
                                 sercheados.insertAdjacentHTML('beforeend', userAdd)
@@ -383,6 +383,21 @@
             }
         })
         
+        sercheados.addEventListener('click',(e)=>{
+            if(e.target.className == 'addfrdn'){
+                const user = e.target.parentElement.children[1].innerText;
+                fetch('/addfriend',{
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify({addFriend:user})
+
+                })
+            }
+
+        })
+
     </script>
 </head>
 <body>
@@ -391,7 +406,7 @@
             <figure class="Contactos_user-perfil">
                 <img src="" />
             </figure>
-            <h3>Killua</h3>
+            <h3>------</h3>
         </div>
         <div class="Contactos_users"> 
 
@@ -413,7 +428,7 @@
                             <img src="" alt="">
                         </figure>
                         <h3>Piti</h3>
-                        <button>enviar</button> 
+                        <button class="addfrdn">enviar</button> 
                     </div>
 
                 </div>

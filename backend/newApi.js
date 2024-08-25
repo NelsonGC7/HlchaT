@@ -22,12 +22,11 @@ const loginLimiter = rateLimit({
 
 
 //socket requeriments
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import logger  from 'morgan';
 import { createServer } from 'http';
 
 import  { z } from 'zod';
-import { Console } from 'node:console';
 const userSchema = z.object({
 
     user:z.string().min(3).max(15),
@@ -84,18 +83,18 @@ async function createTable(){
         `)
         console.log("TABLE CREATED MESSAGES")
         await db.execute(`
-            DROP TABLE IF EXISTS friendsships;    
-        `);
-        await db.execute(`
-        CREATE TABLE IF NOT EXISTS friendships(
-            friends_id INTEGER PRIMARY KEY,
-            user1_id INTEGER NOT NULL,
-            user2_id INTEGER NOT NULL,
-            friends_since TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user1_id) REFERENCES users(user_id),
-            FOREIGN KEY (user2_id) REFERENCES users(user_id)
+            DROP TABLE IF EXISTS friendships;`
         );
-            
+        await db.execute(`
+            CREATE TABLE IF NOT EXISTS friendships(
+                ab_id TEXT PRIMARY KEY,
+                ab_status TEXT  NOT NULL DEFAULT 'pending',
+                a_id TEXT NOT NULL,
+                b_id TEXT NOT NULL,
+                ab_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (a_id) REFERENCES users(user_id),
+                FOREIGN KEY (b_id) REFERENCES users(user_id)
+            );          
         `)
     }
     catch(err){
@@ -240,6 +239,10 @@ app.use('/h!chat/char',(req,res,next)=>{
     */
 
 app.get('/:user/chat', midelToken, async (req,res)=>{
+    
+
+
+
     const userValid = req.user
     const user = req.params.user;
     const token = req.cookies.access_token;
@@ -313,10 +316,17 @@ app.post('/search',midelToken,async(req,res)=>{
    }
 
 })
+app.post('/addfriend',midelToken, async(req,res)=>{
+     const validUser =req.user;
+     const {addFriend} = req.body;
+     const cokie = req.cookies.access_token;
+     const validation = jwt.verify(cokie,tknJsn);
+    if(!validation) return res.status(401).json({msg:"Access Denied no token"});  
+       
+    console.log(addFriend);
 
 
-
-
+})
 
 
 app.post('/logout',midelToken,(req,res)=>{
