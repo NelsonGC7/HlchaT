@@ -343,9 +343,23 @@ app.post('/addfriend',midelToken, async(req,res)=>{
             }
         }
     )
-    if(result2.rows.length === 0 )return res.status(102).json({msg:"no friendship found"});
     if(result2.rows.length > 0) return res.status(203).json({msg:"friendship already exist"});
     
+    const idAmistad = randomUUID();
+
+    const result3 = await db.execute(
+        {
+            sql:"INSERT INTO friendships (ab_id,ab_status,a_id,b_id) VALUES (:id,:status,:send,:recive)",
+            args:{
+                id:idAmistad,
+                status:`pending`,
+                send:validUser.usId,
+                recive:user_id,
+            },
+        }
+    )
+    console.log(result3)
+
 
 })
 
