@@ -203,7 +203,8 @@ app.post('/login', loginLimiter  ,async(req,res)=>{
                     secure:true,
                     sameSite:'strict',
                     maxAge: 60 * 60 * 1000, // 1 hour
-                }).send({msg:"login success"})
+                })
+                .send({msg:"login success"})
             }
             else{
                 res.status(401).json({msg:"password incorrect"});
@@ -272,7 +273,11 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
             secure:true,
             sameSite:'strict',
             maxAge: 60 * 60 * 1000, // 1 hour
-        });
+        })
+        .cookie("user",user,{
+            sameSite: 'none',
+            secure:true,
+        })
 
         
     }else{

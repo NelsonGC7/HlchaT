@@ -300,6 +300,7 @@
         const mensajes = document.querySelector('#mensajes');
         const formSearch = document.querySelector('.form-search');
         const inputSearch = formSearch.children[0];
+        const US  = document.cookie.split('=')
         const sercheados = document.querySelector('.Contactos_users-searcheados');
         //mensajes 
         formulario.addEventListener('submit',(e)=>{
@@ -322,6 +323,10 @@
 
         })
         //busqueda
+        if(US.length === 2){
+            console.log(US[1])
+            document.querySelector('.Contactos_user h3').textContent = US[1];
+        }
         
         formSearch.addEventListener('submit',(e)=>{
             e.preventDefault();
@@ -348,7 +353,6 @@
                         res.json()
                         .then(data => {
                             data.forEach( user=>{
-                                console.log(user)
                                 const userAdd = 
                                 `
                                     <div class="Contactos_users-searcheadoss">
@@ -359,9 +363,6 @@
                                         <button>enviar</button>
                                     </div>
                                 `;
-                                console.log(sercheados.children.length)
-                                
-
                                 sercheados.insertAdjacentHTML('beforeend', userAdd)
                                 
                             })
