@@ -119,6 +119,7 @@ app.use(cookieParser())
 
 async function midelToken(req,res,next){
     const token = req.cookies.access_token;
+    console.log("midelware")
     if(!token){
         return res.status(401).send("Access Denied desde middleware");
     }
@@ -199,7 +200,7 @@ app.post('/login', loginLimiter  ,async(req,res)=>{
                 .cookie('access_token',tkn,{
                     httpOnly:true,
                     secure:true,
-                    sameSite:'strict',
+                    sameSite:'none',
                     maxAge: 60 * 60 * 1000, // 1 hour
                 })
                 .send({msg:"login success"})
@@ -270,7 +271,7 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
         res.cookie('access_token',token,{
             httpOnly:true,
             secure:true,
-            sameSite:'strict',
+            sameSite:'none',
             maxAge: 60 * 60 * 1000, // 1 hour
         })
         .cookie("user",user,{
@@ -375,12 +376,38 @@ app.post('/addfriend',midelToken, async(req,res)=>{
 
 })
 app.get('/friends',midelToken,async(req,res)=>{
+   
     const validUser = req.user
     const cokie = req.cookies.access_token;
     const valid = jwt.verify(cokie,tknJsn)
-    if(!valid) return res.status(400)
+    if(validUser.usId !== valid.usId)return res.status(400).json({"msj":"send catch"})
+    if(!valid) return res.status(401).json({"msj":"error 400"});
 
-    res.status(200).json({"msj":"hola weon"})
+    try{
+    
+        const result = await db.execute({
+            sql:
+            `
+                SELECT users.user_name,users.user_id
+                FROM users 
+                WHERE users.user_id IN (
+                    SELECT friendships.a_id FROM friendships
+                    WHERE friendships.b_id = :mser
+                )
+            `,
+            args:{
+                mser:`${validUser.usId}`
+    
+            }
+        })
+        res.status(200).json({"msj":"hola weon"}) 
+
+
+    }catch{
+        res.status(401).send("err in db");
+    }
+
+    
 
     
 })
