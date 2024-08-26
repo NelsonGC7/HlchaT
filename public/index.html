@@ -360,13 +360,35 @@
         const formSearch = document.querySelector('.form-search');
         const inputSearch = formSearch.children[0];
         const US  = document.cookie.split('=')
+        const mishoms = document.querySelector('.Contactos_users')
         const sercheados = document.querySelector('.Contactos_users-searcheados');
+
+        
         const frds = async()=>{
             const uss = await fetch('/friends')
-            console.log(uss)
-
+            const userJson = await uss.json()
+            return userJson.asept;
         }
-        frds()
+       const frdss =  await frds()
+        frdss.forEach( user => {
+            const amistad = 
+            `
+                <div class="Contactos_users-user"> 
+                <figure class="Contactos_user-perfil">
+                   
+                </figure>
+                <h3>${user.user_name}</h3>
+                <div class="Contactos_user-btns">
+                    <button class="check"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(115, 208, 69, 1);"><path d="M7 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7zm4 10.414-2.707-2.707 1.414-1.414L11 12.586l3.793-3.793 1.414 1.414L11 15.414z"></path></svg></button>
+                    <button class="delet"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(220, 51, 51);"><path d="M17 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm-1 8H8v-2h8z"></path></svg></button>
+                </div>
+            </div>
+            `
+            //console.log(amistad)
+            mishoms.insertAdjacentHTML('beforeend', amistad)
+
+
+        })
         //mensajes 
         formulario.addEventListener('submit',(e)=>{
             e.preventDefault();
@@ -389,7 +411,7 @@
         })
         //busqueda
         if(US.length === 2){
-            console.log(US[1])
+          
             document.querySelector('.Contactos_user h3').textContent = US[1];
         }
         
@@ -492,6 +514,7 @@
         </div>
         <div class="Contactos_users"> 
 
+            <!-- 
             <div class="Contactos_users-user"> 
                 <figure class="Contactos_user-perfil">
                    
@@ -502,6 +525,9 @@
                     <button class="delet"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(220, 51, 51);"><path d="M17 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm-1 8H8v-2h8z"></path></svg></button>
                 </div>
             </div>
+            
+            
+            -->
 
             <div class="Contactos_users-search"> 
                 <form class="form-search" >

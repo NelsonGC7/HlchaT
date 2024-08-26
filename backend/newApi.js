@@ -384,7 +384,6 @@ app.get('/friends',midelToken,async(req,res)=>{
     if(!valid) return res.status(401).json({"msj":"error 400"});
 
     try{
-    
         const result = await db.execute({
             sql:
             `
@@ -397,14 +396,16 @@ app.get('/friends',midelToken,async(req,res)=>{
             `,
             args:{
                 mser:`${validUser.usId}`
-    
             }
         })
-        res.status(200).json({"msj":"hola weon"}) 
+        //console.log(result.rows.length)
+        if(result.rows.length == 0) return res.status(404).json({"msj":"err en db in1"})
+        
+        res.status(202).json({"asept":result.rows})
 
 
     }catch{
-        res.status(401).send("err in db");
+        res.status(405).send("err in db in2");
     }
 
     
