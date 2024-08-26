@@ -71,11 +71,14 @@ Content-Type: application/json
     "userSearch": "pit"
 }
 
-###
-
+###prueba post infiltrado
 POST http://127.0.0.1:42066/addfriend
 Content-Type: application/json
 
 {
     "userSearch": "piti"
 }
+
+### prueba get friends
+
+GET http://127.0.0.1:42066/friends

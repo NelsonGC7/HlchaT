@@ -361,6 +361,12 @@
         const inputSearch = formSearch.children[0];
         const US  = document.cookie.split('=')
         const sercheados = document.querySelector('.Contactos_users-searcheados');
+        const frds = async()=>{
+            const uss = await fetch('/friends')
+            console.log(uss)
+
+        }
+        frds()
         //mensajes 
         formulario.addEventListener('submit',(e)=>{
             e.preventDefault();

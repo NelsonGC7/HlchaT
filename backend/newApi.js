@@ -19,13 +19,10 @@ const loginLimiter = rateLimit({
     max:6,
     message: "too many request from this ip, please try again in 2 minutes"
 })
-
-
 //socket requeriments
 import { Server } from 'socket.io';
 import logger  from 'morgan';
 import { createServer } from 'http';
-
 import  { z } from 'zod';
 const userSchema = z.object({
 
@@ -36,7 +33,6 @@ const userSchema = z.object({
 
 function validateUser(object){
     return userSchema.safeParse(object)
-
 }
 
 dotenv.config();
@@ -118,6 +114,30 @@ app.use(express.json())
 app.use(cookieParser())
 
 
+
+//creo una funcion middleware para verificar el token
+
+async function midelToken(req,res,next){
+    const token = req.cookies.access_token;
+    console.log(token)
+    if(!token){
+        return res.status(401).send("Access Denied desde middleware");
+    }
+    //console.log("este es token de: "+ user ,token);
+    try{
+        const data = jwt.verify(token,tknJsn);
+        if(!data) return res.status(401).send("Access Denied desde middleware-");
+        req.user = data;
+        next();
+    }
+    catch(err){
+        res.status(401).send("Access Denied")
+    }
+
+
+} 
+
+
 app.get('/',(req,res)=>{
     res.send("started page")
 })
@@ -151,26 +171,7 @@ app.post('/users', rejisterLimiter , async(req,res)=>{
     }
 })
 
-//creo una funcion middleware para verificar el token
 
-async function midelToken(req,res,next){
-    const token = req.cookies.access_token;
-    if(!token){
-        return res.status(401).send("Access Denied desde middleware");
-    }
-    //console.log("este es token de: "+ user ,token);
-    try{
-        const data = jwt.verify(token,tknJsn);
-        if(!data) return res.status(401).send("Access Denied desde middleware-");
-        req.user = data;
-        next();
-    }
-    catch(err){
-        res.status(401).send("Access Denied")
-    }
-
-
-} 
 app.post('/login', loginLimiter  ,async(req,res)=>{
     const {user,password} = req.body;
     try{
@@ -239,9 +240,6 @@ app.use('/h!chat/char',(req,res,next)=>{
 
 app.get('/:user/chat', midelToken, async (req,res)=>{
     
-
-
-
     const userValid = req.user
     const user = req.params.user;
     const token = req.cookies.access_token;
@@ -377,6 +375,17 @@ app.post('/addfriend',midelToken, async(req,res)=>{
 
 
 })
+app.get('/friends',midelToken,async(req,res)=>{
+    const validUser = req.user
+    const cokie = req.cookies.access_token;
+    const valid = jwt.verify(cokie,tknJsn)
+    if(!valid) return res.status(400)
+
+    res.status(200).json({"msj":"hola weon"})
+
+    
+})
+
 
 
 app.post('/logout',midelToken,(req,res)=>{
