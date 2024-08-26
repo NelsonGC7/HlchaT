@@ -299,9 +299,17 @@ app.post('/search',midelToken,async(req,res)=>{
     //console.log("buscando a: "+ userSearch);
     const result = await db.execute(
         {
-            sql:"SELECT user_name FROM users WHERE user_name LIKE :search",
+            sql:`SELECT user_name
+                 FROM users WHERE user_name LIKE :search
+                 AND user_id NOT IN (
+                    SELECT b_id FROM friendships
+                    WHERE a_id = :userId
+                    AND ab_status = 'pending'
+
+                 )` ,
             args:{
                 search:`%${userSearch}%`,
+                userId:data.usId,
             }
         }
         
