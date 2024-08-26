@@ -375,13 +375,15 @@ app.post('/addfriend',midelToken, async(req,res)=>{
 
 
 })
-app.get('/friends',midelToken,async(req,res)=>{
+app.post('/friends',midelToken,async(req,res)=>{
    
     const validUser = req.user
+    console.log(req.params)
     const cokie = req.cookies.access_token;
     const valid = jwt.verify(cokie,tknJsn)
     if(validUser.usId !== valid.usId)return res.status(400).json({"msj":"send catch"})
     if(!valid) return res.status(401).json({"msj":"error 400"});
+    console.log(validUser)
 
     try{
         const result = await db.execute({
@@ -399,7 +401,8 @@ app.get('/friends',midelToken,async(req,res)=>{
             }
         })
         //console.log(result.rows.length)
-        if(result.rows.length == 0) return res.status(404).json({"msj":"err en db in1"})
+        console.log(result.rows)
+        if(result.rows.length == 0) return res.status(204).json({"msj":"err en db in1"})
         
         res.status(202).json({"asept":result.rows})
 
