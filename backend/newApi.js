@@ -119,7 +119,6 @@ app.use(cookieParser())
 
 async function midelToken(req,res,next){
     const token = req.cookies.access_token;
-    console.log(token)
     if(!token){
         return res.status(401).send("Access Denied desde middleware");
     }
