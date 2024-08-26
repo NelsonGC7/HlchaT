@@ -393,17 +393,46 @@ app.get('/friends',midelToken,async(req,res)=>{
                 WHERE users.user_id IN (
                     SELECT friendships.a_id FROM friendships
                     WHERE friendships.b_id = :mser
+                    AND friendships.ab_status = 'pending'
+                   
+                 
                 )
             `,
             args:{
                 mser:`${validUser.usId}`
             }
         })
+       
         //console.log(result.rows.length)
         // console.log(result.rows)
-        if(result.rows.length == 0) return res.status(204).json({"msj":"err en db in1"})
+        const result2 = await db.execute({
+            sql:
+            `
+                SELECT users.user_name,users.user_id
+                FROM users 
+                WHERE users.user_id IN (
+                    SELECT friendships.a_id FROM friendships
+                    WHERE friendships.b_id = :mser
+                    AND friendships.ab_status = 'assept'
+                   
+                 
+                )
+            `,
+            args:{
+                mser:`${validUser.usId}`
+            }
+        })
+        console.log(result2.rows)
+        console.log(result.rows)
+        if(result.rows.length == 0 && result2.rows.length == 0){ 
+            return res.status(204).json({"msj":"err en db in1"})
+        }
         
-        res.status(202).json({"asept":result.rows})
+        res.status(202).json({
+            "pending":result.rows,
+            "assepted":result2.rows
+
+        })
 
 
     }catch{
