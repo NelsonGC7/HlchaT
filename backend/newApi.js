@@ -300,7 +300,9 @@ app.post('/search',midelToken,async(req,res)=>{
     const result = await db.execute(
         {
             sql:`SELECT user_name
-                 FROM users WHERE user_name LIKE :search
+                 FROM users 
+                 WHERE user_name LIKE :search
+                 AND user_id != :userId
                  AND user_id NOT IN (
                     SELECT b_id FROM friendships
                     WHERE a_id = :userId
