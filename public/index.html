@@ -423,8 +423,9 @@
             document.querySelector('.Contactos_user h3').textContent = US[1];
         }
         
-        formSearch.addEventListener('submit',(e)=>{
+        document.querySelector('.searchBton').addEventListener('click',(e)=>{
             e.preventDefault();
+            console.log(e.AT_TARGET)
             if(sercheados.children.length  != 0){
                 sercheados.innerHTML = '';
             }
