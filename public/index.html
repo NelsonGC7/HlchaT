@@ -1,3 +1,4 @@
+ <!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAABqUlEQVRIS+2W7U0CQRCG31lNENSoHWAH2gF0gB1AB1IBUAF2IB1IB9KB14FYgSQqhBh3nDkOsreckluP8EMuIYQbdp6dr3eXsKOHdsRFJvgNqB0AVwycF7Cx6BgY+n7WwDNj7pm5WQDQdTGqMNfdFynwDKgy0XPB0NgdMV+WgfHSdwocp5jocRvgL4n4FBjtwXEG9ql2miyyzK1P6coS0ARR37FNwNybA4NDmX1pzo7Yan6DhjTXZC6jcAFMls6mxvQFdruYE7qrWNte2l5FdEqLkUyJTwg4kuG/diP4ABpE9KDvRGxufGWaLkYyFXUIeC1iAXcFrClVcE/AXS/iJ/lddTcbAtb1I6lxW2uc1FGjXaVS638iNVblgzGdLMkNBf9ZzPbgf35IJMMvX8U/v57HipPh11FpFImWmR+UrW25PjPvXO+ix2JICQAZc7aSyR92pQBr7YtrlnvbWOZ/6EpurLR5IktptL/Q0+xNfnOB1VnWZTArlYWDkz5wD4FITq+6n8qtgJPujy+FIdDcNXajUPiRfNwr66YoN3Z1Hgeh/83dXKEgf903PeLkHzwGWCEAAAAASUVORK5CYII=">
     
     <title>chat</title>
+   
     <style>
                 *{
             margin: 0;
@@ -367,6 +369,8 @@
         }
 
     </style>
+    
+   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js" integrity="sha512-11t8Q+vY9JlCrr+PveZKTYJq8n7O09Y5X/pk/aMd3vJugSvu4xOunGEUzaADqL3I8cZKE/pBwwCfXzDkRJh2sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="module" defer >
        /*
@@ -403,7 +407,6 @@
         const mishoms = document.querySelector('.Contactos_users')
         const sercheados = document.querySelector('.Contactos_users-searcheados');
     
-
         fetch('/friends',{
             method:'GET',
         })
@@ -669,7 +672,9 @@
 
     </script>
 </head>
+
 <body>
+
     <section class="Contactos">
         <div class="Contactos_user">
             <figure class="Contactos_user-perfil">
@@ -680,7 +685,7 @@
                 <input type="text" placeholder="Buscar amigos">
                 <button class="searchBton"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(12, 32, 1, 1);"><path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path></svg></button>
             </form>
-            <!-- 
+           
             <div class="Contactos_users-search"> 
                 
                 <form class="form-search" >
@@ -697,12 +702,12 @@
                         <button class="addfrdn">enviar</button> 
                         
                 </div>
-            -->
+            
             </div>
         </div>
         <div class="Contactos_users"> 
 
-            <!-- 
+            
             <div class="Contactos_users-user"> 
                 <figure class="Contactos_user-perfil">
                    
@@ -715,8 +720,7 @@
             </div>
             
             
-            -->
-             <!-- 
+            
             <div class="Contactos_users-search"> 
                 <form class="form-search" >
                     <input type="text" placeholder="Buscar amigos">
@@ -732,7 +736,7 @@
                         <button class="addfrdn">enviar</button> 
                         
                </div>
-            -->    
+             
 
                 </div>
  
@@ -748,8 +752,610 @@
             <button id="bton">send</button>
         </form>    
     </section>
+   
+</body>
+
+
+
+
+
+</html> 
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAABqUlEQVRIS+2W7U0CQRCG31lNENSoHWAH2gF0gB1AB1IBUAF2IB1IB9KB14FYgSQqhBh3nDkOsreckluP8EMuIYQbdp6dr3eXsKOHdsRFJvgNqB0AVwycF7Cx6BgY+n7WwDNj7pm5WQDQdTGqMNfdFynwDKgy0XPB0NgdMV+WgfHSdwocp5jocRvgL4n4FBjtwXEG9ql2miyyzK1P6coS0ARR37FNwNybA4NDmX1pzo7Yan6DhjTXZC6jcAFMls6mxvQFdruYE7qrWNte2l5FdEqLkUyJTwg4kuG/diP4ABpE9KDvRGxufGWaLkYyFXUIeC1iAXcFrClVcE/AXS/iJ/lddTcbAtb1I6lxW2uc1FGjXaVS638iNVblgzGdLMkNBf9ZzPbgf35IJMMvX8U/v57HipPh11FpFImWmR+UrW25PjPvXO+ix2JICQAZc7aSyR92pQBr7YtrlnvbWOZ/6EpurLR5IktptL/Q0+xNfnOB1VnWZTArlYWDkz5wD4FITq+6n8qtgJPujy+FIdDcNXajUPiRfNwr66YoN3Z1Hgeh/83dXKEgf903PeLkHzwGWCEAAAAASUVORK5CYII=">
+    <title>H!chaT</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100%;
+            background-color: #f0f2f5;
+        }
+        .chat-container {
+            display: flex;
+            height: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Estilos para la barra lateral */
+        .sidebar {
+            width: 30%;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            transition: all .8 ease-in-out infinite;
+        }
+
+        .sidebar-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: rgb(170, 235, 222);
+        }
+        .search-container {
+            position: relative;
+            margin-top: 15px;
+        }
+        .search-container input {
+            width: 100%;
+            padding: 10px 10px 10px 35px;
+            border: none;
+            border-radius: 20px;
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 14px;
+        }
+        .search-container input::placeholder {
+            color: rgb(170, 235, 222);
+        }
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.7);
+        }
+        .search-send{
+            height: min-content;
+            max-height: 50%;
+            width: 100%;
+            overflow-y: scroll;
+
+            
+        }
+        .search-send .friend-info{
+            flex-grow: 0;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            padding: .2rem;
+            div{
+                margin: 0;
+            }
+            .friend_Status{
+                font-size: .5rem;
+            }
+
+        }
+        .search-send .friend-figure{
+            background-color: #5a67d8;
+        }
+        .search-send button{
+            position: absolute;
+            right: .5rem;
+            height: 1.6rem;
+            width: 1.6rem;
+            border: none;
+            background: transparent;
+            box-shadow: 0 0.125rem  35px 0 rgba(0, 0, 0, 0.597);
+            transition: all .5s ease-in;
+            cursor: pointer;
+           
+            &:hover{
+                scale: 1.1;
+                border-radius: .2rem;
+                box-shadow: 0 .145rem 7px 0 rgba(63, 1, 90, 0.822);
+            }
+        }
+
+        /* Estilos para las pestañas */
+        .tabs {
+            display: flex;
+            background-color: #f5f7fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .tabs a {
+            flex: 1;
+            text-align: center;
+            padding: 15px 0;
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .tabs a:hover {
+            background-color: #e2e8f0;
+        }
+        .tabs a.active {
+            border-bottom: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        /* Estilos para la lista de amigos */
+        .friend-list {
+            overflow-y: auto;
+            flex-grow: 1;
+            display: none;
+        }
+        .friend-soli{
+            overflow-y: auto;
+            flex-grow: 1;
+            
+        }
+        .friend-item {
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.3s ease;
+        }
+        .friend-item-search{
+            position: relative;
+            border-bottom: 0.125rem solid rgba(63, 1, 90, 0.374);
+            padding: .5rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .friend-item:hover {
+            background-color: #bbd8f5;
+        }
+        .friend-figure{
+            height: .6rem;
+            width: .6rem;
+            border-radius: 50%;
+            background-color: yellow;
+        }
+        .friend-info {
+            flex-grow: 1;
+        }
+        .friend-name {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        .friend-status {
+            font-size: 0.6em;
+            color: #718096;
+        }
+
+        /* Estilos para el área principal de chat */
+        .main-chat {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            padding: 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .chat-header h2 {
+            margin: 0;
+            color: #2d3748;
+            font-size: 20px;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .message {
+            max-width: 70%;
+            margin-bottom: 20px;
+            clear: both;
+        }
+        .message.received {
+            float: left;
+        }
+        .message.sent {
+            float: right;
+        }
+        .message-content {
+            padding: 12px 16px;
+            border-radius: 18px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .received .message-content {
+            background-color: #e2e8f0;
+            color: #2d3748;
+        }
+        .sent .message-content {
+            background-color: #667eea;
+            color: white;
+        }
+        .message-time {
+            font-size: 0.75em;
+            color: #a0aec0;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        /* Estilos para el área de entrada de mensajes */
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background-color: #fff;
+            border-top: 1px solid #e0e0e0;
+        }
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #cbd5e0;
+            border-radius: 20px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        .chat-input button {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .chat-input button:hover {
+            background-color: #5a67d8;
+        }
+        footer{
+            display: none;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js" integrity="sha512-11t8Q+vY9JlCrr+PveZKTYJq8n7O09Y5X/pk/aMd3vJugSvu4xOunGEUzaADqL3I8cZKE/pBwwCfXzDkRJh2sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="module" defer >
+       /*
+       const socket = io()
+        const form = document.querySelector('form')
+        const input = document.querySelector('input')
+        const mensajes = document.querySelector('ul');
+        socket.on('chat message', (msg) => {
+            const item = document.createElement('li')
+            item.textContent = msg
+            mensajes.appendChild(item)
+        })
+        
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            if(input.value){
+                socket.emit('chat message', input.value)
+                input.value = ''
+                
+
+            }
+        })
+
+        */
+        const IO = io();
+
+        const formularioChat = document.querySelector('.chat-input');//chek
+        const inputChat = document.querySelector('.chat-input input');
+        const mensajesChat = document.querySelector('chat-message');
+        const formSearch = document.querySelector('.form-search');
+        //const inputSearch = formSearch.children[0];
+        const US  = document.cookie.split('=')//check
+        const mishoms = document.querySelector('.friend-list')//xhek
+        const serchfriend = document.querySelector('.sidebar-header form');
+        const send = document.querySelector('.search-send')
+        console.log(send)
+        fetch('/friends',{
+            method:'GET',
+        })
+        .then(res => res.json())
+            .then(res=> {
+                const jsonPending= res.pending;
+                const jsonAssepted = res.assepted
+             
+              
+                jsonPending.forEach(user =>{
+                    const amistad = `
+                        <div class="Contactos_users-user ${user.user_name}"> 
+                            <figure class="Contactos_user-perfil">
+                            
+                            </figure>
+                            <h3>${user.user_name}</h3>
+                            <div class="Contactos_user-btns">
+                                <button class="check"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(115, 208, 69, 1);"><path d="M7 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7zm4 10.414-2.707-2.707 1.414-1.414L11 12.586l3.793-3.793 1.414 1.414L11 15.414z"></path></svg></button>
+                            </div>
+                        </div>
+                    `
+                    mishoms.insertAdjacentHTML('beforeend',amistad)
+                    const select = document.querySelector(`.${user.user_name}`)
+                    const userFriend = select.children[1];
+                    const btonFriend = select.children[2]
+                    btonFriend.addEventListener('click',(e)=>{
+                        fetch('/addfriend',{
+                            method:'POST',
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body: JSON.stringify({
+                                addFriend:userFriend.textContent
+                            })
+                        })
+
+                    })
+                    
+                })
+  
+
+                jsonAssepted.forEach(user =>{
+                    const amistad = `
+                        <div class="friend-item">
+                            <figure class="friend-figure"></figure>
+                            <div class="friend-info">
+                                <div class="friend-name">${user.user_name}</div>
+                                <div class="friend-status">linea</div>
+                            </div>
+                        </div>
+                    `
+                    mishoms.innerHTML = ''
+                    mishoms.insertAdjacentHTML('beforeend',amistad)
+                })
+
+
+
+               
+               
+            }).catch(err=> err)
+        //mensajes 
+            
+        setInterval(()=>{
+            fetch('/friends',{
+            method:'GET',
+            })
+        .then(res => res.json())
+            .then(res=> {
+                const jsonPending= res.pending;
+                const jsonAssepted = res.assepted
+             
+                
+                jsonPending.forEach(user =>{
+                    const amistad = `
+                        <div class="Contactos_users-user ${user.user_name}"> 
+                            <figure class="Contactos_user-perfil">
+                            
+                            </figure>
+                            <h3>${user.user_name}</h3>
+                            <div class="Contactos_user-btns">
+                                <button class="check"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(115, 208, 69, 1);"><path d="M7 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7zm4 10.414-2.707-2.707 1.414-1.414L11 12.586l3.793-3.793 1.414 1.414L11 15.414z"></path></svg></button>
+                            </div>
+                        </div>
+                    `
+                    mishoms.innerHTML = ''
+                    mishoms.insertAdjacentHTML('beforeend',amistad)
+                    const select = document.querySelector(`.${user.user_name}`)
+                    const userFriend = select.children[1];
+                    const btonFriend = select.children[2]
+                    btonFriend.addEventListener('click',(e)=>{
+                        fetch('/addfriend',{
+                            method:'POST',
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body: JSON.stringify({
+                                addFriend:userFriend.textContent
+                            })
+                        })
+
+                    })
+                    
+                })
+  
+
+                jsonAssepted.forEach(user =>{
+                    const amistad = `
+                        <div class="friend-item">
+                            <figure class="friend-figure"></figure>
+                            <div class="friend-info">
+                                <div class="friend-name">${user.user_name}</div>
+                                <div class="friend-status">linea</div>
+                            </div>
+                        </div>
+                    `
+                    mishoms.innerHTML = ''
+                    mishoms.insertAdjacentHTML('beforeend',amistad)
+                })
+
+
+
+               
+            }).catch(err=> err)
+            
+            
+        },60000)
+        
+        console.log(serchfriend)
+        formularioChat.children[1].addEventListener('submit',(e)=>{
+            e.preventDefault();
+          
+        
+            if(inputChat.value){
+                IO.emit('chat message', input.value)
+                inputChat.value = '';
+
+            }else{
+                console.log('no hay mensaje')
+                mensajesChat.style.border = '1px solid red'
+            }
+
+        });
+        IO.on('chat message', (msg)=>{
+            const limsg = document.createElement('li');
+            limsg.textContent = msg;
+            mensajesChat.appendChild(limsg);
+            console.log('mensaje recibido', msg)
+
+        })
+        //busqueda
+        if(US.length === 2){
+            document.querySelector('.sidebar-header h1').textContent = US[1];
+        }
+        console.log(serchfriend)
+        serchfriend.addEventListener('submit',(e)=>{
+            e.preventDefault();
+            console.log(e.AT_TARGET)
+            if(send.children.length  != 0){
+                console.log({"1":send.children.length})
+                send.innerHTML = '';
+            }
+            if(serchfriend.children[0].value){
+                fetch('/search',{
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    
+                    },
+                    body: JSON.stringify({
+                        userSearch: serchfriend.children[0].value
+                    })
+                })
+                .then(res =>{
+                    console.log(res)
+                    if(res.status === 206){
+                        res.json()
+                        .then(data => {
+                            console.log(data)
+                        })
+                    }else if(res.status === 226){
+                        res.json()
+                        .then(data => {
+                            data.forEach( user=>{
+                                const amistad = `
+                                    <div class="friend-item-search ${user.user_name}">
+                                        <figure class="friend-figure"></figure>
+                                        <div class="friend-info">
+                                            <div class="friend-name">${user.user_name}</div>
+                                            <div class="friend-status">no send</div>
+                                        </div>
+                                        <button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(5, 1, 14, 1);transform: ;msFilter:;"><path d="M15 2.013H9V9H2v6h7v6.987h6V15h7V9h-7z"></path></svg></button>
+                                    </div>
+                                `
+                                send.insertAdjacentHTML('beforeend', amistad)
+                                const soli = document.querySelector(`${user.user_name}`)
+                                console.log(soli)
+                                
+                            })
+                            console.log(serchfriend)
+                        })
+                        .catch(err => console.log(err))
+                    }
+       
+                } )
+                .catch(err => console.log(err))
+
+            }else{
+               console.log("add name para buscar")
+            }
+        })
+      
+        
+
+    </script>
+</head>
+<body>
+    <sidebar  class="chat-container">
+        <sidebar class="sidebar">
+            <section class="sidebar-header">
+                <h1>-----</h1>
+                <form type="submit" class="search-container">
+                    <input type="text" placeholder="Buscar amigos...">
+                    <span class="search-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(170, 235, 222);"><path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path></svg></span>
+                </form>
+            </section>
+            <div class="search-send">
+
+            </div>
+            
+
+            <nav class="tabs">
+                <a href="#" class="">all</a>
+                <a href="#" class="">around</a>
+                <a href="#" class="active">solid</a>
+            </nav>
+            <div class="friend-list">
+            </div>
+            <div class="friend-soli">
+
+            </div>
+            
+
+
+
+            
+        </sidebar>
+        <section class="main-chat">
+            <div class="chat-header">
+                <h2>Chat con Amigo 1</h2>
+            </div>
+            <div class="chat-messages">
+                <div class="message received">
+                    <div class="message-content">
+                        <p>Hola, ¿cómo estás?</p>
+                    </div>
+                    <div class="message-time">10:30 AM</div>
+                </div>
+                <div class="message sent">
+                    <div class="message-content">
+                        <p>¡Hola! Estoy bien, gracias. ¿Y tú?</p>
+                    </div>
+                    <div class="message-time">10:32 AM</div>
+                </div>
+                <div class="message received">
+                    <div class="message-content">
+                        <p>Todo bien por aquí. ¿Qué planes tienes para hoy?</p>
+                    </div>
+                    <div class="message-time">10:33 AM</div>
+                </div>
+                <div class="message sent">
+                    <div class="message-content">
+                        <p>Tengo pensado trabajar en un proyecto nuevo. ¿Te gustaría colaborar?</p>
+                    </div>
+                    <div class="message-time">10:35 AM</div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Escribe un mensaje...">
+                <button>Enviar</button>
+            </div>
+        </section>
+    </sidebar>
     <footer>
         <p>&copy; 2024 NelsonMahomarGarzaCisneros. Todos los derechos reservados. Prohibida la reproducción total o parcial</p>
     </footer>
 </body>
-</html> 
+</html>

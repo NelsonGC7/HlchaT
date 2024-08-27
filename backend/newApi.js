@@ -356,6 +356,7 @@ app.post('/addfriend',midelToken, async(req,res)=>{
         }
     )
     if(result2.rows.length > 0) {
+        /*
         await db.execute({
             sql:
             `
@@ -367,6 +368,7 @@ app.post('/addfriend',midelToken, async(req,res)=>{
                 recive:user_id,
             }
         })
+            */
         return res.status(404).json({msg:"friendship already exist"})
     };
     const result2_2 = await db.execute(
