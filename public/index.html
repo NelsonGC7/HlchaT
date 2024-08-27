@@ -383,7 +383,7 @@
                 
                 jsonPending.forEach(user =>{
                     const amistad = `
-                        <div class="Contactos_users-user"> 
+                        <div class="Contactos_users-user ${user.user_name}"> 
                             <figure class="Contactos_user-perfil">
                             
                             </figure>
@@ -394,9 +394,24 @@
                         </div>
                     `
                     mishoms.insertAdjacentHTML('beforeend',amistad)
+                    const select = document.querySelector(`.${user.user_name}`)
+                    const userFriend = select.children[1];
+                    const btonFriend = select.children[2]
+                    btonFriend.addEventListener('click',(e)=>{
+                        fetch('/addfriend',{
+                            method:'POST',
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body: JSON.stringify({
+                                addFriend:userFriend.textContent
+                            })
+                        })
+
+                    })
                     
                 })
-                console.log(jsonAssepted)
+  
 
                 jsonAssepted.forEach(user =>{
                     const amistad = `

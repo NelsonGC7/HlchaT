@@ -360,15 +360,41 @@ app.post('/addfriend',midelToken, async(req,res)=>{
             sql:
             `
                 UPDATE friendships set ab_status = 'assept'
-                WHERE a_id = :sender AND b_id = :recive
+                WHERE b_id = :recive AND a_id = :sender
             `,
             args:{
                 sender:validUser.usId,
                 recive:user_id,
             }
         })
-        return res.status(203).json({msg:"friendship already exist"})
+        return res.status(404).json({msg:"friendship already exist"})
     };
+    const result2_2 = await db.execute(
+        {
+            sql:`
+            SELECT ab_id FROM friendships 
+            WHERE b_id = :asepta  AND a_id = :aseptado
+            `,
+            args:{
+                asepta:validUser.usId,
+                aseptado:user_id
+            }
+        }
+    )
+    if(result2_2.rows.length > 0 ){
+        await db.execute({
+            sql:
+            `
+                UPDATE friendships set ab_status = 'assept'
+                WHERE b_id = :asepta AND a_id = :aseptado
+            `,
+            args:{
+                asepta:validUser.usId,
+                aseptado:user_id
+            }
+        })
+        return res.status(450)
+    }
     
     const idAmistad = randomUUID();
 
