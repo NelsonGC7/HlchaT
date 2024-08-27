@@ -305,8 +305,12 @@ app.post('/search',midelToken,async(req,res)=>{
                     SELECT b_id FROM friendships
                     WHERE a_id = :userId
                     AND ab_status = 'pending'
-
-                 )` ,
+                 )
+                AND user_id NOT IN (
+                    SELECT a_id FROM friendships
+                    WHERE b_id = :userId
+                    AND ab_status = 'pending'
+                )` ,
             args:{
                 search:`%${userSearch}%`,
                 userId:data.usId,
@@ -368,7 +372,7 @@ app.post('/addfriend',midelToken, async(req,res)=>{
                 recive:user_id,
             }
         })
-            */
+         */   
         return res.status(404).json({msg:"friendship already exist"})
     };
     const result2_2 = await db.execute(

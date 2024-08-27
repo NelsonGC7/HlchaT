@@ -903,11 +903,12 @@
         .friend-list {
             overflow-y: auto;
             flex-grow: 1;
-            display: none;
+            
         }
         .friend-soli{
             overflow-y: auto;
             flex-grow: 1;
+            display: none;
             
         }
         .friend-item {
@@ -1071,7 +1072,6 @@
         const mishoms = document.querySelector('.friend-list')//xhek
         const serchfriend = document.querySelector('.sidebar-header form');
         const send = document.querySelector('.search-send')
-        console.log(send)
         fetch('/friends',{
             method:'GET',
         })
@@ -1079,7 +1079,7 @@
             .then(res=> {
                 const jsonPending= res.pending;
                 const jsonAssepted = res.assepted
-             
+                console.log(jsonPending,jsonAssepted)
               
                 jsonPending.forEach(user =>{
                     const amistad = `
@@ -1093,10 +1093,11 @@
                             </div>
                         </div>
                     `
-                    mishoms.insertAdjacentHTML('beforeend',amistad)
+                    document.querySelector('.friend-soli').insertAdjacentHTML('beforeend',amistad)
                     const select = document.querySelector(`.${user.user_name}`)
                     const userFriend = select.children[1];
                     const btonFriend = select.children[2]
+                    console.log(userFriend,btonFriend)
                     btonFriend.addEventListener('click',(e)=>{
                         fetch('/addfriend',{
                             method:'POST',
@@ -1126,11 +1127,6 @@
                     mishoms.innerHTML = ''
                     mishoms.insertAdjacentHTML('beforeend',amistad)
                 })
-
-
-
-               
-               
             }).catch(err=> err)
         //mensajes 
             
@@ -1228,7 +1224,6 @@
         console.log(serchfriend)
         serchfriend.addEventListener('submit',(e)=>{
             e.preventDefault();
-            console.log(e.AT_TARGET)
             if(send.children.length  != 0){
                 console.log({"1":send.children.length})
                 send.innerHTML = '';
@@ -1266,11 +1261,22 @@
                                     </div>
                                 `
                                 send.insertAdjacentHTML('beforeend', amistad)
-                                const soli = document.querySelector(`${user.user_name}`)
-                                console.log(soli)
                                 
-                            })
-                            console.log(serchfriend)
+                                document.querySelector(`.${user.user_name}`).addEventListener('click',()=>{
+                                    let newsoli = document.querySelector(`.${user.user_name}`)
+                                    const userr = newsoli.children[1].children[0].innerText
+                                    fetch('/addfriend',{
+                                        method:'POST',
+                                        headers:{
+                                            'Content-Type':'application/json'   
+                                        },
+                                        body:JSON.stringify({addFriend:userr})
+                                    }).then(data=> console.log(data))
+                                    .catch(Error=> console.log(Error))
+
+                                })
+                                
+                            }) 
                         })
                         .catch(err => console.log(err))
                     }
