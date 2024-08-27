@@ -136,6 +136,7 @@
                 border-radius: 2rem;
                 padding: .5rem;
                 transition: all .5s ease;
+                z-index: 0;
                 &:hover{
                     background-color: #D1D7DB;
                     border: #fffefe 1px solid;
@@ -144,25 +145,27 @@
                     width: .5rem;
                     height: .5rem;
                     border-radius: 99999px;
-                    background-color: rgb(4, 0, 252);
+                    background-color: rgb(252, 248, 0);
                     
                 }
                 .Contactos_user-btns{
-                    width: 46%;
-            
-                    height: 2rem;
+                    width: 1.75rem;
+                    height: 1.75rem;
                     gap: .2rem;
                     display: flex;
-                    flex-basis: 100%;
-                    justify-content: end;
-               
+                    align-items: center;
+                    justify-content: center;
+                    position: absolute;
+                    right: 6.6%;
+                    z-index: 0;
+                    
 
                     button{
-                        width: 30%;
+                        width: 100%;
+                        max-width: 4rem;
                         max-width: 1.8rem;
                         height: 100%;
                         max-height: 1.8rem;
-                       
                         background-color: #2b1e1e;
                         color: white;
                         border: none;
@@ -171,10 +174,12 @@
                         display: grid;
                         place-items: center;
                         transition: background-color .5s ease;
+                        z-index: -1;
                         &:hover{
                             background-color: #868585;
                         }
                     }
+                    
                     
                    
 
@@ -183,9 +188,9 @@
             .Contactos_users-search{
                 position: absolute;
                 margin: 0 auto;
-                bottom: .5rem;
+                bottom: -30%;
                 width: 95%;
-                height: 35%;
+                height: 38%;
                 min-height: 11.5625rem;
                 gap: .5rem;
                 background-color: #2b1e1e;
@@ -193,6 +198,7 @@
                 padding: .5rem;
                 display: flex;
                 flex-direction: column;
+                z-index: 10;
                 .form-search{
                     display: flex;
                     width: 100%;
@@ -388,6 +394,7 @@
                         </div>
                     `
                     mishoms.insertAdjacentHTML('beforeend',amistad)
+                    
                 })
                 console.log(jsonAssepted)
 
@@ -411,7 +418,7 @@
                 mishoms.addEventListener('click',(e)=>{
                     e.preventDefault()
                     if(e.target.tagName === "svg" || e.target.tagName === "BUTTON" || e.target.tagName ==="path"){
-
+                        console.log(e.target.parentElement.parentElement)
 
 
                     }

@@ -328,7 +328,7 @@ app.post('/addfriend',midelToken, async(req,res)=>{
      const {addFriend} = req.body;
      const cokie = req.cookies.access_token;
      const validation = jwt.verify(cokie,tknJsn);
-     console.log(addFriend)
+
     if(!validation) return res.status(401).json({msg:"Access Denied no token"});  
    // console.log(validation.usId)
     //console.log(validUser.usId)
@@ -355,7 +355,20 @@ app.post('/addfriend',midelToken, async(req,res)=>{
             }
         }
     )
-    if(result2.rows.length > 0) return res.status(203).json({msg:"friendship already exist"});
+    if(result2.rows.length > 0) {
+        await db.execute({
+            sql:
+            `
+                UPDATE friendships set ab_status = 'assept'
+                WHERE a_id = :sender AND b_id = :recive
+            `,
+            args:{
+                sender:validUser.usId,
+                recive:user_id,
+            }
+        })
+        return res.status(203).json({msg:"friendship already exist"})
+    };
     
     const idAmistad = randomUUID();
 
@@ -370,7 +383,7 @@ app.post('/addfriend',midelToken, async(req,res)=>{
             },
         }
     )
-    console.log(result3.rowsAffected)
+
     if(result3.rowsAffected > 0) return res.status(200).json({msg:"friendship created"});
 
 
@@ -422,8 +435,7 @@ app.get('/friends',midelToken,async(req,res)=>{
                 mser:`${validUser.usId}`
             }
         })
-        console.log(result2.rows)
-        console.log(result.rows)
+  
         if(result.rows.length == 0 && result2.rows.length == 0){ 
             return res.status(204).json({"msj":"err en db in1"})
         }
