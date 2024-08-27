@@ -900,15 +900,28 @@
         }
 
         /* Estilos para la lista de amigos */
+        .Container-complete{
+            height: 100%;
+            width: 100%;
+            display: grid;
+            grid-column: 100%;
+            grid-row: 100%;
+            grid-template-areas: 
+            "todo"
+            ;
+        }
         .friend-list {
             overflow-y: auto;
             flex-grow: 1;
-            
+            grid-area: todo;
+            z-index: 1;
+           
         }
         .friend-soli{
             overflow-y: auto;
-            flex-grow: 1;
-            display: none;
+           grid-area: todo;
+           z-index: -1;
+            
             
         }
         .friend-item {
@@ -918,6 +931,7 @@
             padding: 15px;
             border-bottom: 1px solid #e0e0e0;
             transition: background-color 0.3s ease;
+
         }
         .friend-item-search{
             position: relative;
@@ -1072,6 +1086,48 @@
         const mishoms = document.querySelector('.friend-list')//xhek
         const serchfriend = document.querySelector('.sidebar-header form');
         const send = document.querySelector('.search-send')
+        const tabs = document.querySelector('.tabs').children;
+        const newTabs = [...tabs]
+       newTabs.forEach(res=> 
+        res.addEventListener('click',()=>{ 
+            if(res.nextElementSibling){
+
+                if(res.classList.contains("active")){
+                res.classList.remove("active")
+                    if(res.nextElementSibling.classList.contains("active")){
+                        res.nextElementSibling.classList.remove("active") 
+                    }else{
+                        res.nextElementSibling.classList.add("active");
+                    }
+                
+                }else{
+                    res.classList.add("active")
+                    res.nextElementSibling.classList.remove("active") 
+                    
+                }
+     
+            }else{
+                if(res.previousElementSibling.classList.contains("active")){
+                    res.previousElementSibling.classList.remove("active")
+                    if(res.classList.contains("acive")){
+                        res.classList.remove("active")
+                    }else{
+                        res.classList.add("active")
+                    }
+                }else{
+                    res.previousElementSibling.classList.add("active");
+                    res.classList.remove("active")
+                }
+                
+              
+                
+            }
+           
+            
+        })
+       )
+        
+        console.log(newTabs)
         fetch('/friends',{
             method:'GET',
         })
@@ -1079,7 +1135,6 @@
             .then(res=> {
                 const jsonPending= res.pending;
                 const jsonAssepted = res.assepted
-                console.log(jsonPending,jsonAssepted)
               
                 jsonPending.forEach(user =>{
                     const amistad = `
@@ -1097,7 +1152,7 @@
                     const select = document.querySelector(`.${user.user_name}`)
                     const userFriend = select.children[1];
                     const btonFriend = select.children[2]
-                    console.log(userFriend,btonFriend)
+                    
                     btonFriend.addEventListener('click',(e)=>{
                         fetch('/addfriend',{
                             method:'POST',
@@ -1129,7 +1184,7 @@
                 })
             }).catch(err=> err)
         //mensajes 
-            
+            /*
         setInterval(()=>{
             fetch('/friends',{
             method:'GET',
@@ -1194,8 +1249,8 @@
             
             
         },60000)
+        */
         
-        console.log(serchfriend)
         formularioChat.children[1].addEventListener('submit',(e)=>{
             e.preventDefault();
           
@@ -1221,7 +1276,7 @@
         if(US.length === 2){
             document.querySelector('.sidebar-header h1').textContent = US[1];
         }
-        console.log(serchfriend)
+        
         serchfriend.addEventListener('submit',(e)=>{
             e.preventDefault();
             if(send.children.length  != 0){
@@ -1309,15 +1364,17 @@
             
 
             <nav class="tabs">
-                <a href="#" class="">all</a>
-                <a href="#" class="">around</a>
-                <a href="#" class="active">solid</a>
+                <a href="#" class="active"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(90, 103, 216, 1);"><path d="M21 2H6a2 2 0 0 0-2 2v3H2v2h2v2H2v2h2v2H2v2h2v3a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-8 2.999c1.648 0 3 1.351 3 3A3.012 3.012 0 0 1 13 11c-1.647 0-3-1.353-3-3.001 0-1.649 1.353-3 3-3zM19 18H7v-.75c0-2.219 2.705-4.5 6-4.5s6 2.281 6 4.5V18z"></path></svg></a>
+                <!-- <a href="#" class=""> <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(90, 103, 216, 1);"><path d="m12 17 1-2V9.858c1.721-.447 3-2 3-3.858 0-2.206-1.794-4-4-4S8 3.794 8 6c0 1.858 1.279 3.411 3 3.858V15l1 2zM10 6c0-1.103.897-2 2-2s2 .897 2 2-.897 2-2 2-2-.897-2-2z"></path><path d="m16.267 10.563-.533 1.928C18.325 13.207 20 14.584 20 16c0 1.892-3.285 4-8 4s-8-2.108-8-4c0-1.416 1.675-2.793 4.267-3.51l-.533-1.928C4.197 11.54 2 13.623 2 16c0 3.364 4.393 6 10 6s10-2.636 10-6c0-2.377-2.197-4.46-5.733-5.437z"></path></svg></a> -->
+                <a href="#" class=""><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(90, 103, 216, 1);"><path d="M19.95 5.64 13.59 12l6.36 6.36 1.41-1.41L16.41 12l4.95-4.95-1.41-1.41zM2.64 7.05 7.59 12l-4.95 4.95 1.41 1.41L10.41 12 4.05 5.64 2.64 7.05z"></path></svg></a>
             </nav>
-            <div class="friend-list">
-            </div>
-            <div class="friend-soli">
-
-            </div>
+            <section class="Container-complete">
+                <div class="friend-list">
+                    
+                </div>
+                <div class="friend-soli">
+                </div>
+            </section>
             
 
 
