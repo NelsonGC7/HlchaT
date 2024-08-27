@@ -81,4 +81,4 @@ Content-Type: application/json
 
 ### prueba get friends
 
-GET http://127.0.0.1:42066/friends
+post http://127.0.0.1:42066/friends
