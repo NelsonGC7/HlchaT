@@ -1091,32 +1091,38 @@
        newTabs.forEach(res=> 
         res.addEventListener('click',()=>{ 
             if(res.nextElementSibling){
-
                 if(res.classList.contains("active")){
-                res.classList.remove("active")
+                    res.classList.remove("active")
+
                     if(res.nextElementSibling.classList.contains("active")){
                         res.nextElementSibling.classList.remove("active") 
                     }else{
                         res.nextElementSibling.classList.add("active");
+                        document.querySelector(".friend-list").style.zIndex = "-1";
+                        document.querySelector('.friend-soli').style.zIndex = "1";
                     }
-                
                 }else{
-                    res.classList.add("active")
-                    res.nextElementSibling.classList.remove("active") 
-                    
+                    res.nextElementSibling.classList.remove("active")
+                    res.classList.add("active")  
+                    document.querySelector(".friend-list").style.zIndex = "1";
+                    document.querySelector('.friend-soli').style.zIndex = "-1"; 
                 }
      
             }else{
                 if(res.previousElementSibling.classList.contains("active")){
-                    res.previousElementSibling.classList.remove("active")
+                    res.previousElementSibling.classList.remove("active");
                     if(res.classList.contains("acive")){
-                        res.classList.remove("active")
+                        res.classList.remove("active")  
                     }else{
-                        res.classList.add("active")
+                        res.classList.add("active");
+                        document.querySelector(".friend-list").style.zIndex = "-1";
+                        document.querySelector('.friend-soli').style.zIndex = "1";
                     }
                 }else{
                     res.previousElementSibling.classList.add("active");
                     res.classList.remove("active")
+                    document.querySelector(".friend-list").style.zIndex = "1";
+                    document.querySelector('.friend-soli').style.zIndex = "-1";
                 }
                 
               
