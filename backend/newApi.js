@@ -305,13 +305,14 @@ app.post('/search',midelToken,async(req,res)=>{
                     SELECT b_id FROM friendships
                     WHERE a_id = :userId
                     AND ab_status = 'pending'
-                    OR ab_Status = 'assept'
+                    OR ab_status = 'assept'
+                  
                  )
                 AND user_id NOT IN (
                     SELECT a_id FROM friendships
                     WHERE b_id = :userId
-                    AND ab_status = 'pending'
-                    OR ab_Status = 'assept'
+                    AND ab_Status = 'assept'
+                    OR ab_status = 'pending'
                 )` ,
             args:{
                 search:`%${userSearch}%`,
@@ -458,11 +459,15 @@ app.get('/friends',midelToken,async(req,res)=>{
                 SELECT users.user_name,users.user_id
                 FROM users 
                 WHERE users.user_id IN (
+            
                     SELECT friendships.a_id FROM friendships
                     WHERE friendships.b_id = :mser
                     AND friendships.ab_status = 'assept'
-                   
-                 
+                    )
+                    OR  users.user_id IN (
+                    SELECT friendships.b_id FROM friendships
+                    WHERE friendships.a_id = :mser
+                    AND friendships.ab_status = 'assept'     
                 )
             `,
             args:{
