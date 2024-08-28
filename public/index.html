@@ -334,6 +334,7 @@
         const inputChat = document.querySelector('.chat-input input');
         //const mensajesChat = document.querySelector('.chat-messages');
         const formSearch = document.querySelector('.form-search');
+        const conteiner =document.querySelector(".main-chat")
         //const inputSearch = formSearch.children[0];
         const US  = document.cookie.split('=')//check
         const mishoms = document.querySelector('.friend-list')//xhek
@@ -341,7 +342,7 @@
         const send = document.querySelector('.search-send')
         const tabs = document.querySelector('.tabs').children;
         const newTabs = [...tabs]
-    
+        console.log(conteiner)
        newTabs.forEach(res=> 
         res.addEventListener('click',()=>{ 
             if(res.nextElementSibling){
@@ -448,7 +449,58 @@
                         </div>
                     `;
                     mishoms.insertAdjacentHTML('beforeend',amistad);
-                    let cluster = document.querySelector(`.friend-item .cluster-${user.user_name}`);
+                    let cluster = document.querySelector(`.cluster-${user.user_name}`);
+                    cluster.addEventListener("click",()=>{
+                        conteiner.innerHTML= "";
+                        const newChat = `
+                         <div class="chat-header">
+                            <h2>${user.user_name}</h2>
+                        </div>
+                        <div class="chat-messages">
+
+                            <!--
+                            <div class="message received">
+                                <div class="message-content">
+                                    <p>Hola, ¿cómo estás?</p>
+                                </div>
+                                <div class="message-time">10:30 AM</div>
+                            </div>
+                            <div class="message sent">
+                                <div class="message-content">
+                                    <p>¡Hola! Estoy bien, gracias. ¿Y tú?</p>
+                                </div>
+                                <div class="message-time">10:32 AM</div>
+                            </div>
+                            <div class="message received">
+                                <div class="message-content">
+                                    <p>Todo bien por aquí. ¿Qué planes tienes para hoy?</p>
+                                </div>
+                                <div class="message-time">10:33 AM</div>
+                            </div>
+                            <div class="message sent">
+                                <div class="message-content">
+                                    <p>Tengo pensado trabajar en un proyecto nuevo. ¿Te gustaría colaborar?</p>
+                                </div>
+                                <div class="message-time">10:35 AM</div>
+                            </div>
+                        -->
+
+                        </div>
+
+
+                    
+                        <form class="chat-input">
+                            <input type="text" placeholder="Escribe un mensaje...">
+                            <button>Enviar</button>
+                        </form>
+                        
+                        
+                        
+                        `
+                        conteiner.innerHTML = newChat;
+                    })
+
+                    
                 })
             }).catch(err=> err)
         //mensajes 
