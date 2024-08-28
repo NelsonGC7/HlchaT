@@ -102,7 +102,7 @@
             width: 1.6rem;
             border: none;
             background: transparent;
-            box-shadow: 0 0.125rem  35px 0 rgba(0, 0, 0, 0.597);
+            box-shadow: 0 0.125rem  15px -5px rgba(0, 0, 0, 0.597);
             transition: all .5s ease-in;
             cursor: pointer;
            
@@ -514,17 +514,23 @@
                                 `
                                 send.insertAdjacentHTML('beforeend', amistad)
                                 
-                                document.querySelector(`.${user.user_name}`).addEventListener('click',()=>{
-                                    let newsoli = document.querySelector(`.${user.user_name}`)
-                                    const userr = newsoli.children[1].children[0].innerText
-                                    fetch('/addfriend',{
-                                        method:'POST',
-                                        headers:{
-                                            'Content-Type':'application/json'   
-                                        },
-                                        body:JSON.stringify({addFriend:userr})
-                                    }).then(data=> console.log(data))
-                                    .catch(Error=> console.log(Error))
+                                document.querySelector(`.${user.user_name}`).addEventListener('click',async()=>{
+                                    try{
+                                        let newsoli = document.querySelector(`.${user.user_name}`)
+                                        const userr = newsoli.children[1].children[0].innerText
+                                        const data = await fetch('/addfriend',{
+                                            method:'POST',
+                                            headers:{
+                                                'Content-Type':'application/json'   
+                                            },
+                                            body:JSON.stringify({addFriend:userr})
+                                            })
+                                        const result = await data.json()
+                                        if(result) return newsoli.remove();
+                                    }
+                                    catch{
+                                        console.log("error en la soilictud")
+                                    }
 
                                 })
                                 
