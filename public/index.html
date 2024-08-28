@@ -444,11 +444,19 @@
                             <figure class="friend-figure"></figure>
                             <div class="friend-info">
                                 <div class="friend-name">${user.user_name}</div>
-                                <div class="friend-status">---</div>
+                                <div class="friend-status">${user.user_status}</div>
                             </div>
                         </div>
                     `;
                     mishoms.insertAdjacentHTML('beforeend',amistad);
+                    const status =  document.querySelector(`.cluster-${user.user_name} .friend-figure `)
+                 
+                    if(user.user_status === 'online'){
+                        status.style.backgroundColor = "green";
+                    }else{
+                        status.style.backgroundColor = "red";
+                    }
+                    console.log(status)
                     let cluster = document.querySelector(`.cluster-${user.user_name}`);
                     cluster.addEventListener("click",()=>{
                         conteiner.innerHTML= "";
