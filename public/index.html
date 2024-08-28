@@ -438,7 +438,7 @@
                             <figure class="friend-figure"></figure>
                             <div class="friend-info">
                                 <div class="friend-name">${user.user_name}</div>
-                                <div class="friend-status">linea</div>
+                                <div class="friend-status">---</div>
                             </div>
                         </div>
                     `;
@@ -446,71 +446,6 @@
                 })
             }).catch(err=> err)
         //mensajes 
-          
-        setInterval(()=>{
-            fetch('/friends',{
-            method:'GET',
-            })
-        .then(res => res.json())
-            .then(res=> {
-                const jsonPending= res.pending;
-                const jsonAssepted = res.assepted
-             
-                
-                jsonPending.forEach(user =>{
-                    const amistad = `
-                        <div class="Contactos_users-user ${user.user_name}"> 
-                            <figure class="Contactos_user-perfil">
-                            
-                            </figure>
-                            <h3>${user.user_name}</h3>
-                            <div class="Contactos_user-btns">
-                                <button class="check"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(115, 208, 69, 1);"><path d="M7 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7zm4 10.414-2.707-2.707 1.414-1.414L11 12.586l3.793-3.793 1.414 1.414L11 15.414z"></path></svg></button>
-                            </div>
-                        </div>
-                    `
-                    mishoms.innerHTML = ''
-                    mishoms.insertAdjacentHTML('beforeend',amistad)
-                    const select = document.querySelector(`.${user.user_name}`)
-                    const userFriend = select.children[1];
-                    const btonFriend = select.children[2]
-                    btonFriend.addEventListener('click',(e)=>{
-                        fetch('/addfriend',{
-                            method:'POST',
-                            headers:{
-                                'Content-Type':'application/json'
-                            },
-                            body: JSON.stringify({
-                                addFriend:userFriend.textContent
-                            })
-                        })
-
-                    })
-                    
-                })
-  
-
-                jsonAssepted.forEach(user =>{
-                    const amistad = `
-                        <div class="friend-item">
-                            <figure class="friend-figure"></figure>
-                            <div class="friend-info">
-                                <div class="friend-name">${user.user_name}</div>
-                                <div class="friend-status">linea</div>
-                            </div>
-                        </div>
-                    `
-                    mishoms.innerHTML = ''
-                    mishoms.insertAdjacentHTML('beforeend',amistad)
-                })
-
-
-
-               
-            }).catch(err=> err)
-            
-            
-        },60000)
         
         
         formularioChat.children[1].addEventListener('submit',(e)=>{

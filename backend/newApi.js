@@ -305,14 +305,14 @@ app.post('/search',midelToken,async(req,res)=>{
                     SELECT b_id FROM friendships
                     WHERE a_id = :userId
                     AND ab_status = 'pending'
-                    OR ab_status = 'assept'
+                   
                   
                  )
                 AND user_id NOT IN (
                     SELECT a_id FROM friendships
                     WHERE b_id = :userId
                     AND ab_Status = 'assept'
-                    OR ab_status = 'pending'
+                   
                 )` ,
             args:{
                 search:`%${userSearch}%`,
