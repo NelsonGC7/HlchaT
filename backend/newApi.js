@@ -58,14 +58,13 @@ async function createTable(){
               user_name VARCHAR(25) UNIQUE,
               user_email VARCHAR(100) UNIQUE,
               user_pass VARCHAR(50) NOT NULL,
-              user_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-            );
+              user_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              user_status TEXT NOT NULL)
           `);
             console.log("TABLE CREATED")
+    
+        await db.execute(`DROP TABLE IF EXISTS mesages`);
 
-        await db.execute(`
-            DROP TABLE IF EXISTS mesages;`
-        );
         await db.execute(`
         CREATE TABLE IF NOT EXISTS mesages(
             mesage_id INTEGER  PRIMARY KEY,
@@ -75,11 +74,12 @@ async function createTable(){
             send_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (send_id) REFERENCES users(user_id),
             FOREIGN KEY (rec_id) REFERENCES users(user_id)
-        );          
+            );          
         `)
+
         console.log("TABLE CREATED MESSAGES")
         await db.execute(`
-            DROP TABLE IF EXISTS friendships;`
+            DROP TABLE IF EXISTS friendships`
         );
         await db.execute(`
             CREATE TABLE IF NOT EXISTS friendships(
@@ -92,11 +92,15 @@ async function createTable(){
                 FOREIGN KEY (b_id) REFERENCES users(user_id)
             );          
         `)
+       
     }
     catch(err){
         console.log(err)
     }
 };
+
+
+
 
 
 const app = express();
@@ -155,12 +159,15 @@ app.post('/users', rejisterLimiter , async(req,res)=>{
         const hashedPassword = await bcrypt.hash(password,8);  
         await db.execute(
                 {
-                    sql:"INSERT INTO users (user_id,user_name,user_email,user_pass) VALUES (:id,:user,:correo,:password)",
+                    sql:"INSERT INTO users (user_id,user_name,user_email,user_pass,user_status) VALUES (:id,:user,:correo,:password,:status)",
                     args:{
                         id:randomUUID(),
                         user:result.data.user,
                         correo:result.data.correo,
                         password:hashedPassword,
+                        status:"online"
+
+
                     },
                 },
         );
@@ -455,7 +462,7 @@ app.get('/friends',midelToken,async(req,res)=>{
         const result2 = await db.execute({
             sql:
             `
-                SELECT users.user_name,users.user_id
+                SELECT users.user_name,users.user_id,users.user_status
                 FROM users 
                 WHERE users.user_id IN (
             
