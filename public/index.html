@@ -332,7 +332,7 @@
 
         const formularioChat = document.querySelector('.chat-input');//chek
         const inputChat = document.querySelector('.chat-input input');
-        const mensajesChat = document.querySelector('.chat-messages');
+        //const mensajesChat = document.querySelector('.chat-messages');
         const formSearch = document.querySelector('.form-search');
         //const inputSearch = formSearch.children[0];
         const US  = document.cookie.split('=')//check
@@ -341,7 +341,7 @@
         const send = document.querySelector('.search-send')
         const tabs = document.querySelector('.tabs').children;
         const newTabs = [...tabs]
-        console.log(mensajesChat)
+    
        newTabs.forEach(res=> 
         res.addEventListener('click',()=>{ 
             if(res.nextElementSibling){
@@ -387,7 +387,6 @@
         })
        )
         
-        console.log(newTabs)
         fetch('/friends',{
             method:'GET',
         })
@@ -395,8 +394,6 @@
             .then(res=> {
                 const jsonPending= res.pending;
                 const jsonAssepted = res.assepted
-                console.log("Pendiente:",jsonPending)
-                console.log("asept",jsonAssepted)
 
                 jsonPending.forEach(user =>{
                     const amistad = `
@@ -441,9 +438,8 @@
   
 
                 jsonAssepted.forEach(user =>{
-                    console.log(user)
                     let amistad = `
-                        <div class="friend-item">
+                        <div class="friend-item cluster-${user.user_name}">
                             <figure class="friend-figure"></figure>
                             <div class="friend-info">
                                 <div class="friend-name">${user.user_name}</div>
@@ -451,11 +447,12 @@
                             </div>
                         </div>
                     `;
-                    mishoms.insertAdjacentHTML('beforeend',amistad)
+                    mishoms.insertAdjacentHTML('beforeend',amistad);
+                    let cluster = document.querySelector(`.friend-item .cluster-${user.user_name}`);
                 })
             }).catch(err=> err)
         //mensajes 
-        
+        /*
         console.log(formularioChat.children)
         formularioChat.addEventListener('submit',(e)=>{
             e.preventDefault();
@@ -478,6 +475,7 @@
             console.log('mensaje recibido', msg)
 
         })
+            */
         //busqueda
         if(US.length === 2){
             document.querySelector('.sidebar-header h1').textContent = US[1];
@@ -594,46 +592,9 @@
             
         </sidebar>
         <section class="main-chat">
-            <div class="chat-header">
-                <h2>Chat con Amigo 1</h2>
-            </div>
-            <div class="chat-messages">
 
-                <!--
-                <div class="message received">
-                    <div class="message-content">
-                        <p>Hola, ¿cómo estás?</p>
-                    </div>
-                    <div class="message-time">10:30 AM</div>
-                </div>
-                <div class="message sent">
-                    <div class="message-content">
-                        <p>¡Hola! Estoy bien, gracias. ¿Y tú?</p>
-                    </div>
-                    <div class="message-time">10:32 AM</div>
-                </div>
-                <div class="message received">
-                    <div class="message-content">
-                        <p>Todo bien por aquí. ¿Qué planes tienes para hoy?</p>
-                    </div>
-                    <div class="message-time">10:33 AM</div>
-                </div>
-                <div class="message sent">
-                    <div class="message-content">
-                        <p>Tengo pensado trabajar en un proyecto nuevo. ¿Te gustaría colaborar?</p>
-                    </div>
-                    <div class="message-time">10:35 AM</div>
-                </div>
-            -->
-
-            </div>
-
-
-        
-            <form class="chat-input">
-                <input type="text" placeholder="Escribe un mensaje...">
-                <button>Enviar</button>
-            </form>
+           
+            
         </section>
     </sidebar>
     <footer>
