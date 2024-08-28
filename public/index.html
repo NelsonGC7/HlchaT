@@ -414,17 +414,26 @@
                     const select = document.querySelector(`.${user.user_name}`)
                     const userFriend = select.children[1];
                     const btonFriend = select.children[2]
+                    console.log(select)
                     
-                    btonFriend.addEventListener('click',(e)=>{
-                        fetch('/addfriend',{
-                            method:'POST',
-                            headers:{
-                                'Content-Type':'application/json'
-                            },
-                            body: JSON.stringify({
-                                addFriend:userFriend.textContent
+                    btonFriend.addEventListener('click',async()=>{
+                        try{
+                            const fech = await fetch('/addfriend',{
+                                method:'POST',
+                                headers:{
+                                    'Content-Type':'application/json'
+                                },
+                                body: JSON.stringify({
+                                    addFriend:userFriend.textContent
+                                })
                             })
-                        })
+                            select.remove()
+                            const result = await fech.json()
+                            console.log(result)
+                        }catch{
+                            console.log("error en la solicitud")
+                        }
+        
 
                     })
                     

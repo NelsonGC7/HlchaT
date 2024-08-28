@@ -401,7 +401,7 @@ app.post('/addfriend',midelToken, async(req,res)=>{
                 aseptado:user_id
             }
         })
-        return res.status(450)
+        return res.status(203).json({"msj":"error en result2_2"})
     }
     
     const idAmistad = randomUUID();
