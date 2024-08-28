@@ -341,6 +341,7 @@
         const send = document.querySelector('.search-send')
         const tabs = document.querySelector('.tabs').children;
         const newTabs = [...tabs]
+        console.log(mishoms)
        newTabs.forEach(res=> 
         res.addEventListener('click',()=>{ 
             if(res.nextElementSibling){
@@ -396,6 +397,7 @@
                 const jsonAssepted = res.assepted
                 console.log("Pendiente:",jsonPending)
                 console.log("asept",jsonAssepted)
+
                 jsonPending.forEach(user =>{
                     const amistad = `
                         <div class="Contactos_users-user ${user.user_name}"> 
@@ -430,7 +432,8 @@
   
 
                 jsonAssepted.forEach(user =>{
-                    const amistad = `
+                    console.log(user)
+                    let amistad = `
                         <div class="friend-item">
                             <figure class="friend-figure"></figure>
                             <div class="friend-info">
@@ -438,13 +441,12 @@
                                 <div class="friend-status">linea</div>
                             </div>
                         </div>
-                    `
-                    mishoms.innerHTML = ''
+                    `;
                     mishoms.insertAdjacentHTML('beforeend',amistad)
                 })
             }).catch(err=> err)
         //mensajes 
-            /*
+          
         setInterval(()=>{
             fetch('/friends',{
             method:'GET',
@@ -509,7 +511,7 @@
             
             
         },60000)
-        */
+        
         
         formularioChat.children[1].addEventListener('submit',(e)=>{
             e.preventDefault();
