@@ -106,19 +106,23 @@ app.use(cookieParser())
 
 async function midelToken(req,res,next){
     const token = req.cookies.access_token;
+    try{
+   
     console.log("midelware")
     if(!token){
-        return res.status(401).send("Access Denied desde middleware");
+        return res.status(401).json({"error1":"Access Denied desde middleware"});
     }
     //console.log("este es token de: "+ user ,token);
-    try{
+    
         const data = jwt.verify(token,tknJsn);
-        if(!data) return res.status(401).send("Access Denied desde middleware-");
+        if(!data) return res.status(401).send({"error2":"token no valido"});
         req.user = data;
         next();
     }
     catch(err){
-        res.status(401).send("Access Denied")
+        if(err instanceof jwt.TokenExpiredError){
+            return res.status(401).json({"error3:":"Token expirado"})
+        }
     }
 
 
@@ -257,7 +261,7 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
             httpOnly:false,
             secure:true,
             sameSite:'none',
-            maxAge: 60 * 60 * 1000, // 1 hour
+            maxAge: 60 * 60 * 2000, // 1 hour
         })
         .cookie("user",user,{
             httpOnly:false,
@@ -480,22 +484,19 @@ app.post('/logout',midelToken,(req,res)=>{
 
 //sockets de comunicacion
 
-io.on('connection',(socket)=>{
+io.on('connection',async(socket)=>{
     console.log(`user connected`);
     const  tk = socket.handshake.auth.token;
     if(!tk){
         socket.disconnect()
         return;
     }
-    jwt.verify(tk,tknJsn,async(err,decode)=>{
-        
-        const usC = decode.usId;
+        const data = await jwt.verify(tk,tknJsn);
+
+        if(!data) return socket.disconnect();
+        const usC = data.usId;
         if(!usC) return console.log("no tienes el usId")
-        if(err){
-            socket.disconnect()
-            return;
-        };
-        socket.on('joinC',async(data)=>{
+        const verAmistad = async(sender,recive)=>{
             const result = await db.execute({
                 sql:`
                 SELECT ab_id FROM friendships 
@@ -503,18 +504,34 @@ io.on('connection',(socket)=>{
                 OR a_id = :reciId AND b_id = :sendId 
                 `,
                 args:{
-                    sendId:usC,
-                    reciId:data.recive_id
+                    sendId:sender,
+                    reciId:recive
                 }
-            })
-            const idAmistad = result.rows[0].ab_id
+            });
+            return result.rows
+
+            
+        }
+       
+        
+        socket.on('joinC',async(data)=>{
+           const result = await verAmistad(usC,data.recive_id)
+            if(result.length === 0) return console.log("no eres amigo")
+            const idAmistad = result[0].ab_id
             const room = idAmistad
             socket.join(room)
             console.log(`user ${usC} joined room ${room}`)
 
         })
-       
-    })
+        socket.on('privmsj', async(data)=>{
+           
+            const {recive_id,msj } = data;
+            const result = await verAmistad(usC,data.recive_id)
+            if(result.length === 0) return console.log("no eres amigo")
+
+            io.to(result[0].ab_id).emit('privmsj',msj)
+            console.log(msj)
+        })
 
     socket.on('disconnect',()=>{
      console.log(`user disconnected`);

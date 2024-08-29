@@ -74,9 +74,7 @@
             height: min-content;
             max-height: 50%;
             width: 100%;
-         
-
-            
+            transition: all   .5s  cubic-bezier(0.39, 0.575, 0.565, 1) ease-in ;
         }
         .search-send .friend-info{
             flex-grow: 0;
@@ -217,6 +215,7 @@
             display: flex;
             align-items: center;
             gap: .5rem;
+            
         }
         .friend-item:hover {
             background-color: #bbd8f5;
@@ -327,6 +326,7 @@
             display: none;
         }
     </style>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js" integrity="sha512-11t8Q+vY9JlCrr+PveZKTYJq8n7O09Y5X/pk/aMd3vJugSvu4xOunGEUzaADqL3I8cZKE/pBwwCfXzDkRJh2sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="module" defer >
        /*
@@ -633,9 +633,6 @@
                             <input type="text" placeholder="Escribe un mensaje...">
                             <button>Enviar</button>
                         </form>
-                        
-                        
-                        
                         `
                         conteiner.innerHTML = newChat;
                         const formularioChat = document.querySelector('.chat-input');//chek
@@ -644,14 +641,12 @@
                             e.preventDefault()
                             const messaje = inputChat.value;
                             
-                            
-
-
+                            IO.emit('privmsj',{recive_id:user.user_id,msj:messaje})
+                        })  
+                        IO.on('privmsj',(data)=>{
+                            console.log(data)
                         })
-                        
-                    })
-
-                    
+                    }) 
                 })
             }).catch(err=> err)
         
@@ -787,9 +782,9 @@
             
 
             <nav class="tabs">
-                <a href="#" class="active"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(90, 103, 216, 1);"><path d="M21 2H6a2 2 0 0 0-2 2v3H2v2h2v2H2v2h2v2H2v2h2v3a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-8 2.999c1.648 0 3 1.351 3 3A3.012 3.012 0 0 1 13 11c-1.647 0-3-1.353-3-3.001 0-1.649 1.353-3 3-3zM19 18H7v-.75c0-2.219 2.705-4.5 6-4.5s6 2.281 6 4.5V18z"></path></svg></a>
+                <a  class="active"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(90, 103, 216, 1);"><path d="M21 2H6a2 2 0 0 0-2 2v3H2v2h2v2H2v2h2v2H2v2h2v3a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-8 2.999c1.648 0 3 1.351 3 3A3.012 3.012 0 0 1 13 11c-1.647 0-3-1.353-3-3.001 0-1.649 1.353-3 3-3zM19 18H7v-.75c0-2.219 2.705-4.5 6-4.5s6 2.281 6 4.5V18z"></path></svg></a>
                 <!-- <a href="#" class=""> <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(90, 103, 216, 1);"><path d="m12 17 1-2V9.858c1.721-.447 3-2 3-3.858 0-2.206-1.794-4-4-4S8 3.794 8 6c0 1.858 1.279 3.411 3 3.858V15l1 2zM10 6c0-1.103.897-2 2-2s2 .897 2 2-.897 2-2 2-2-.897-2-2z"></path><path d="m16.267 10.563-.533 1.928C18.325 13.207 20 14.584 20 16c0 1.892-3.285 4-8 4s-8-2.108-8-4c0-1.416 1.675-2.793 4.267-3.51l-.533-1.928C4.197 11.54 2 13.623 2 16c0 3.364 4.393 6 10 6s10-2.636 10-6c0-2.377-2.197-4.46-5.733-5.437z"></path></svg></a> -->
-                <a href="#" class=""><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(90, 103, 216, 1);"><path d="M19.95 5.64 13.59 12l6.36 6.36 1.41-1.41L16.41 12l4.95-4.95-1.41-1.41zM2.64 7.05 7.59 12l-4.95 4.95 1.41 1.41L10.41 12 4.05 5.64 2.64 7.05z"></path></svg>
+                <a  class=""><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(90, 103, 216, 1);"><path d="M19.95 5.64 13.59 12l6.36 6.36 1.41-1.41L16.41 12l4.95-4.95-1.41-1.41zM2.64 7.05 7.59 12l-4.95 4.95 1.41 1.41L10.41 12 4.05 5.64 2.64 7.05z"></path></svg>
                 
                 </a>
             </nav>
