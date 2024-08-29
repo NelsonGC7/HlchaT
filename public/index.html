@@ -404,12 +404,7 @@
                     document.querySelector(".friend-list").style.zIndex = "1";
                     document.querySelector('.friend-soli').style.zIndex = "-1";
                 }
-                
-              
-                
             }
-           
-            
         })
        )
         
@@ -421,9 +416,8 @@
             .then(res=> {
                 const jsonPending= res.pending;
                 const jsonAssepted = res.assepted
-                console.log(jsonPending.length)
                 if(jsonPending.length > 0){
-                    console.log(newTabs[1])
+                  
                     const P = document.createElement('p');
                     P.id = "numSoli"
                     P.textContent = jsonPending.length;           
@@ -447,7 +441,7 @@
                     const select = document.querySelector(`.${user.user_name}`)
                     const userFriend = select.children[1];
                     const btonFriend = select.children[2]
-                    console.log(select)
+                    
                     
                     btonFriend.addEventListener('click',async()=>{
                         try{
@@ -584,7 +578,7 @@
                     }else{
                         status.style.backgroundColor = "red";
                     }
-                    console.log(status)
+                    
                     let cluster = document.querySelector(`.cluster-${user.user_name}`);
                     cluster.addEventListener("click",()=>{
                         conteiner.innerHTML= "";
@@ -645,6 +639,7 @@
      }
         
      llamada()
+     
             //mensajes 
         /*
         console.log(formularioChat.children)
@@ -693,7 +688,7 @@
                     })
                 })
                 .then(res =>{
-                    console.log(res)
+                    
                     if(res.status === 206){
                         res.json()
                         .then(data => {
