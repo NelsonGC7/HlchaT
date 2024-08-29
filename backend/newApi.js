@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import { randomUUID } from 'node:crypto';
 import rateLimit from 'express-rate-limit';
-
 const rejisterLimiter = rateLimit({
     windowMs: 2 * 60 * 1000, // 2 minutes
     max:6,
@@ -30,20 +29,15 @@ const userSchema = z.object({
     correo:z.string().email(),
     password:z.string().min(8).max(20)
 })
-
 function validateUser(object){
     return userSchema.safeParse(object)
 }
-
 dotenv.config();
 const tknJsn = process.env.JSNTKN;
-
-
 const db = createClient({
     url:process.env.DBHOST,
     authToken:process.env.DBTOKEN
 });
-
 /* creacion de trablas para los usuarios y los mensajes en la base de datos*/
 async function createTable(){
     try{
@@ -98,27 +92,16 @@ async function createTable(){
         console.log(err)
     }
 };
-
-
-
-
-
 const app = express();
 const socketServer = createServer(app);
-
 const io = new Server(socketServer,{
     connectionStateRecovery:{},
 });
-
-
 const PORT = process.env.PORT || 42066;
 app.use(logger('dev'));
 app.use(cors());
 app.use(express.json())
 app.use(cookieParser())
-
-
-
 //creo una funcion middleware para verificar el token
 
 async function midelToken(req,res,next){
@@ -141,14 +124,12 @@ async function midelToken(req,res,next){
 
 } 
 
-
 app.get('/',(req,res)=>{
     res.send("started page")
-})
+});
 app.get('/loginre',(req,res)=>{
     res.sendFile(process.cwd()+ '/schemas/login.html')
-})
-
+});
 app.post('/users', rejisterLimiter , async(req,res)=>{
     try{
         const {password} = req.body;
@@ -176,9 +157,7 @@ app.post('/users', rejisterLimiter , async(req,res)=>{
     catch(err){
         res.status(409).json({msg:"user not created"})
     }
-})
-
-
+});
 app.post('/login', loginLimiter  ,async(req,res)=>{
     const {user,password} = req.body;
     try{
@@ -224,7 +203,7 @@ app.post('/login', loginLimiter  ,async(req,res)=>{
     catch(err){
         console.log(err)
     }
-})
+});
 /* //cree mi propoio middleware para verificar el token el ruta deseada
 app.use('/h!chat/char',(req,res,next)=>{
     const tokken = req.headers.Autorization;
@@ -244,7 +223,6 @@ app.use('/h!chat/char',(req,res,next)=>{
 
 })
     */
-
 app.get('/:user/chat', midelToken, async (req,res)=>{
     
     const userValid = req.user
@@ -276,15 +254,18 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
         res.status(200)
         .sendFile(process.cwd() + '/public/index.html')
         res.cookie('access_token',token,{
-            httpOnly:true,
+            httpOnly:false,
             secure:true,
             sameSite:'none',
             maxAge: 60 * 60 * 1000, // 1 hour
         })
         .cookie("user",user,{
-            sameSite: 'none',
+            httpOnly:false,
             secure:true,
-        })
+            sameSite:'none',
+            
+        });
+
 
         
     }else{
@@ -292,7 +273,6 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
         return res.status(401).json({msg:"Access Denied noo token !!"}) 
     }
 });
-
 app.post('/search',midelToken,async(req,res)=>{
     const {userSearch} = req.body;
     const token = req.cookies.access_token;
@@ -335,7 +315,7 @@ app.post('/search',midelToken,async(req,res)=>{
        console.log("error en el TRY search",err)
    }
 
-})
+});
 app.post('/addfriend',midelToken, async(req,res)=>{
      const validUser =req.user;
      const {addFriend} = req.body;
@@ -428,7 +408,7 @@ app.post('/addfriend',midelToken, async(req,res)=>{
     if(result3.rowsAffected > 0) return res.status(200).json({msg:"friendship created"});
 
 
-})
+});
 app.get('/friends',midelToken,async(req,res)=>{
    
     const validUser = req.user
@@ -456,7 +436,6 @@ app.get('/friends',midelToken,async(req,res)=>{
                 mser:`${validUser.usId}`
             }
         })
-       
         //console.log(result.rows.length)
         // console.log(result.rows)
         const result2 = await db.execute({
@@ -480,29 +459,18 @@ app.get('/friends',midelToken,async(req,res)=>{
                 mser:`${validUser.usId}`
             }
         })
-  
         if(result.rows.length == 0 && result2.rows.length == 0){ 
             return res.status(204).json({"msj":"err en db in1"})
-        }
-        
+        }    
         res.status(202).json({
             "pending":result.rows,
             "assepted":result2.rows
 
         })
-
-
     }catch{
         res.status(405).send("err in db in2");
-    }
-
-    
-
-    
-})
-
-
-
+    }    
+});
 app.post('/logout',midelToken,(req,res)=>{
     const token = req.cookies.access_token;
     if(!token) return res.status(401).send("Access Denied no token");
@@ -510,21 +478,49 @@ app.post('/logout',midelToken,(req,res)=>{
     res.status(200).send("logout success");
 });
 
-
 //sockets de comunicacion
 
 io.on('connection',(socket)=>{
     console.log(`user connected`);
+    const  tk = socket.handshake.auth.token;
+    if(!tk){
+        socket.disconnect()
+        return;
+    }
+    jwt.verify(tk,tknJsn,async(err,decode)=>{
+        
+        const usC = decode.usId;
+        if(!usC) return console.log("no tienes el usId")
+        if(err){
+            socket.disconnect()
+            return;
+        };
+        socket.on('joinC',async(data)=>{
+            const result = await db.execute({
+                sql:`
+                SELECT ab_id FROM friendships 
+                WHERE a_id = :sendId AND b_id = :reciId
+                OR a_id = :reciId AND b_id = :sendId 
+                `,
+                args:{
+                    sendId:usC,
+                    reciId:data.recive_id
+                }
+            })
+            const idAmistad = result.rows[0].ab_id
+            const room = idAmistad
+            socket.join(room)
+            console.log(`user ${usC} joined room ${room}`)
 
+        })
+       
+    })
 
     socket.on('disconnect',()=>{
      console.log(`user disconnected`);
     })
 
-    socket.on('chat message',(msg)=>{
-        io.emit('chat message',msg);
-        
-    })
+
 
 })
 

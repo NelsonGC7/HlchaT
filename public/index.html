@@ -352,20 +352,28 @@
         })
 
         */
-        const IO = io();
-
-        const formularioChat = document.querySelector('.chat-input');//chek
-        const inputChat = document.querySelector('.chat-input input');
-        //const mensajesChat = document.querySelector('.chat-messages');
+        const US  = document.cookie.split(';')//
+        console.log(US)
+        if(US[0].split('=')[0] === "user"){
+                var user = US[0].split('=')[1]
+                var tk =  US[1].split('=')[1]
+            }else{
+                var user = US[1].split('=')[1]
+                var tk =  US[0].split('=')[1]
+            }
+        const IO = io({
+            auth:{
+                token:tk
+            }
+        });
+///resolver error de usuarios en diferentes navegadoress
         const formSearch = document.querySelector('.form-search');
         const conteiner =document.querySelector(".main-chat")
-        //const inputSearch = formSearch.children[0];
-        const US  = document.cookie.split('=')//check
+        
         const mishoms = document.querySelector('.friend-list')//xhek
         const serchfriend = document.querySelector('.sidebar-header form');
         const send = document.querySelector('.search-send')
         const tabs = document.querySelector('.tabs').children;
-        
         const newTabs = [...tabs]
     
        newTabs.forEach(res=> 
@@ -572,6 +580,7 @@
                     `;
                     mishoms.insertAdjacentHTML('beforeend',amistad);
                     const status =  document.querySelector(`.cluster-${user.user_name} .friend-figure `)
+
                  
                     if(user.user_status === 'online'){
                         status.style.backgroundColor = "green";
@@ -581,6 +590,7 @@
                     
                     let cluster = document.querySelector(`.cluster-${user.user_name}`);
                     cluster.addEventListener("click",()=>{
+                        IO.emit('joinC',{recive_id:user.user_id})
                         conteiner.innerHTML= "";
                         const newChat = `
                          <div class="chat-header">
@@ -628,6 +638,17 @@
                         
                         `
                         conteiner.innerHTML = newChat;
+                        const formularioChat = document.querySelector('.chat-input');//chek
+                        const inputChat = document.querySelector('.chat-input input');
+                        formularioChat.addEventListener('submit',(e)=>{
+                            e.preventDefault()
+                            const messaje = inputChat.value;
+                            
+                            
+
+
+                        })
+                        
                     })
 
                     
@@ -637,8 +658,8 @@
 
 
      }
-        
      llamada()
+     
      
             //mensajes 
         /*
@@ -666,8 +687,11 @@
         })
             */
         //busqueda
+    
         if(US.length === 2){
-            document.querySelector('.sidebar-header h1').textContent = US[1];
+            
+           
+            document.querySelector('.sidebar-header h1').textContent = user;
         }
         
         serchfriend.addEventListener('submit',(e)=>{
@@ -748,7 +772,7 @@
     </script>
 </head>
 <body>
-    <sidebar  class="chat-container">
+    <section  class="chat-container">
         <sidebar class="sidebar">
             <section class="sidebar-header">
                 <h1>-----</h1>
@@ -782,7 +806,7 @@
            
             
         </section>
-    </sidebar>
+    </section>
     <footer>
         <p>&copy; 2024 NelsonMahomarGarzaCisneros. Todos los derechos reservados. Prohibida la reproducción total o parcial</p>
     </footer>
