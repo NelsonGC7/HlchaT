@@ -528,17 +528,11 @@ io.on('connection',async(socket)=>{
 
         })
         socket.on('privmsj', async(data)=>{
-            
-            console.log()
             const { msj } = data;
             const result = await verAmistad(usC,data.recive_id)
             if(result.length === 0) return console.log("no eres amigo");
             room = result[0].ab_id
-            console.log(date.format('HH:mm'))
             const newDate =  date.format('HH:mm')
-            console.log(usC)
-            
-        
             io.to(room).emit('privmsj',msj,newDate,usC)
            
         })

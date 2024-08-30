@@ -358,13 +358,11 @@
                 var user = US[0].split('=')[1].split("%20%3D%20")[0];
                 var tk =  US[1].split('=')[1]
                 var udId = US[0].split('=')[1].split("%20%3D%20")[1]
-                console.log(udId)
-            }else{
+        }else{
                 var user = US[1].split('=')[1].split("%20%3D%20")[0];
                 var tk =  US[0].split('=')[1]
-                var udId =  US[1].split('=')[1].split("%20%3D%20")[1]
-                console.log(udId)
-            }
+                var udId =  US[1].split('=')[1].split("%20%3D%20")[1]   
+        }
         const IO = io({
             auth:{
                 token:tk
@@ -486,8 +484,8 @@
                                             document.querySelector('#numSoli').remove()
 
                                         }
-                                        nuevosAs.forEach(user =>{
-                                        let Namistad = `
+                                    nuevosAs.forEach(user =>{
+                                        let amistad = `
                                             <div class="friend-item cluster-${user.user_name}">
                                                 <figure class="friend-figure"></figure>
                                                 <div class="friend-info">
@@ -496,50 +494,25 @@
                                                 </div>
                                             </div>
                                         `;
-                                        mishoms.insertAdjacentHTML('beforeend',Namistad);
+                                        mishoms.insertAdjacentHTML('beforeend',amistad);
                                         const status =  document.querySelector(`.cluster-${user.user_name} .friend-figure `)
+
                                     
                                         if(user.user_status === 'online'){
                                             status.style.backgroundColor = "green";
                                         }else{
                                             status.style.backgroundColor = "red";
                                         }
+                                        
                                         let cluster = document.querySelector(`.cluster-${user.user_name}`);
                                         cluster.addEventListener("click",()=>{
+                                            IO.emit('joinC',{recive_id:user.user_id})
                                             conteiner.innerHTML= "";
                                             const newChat = `
                                             <div class="chat-header">
                                                 <h2>${user.user_name}</h2>
                                             </div>
                                             <div class="chat-messages">
-
-                                                <!--
-                                                <div class="message received">
-                                                    <div class="message-content">
-                                                        <p>Hola, ¿cómo estás?</p>
-                                                    </div>
-                                                    <div class="message-time">10:30 AM</div>
-                                                </div>
-                                                <div class="message sent">
-                                                    <div class="message-content">
-                                                        <p>¡Hola! Estoy bien, gracias. ¿Y tú?</p>
-                                                    </div>
-                                                    <div class="message-time">10:32 AM</div>
-                                                </div>
-                                                <div class="message received">
-                                                    <div class="message-content">
-                                                        <p>Todo bien por aquí. ¿Qué planes tienes para hoy?</p>
-                                                    </div>
-                                                    <div class="message-time">10:33 AM</div>
-                                                </div>
-                                                <div class="message sent">
-                                                    <div class="message-content">
-                                                        <p>Tengo pensado trabajar en un proyecto nuevo. ¿Te gustaría colaborar?</p>
-                                                    </div>
-                                                    <div class="message-time">10:35 AM</div>
-                                                </div>
-                                            -->
-
                                             </div>
 
 
@@ -548,17 +521,27 @@
                                                 <input type="text" placeholder="Escribe un mensaje...">
                                                 <button>Enviar</button>
                                             </form>
-                                            
-                                            
-                                            
                                             `
                                             conteiner.innerHTML = newChat;
-                                        });
+                                            const formularioChat = document.querySelector('.chat-input');//chek
+                                            const inputChat = document.querySelector('.chat-input input');
+                                            formularioChat.addEventListener('submit',(e)=>{
+                                                e.preventDefault()
+                                                const messaje = inputChat.value;
+                                                
+                                                IO.emit('privmsj',{recive_id:user.user_id,msj:messaje})
+                                                inputChat.value = '';
+                                            })  
+                        
+                                    })
 
-                                        
-                                    });
+                    
+                            });
+                                          
 
-                                    });
+                    });
+
+                                    
 
 
 
@@ -602,29 +585,6 @@
                             <h2>${user.user_name}</h2>
                         </div>
                         <div class="chat-messages">
-
-                            <!--
-                            
-                            <div class="message sent">
-                                <div class="message-content">
-                                    <p>¡Hola! Estoy bien, gracias. ¿Y tú?</p>
-                                </div>
-                                <div class="message-time">10:32 AM</div>
-                            </div>
-                            <div class="message received">
-                                <div class="message-content">
-                                    <p>Todo bien por aquí. ¿Qué planes tienes para hoy?</p>
-                                </div>
-                                <div class="message-time">10:33 AM</div>
-                            </div>
-                            <div class="message sent">
-                                <div class="message-content">
-                                    <p>Tengo pensado trabajar en un proyecto nuevo. ¿Te gustaría colaborar?</p>
-                                </div>
-                                <div class="message-time">10:35 AM</div>
-                            </div>
-                        -->
-
                         </div>
 
 
@@ -649,10 +609,12 @@
 
                     
                 });
-                IO.on('privmsj',(msj,newDate,usC)=>{
+                IO.on('privmsj',(msj,newDate,usc)=>{
                
+                const xd =  usc === udId ? 'sent' : 'received';
+                console.log(xd)
                 const template1 = ` 
-                <div class="message ">
+                <div class="message ${xd } "}">
                                 <div class="message-content">
                                     <p>${msj}</p>
                                 </div>
