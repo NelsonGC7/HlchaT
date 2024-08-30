@@ -110,7 +110,7 @@ async function midelToken(req,res,next){
     const token = req.cookies.access_token;
     try{
    
-    console.log("midelware")
+    
     if(!token){
         return res.status(401).json({"error1":"Access Denied desde middleware"});
     }
@@ -130,10 +130,8 @@ async function midelToken(req,res,next){
 
 } 
 
+
 app.get('/',(req,res)=>{
-    res.send("started page")
-});
-app.get('/loginre',(req,res)=>{
     res.sendFile(process.cwd()+ '/schemas/login.html')
 });
 app.post('/users', rejisterLimiter , async(req,res)=>{
