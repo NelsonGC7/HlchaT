@@ -600,12 +600,7 @@
                         <div class="chat-messages">
 
                             <!--
-                            <div class="message received">
-                                <div class="message-content">
-                                    <p>Hola, ¿cómo estás?</p>
-                                </div>
-                                <div class="message-time">10:30 AM</div>
-                            </div>
+                            
                             <div class="message sent">
                                 <div class="message-content">
                                     <p>¡Hola! Estoy bien, gracias. ¿Y tú?</p>
@@ -643,14 +638,25 @@
                             const messaje = inputChat.value;
                             
                             IO.emit('privmsj',{recive_id:user.user_id,msj:messaje})
+                            inputChat.value = '';
                         })  
                         
                     })
 
                     
                 });
-                IO.on('privmsj',(msj)=>{
+                IO.on('privmsj',(msj,newDate)=>{
                 console.log(msj)
+                const template1 = ` 
+                <div class="message received">
+                                <div class="message-content">
+                                    <p>${msj}</p>
+                                </div>
+                                <div class="message-time">${newDate}</div>
+                            </div>
+                `;
+                const chat = document.querySelector('.chat-messages');
+                chat.insertAdjacentHTML('beforeend',template1)
                             
                 });
             }).catch(err=> err)

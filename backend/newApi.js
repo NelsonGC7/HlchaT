@@ -7,6 +7,8 @@ import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import { randomUUID } from 'node:crypto';
 import rateLimit from 'express-rate-limit';
+import  dayjs  from 'dayjs';
+const date = dayjs();
 const rejisterLimiter = rateLimit({
     windowMs: 2 * 60 * 1000, // 2 minutes
     max:6,
@@ -528,10 +530,12 @@ io.on('connection',async(socket)=>{
            console.log(data)
             const { msj } = data;
             const result = await verAmistad(usC,data.recive_id)
-            if(result.length === 0) return console.log("no eres amigo")
+            if(result.length === 0) return console.log("no eres amigo");
             room = result[0].ab_id
+            console.log(date.format('HH:mm'))
+            const newDate =  date.format('HH:mm')
 
-            io.to(room).emit('privmsj',msj)
+            io.to(room).emit('privmsj',msj,newDate)
             
         })
 
