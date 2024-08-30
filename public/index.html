@@ -422,6 +422,7 @@
         })
         .then(res => res.json())
             .then(res=> {
+                
                 const jsonPending= res.pending;
                 const jsonAssepted = res.assepted
                 if(jsonPending.length > 0){
@@ -565,7 +566,7 @@
 
                     })
                     
-                })
+                });
   
 
                 jsonAssepted.forEach(user =>{
@@ -643,45 +644,23 @@
                             
                             IO.emit('privmsj',{recive_id:user.user_id,msj:messaje})
                         })  
-                        IO.on('privmsj',(data)=>{
-                            console.log(data)
-                        })
-                    }) 
-                })
+                        
+                    })
+
+                    
+                });
+                IO.on('privmsj',(msj)=>{
+                console.log(msj)
+                            
+                });
             }).catch(err=> err)
         
 
 
      }
      llamada()
-     
-     
             //mensajes 
-        /*
-        console.log(formularioChat.children)
-        formularioChat.addEventListener('submit',(e)=>{
-            e.preventDefault();
-            console.log("hola desd el input")
         
-            if(inputChat.value){
-                IO.emit('chat message', inputChat.value)
-                inputChat.value = '';
-
-            }else{
-                console.log('no hay mensaje')
-                mensajesChat.style.border = '1px solid red'
-            }
-
-        });
-        IO.on('chat message', (msg)=>{
-            const limsg = document.createElement('li');
-            limsg.textContent = msg;
-            mensajesChat.appendChild(limsg);
-            console.log('mensaje recibido', msg)
-
-        })
-            */
-        //busqueda
     
         if(US.length === 2){
             

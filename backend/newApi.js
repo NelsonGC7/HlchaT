@@ -486,12 +486,13 @@ app.post('/logout',midelToken,(req,res)=>{
 
 io.on('connection',async(socket)=>{
     console.log(`user connected`);
+    let room = null;
     const  tk = socket.handshake.auth.token;
     if(!tk){
         socket.disconnect()
         return;
     }
-        const data = await jwt.verify(tk,tknJsn);
+        const data = jwt.verify(tk,tknJsn);
 
         if(!data) return socket.disconnect();
         const usC = data.usId;
@@ -515,22 +516,23 @@ io.on('connection',async(socket)=>{
        
         
         socket.on('joinC',async(data)=>{
+            if(room) socket.leave(room);//si ya esta en una sala la deja 
            const result = await verAmistad(usC,data.recive_id)
-            if(result.length === 0) return console.log("no eres amigo")
-            const idAmistad = result[0].ab_id
-            const room = idAmistad
+            if(result.length === 0) return console.log("no eres amigo")          
+            room = result[0].ab_id
             socket.join(room)
-            console.log(`user ${usC} joined room ${room}`)
+            
 
         })
         socket.on('privmsj', async(data)=>{
-           
-            const {recive_id,msj } = data;
+           console.log(data)
+            const { msj } = data;
             const result = await verAmistad(usC,data.recive_id)
             if(result.length === 0) return console.log("no eres amigo")
+            room = result[0].ab_id
 
-            io.to(result[0].ab_id).emit('privmsj',msj)
-            console.log(msj)
+            io.to(room).emit('privmsj',msj)
+            
         })
 
     socket.on('disconnect',()=>{
