@@ -355,11 +355,15 @@
         const US  = document.cookie.split(';')//
         console.log(US)
         if(US[0].split('=')[0] === "user"){
-                var user = US[0].split('=')[1]
+                var user = US[0].split('=')[1].split("%20%3D%20")[0];
                 var tk =  US[1].split('=')[1]
+                var udId = US[0].split('=')[1].split("%20%3D%20")[1]
+                console.log(udId)
             }else{
-                var user = US[1].split('=')[1]
+                var user = US[1].split('=')[1].split("%20%3D%20")[0];
                 var tk =  US[0].split('=')[1]
+                var udId =  US[1].split('=')[1].split("%20%3D%20")[1]
+                console.log(udId)
             }
         const IO = io({
             auth:{
@@ -645,10 +649,10 @@
 
                     
                 });
-                IO.on('privmsj',(msj,newDate)=>{
-                console.log(msj)
+                IO.on('privmsj',(msj,newDate,usC)=>{
+               
                 const template1 = ` 
-                <div class="message received">
+                <div class="message ">
                                 <div class="message-content">
                                     <p>${msj}</p>
                                 </div>

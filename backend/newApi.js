@@ -265,7 +265,7 @@ app.get('/:user/chat', midelToken, async (req,res)=>{
             sameSite:'none',
             maxAge: 60 * 60 * 2000, // 1 hour
         })
-        .cookie("user",user,{
+        .cookie("user",`${user} = ${user_id}`,{
             httpOnly:false,
             secure:true,
             sameSite:'none',
@@ -493,11 +493,12 @@ io.on('connection',async(socket)=>{
     if(!tk){
         socket.disconnect()
         return;
-    }
+    };
         const data = jwt.verify(tk,tknJsn);
 
         if(!data) return socket.disconnect();
         const usC = data.usId;
+        
         if(!usC) return console.log("no tienes el usId")
         const verAmistad = async(sender,recive)=>{
             const result = await db.execute({
@@ -527,16 +528,19 @@ io.on('connection',async(socket)=>{
 
         })
         socket.on('privmsj', async(data)=>{
-           console.log(data)
+            
+            console.log()
             const { msj } = data;
             const result = await verAmistad(usC,data.recive_id)
             if(result.length === 0) return console.log("no eres amigo");
             room = result[0].ab_id
             console.log(date.format('HH:mm'))
             const newDate =  date.format('HH:mm')
-
-            io.to(room).emit('privmsj',msj,newDate)
+            console.log(usC)
             
+        
+            io.to(room).emit('privmsj',msj,newDate,usC)
+           
         })
 
     socket.on('disconnect',()=>{
