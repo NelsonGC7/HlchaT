@@ -45,7 +45,7 @@
             margin: 0;
             font-size: 24px;
             font-weight: bold;
-            color: rgb(170, 235, 222);
+            color: #aaebde;
         }
         .search-container {
             position: relative;
@@ -71,6 +71,7 @@
             color: rgba(255,255,255,0.7);
         }
         .search-send{
+            position: relative;
             height: min-content;
             max-height: 50%;
             width: 100%;
@@ -92,6 +93,28 @@
         }
         .search-send .friend-figure{
             background-color: #5a67d8;
+        }
+        .search-send .active{
+            height: 2rem;
+            width: 2rem;
+            border-radius: 50%;
+            border: 0.125rem solid white;
+            background-color: transparent;
+            z-index: 10;
+            display: grid;
+            place-items: center;
+            position: absolute;
+            bottom: 0;
+            right: 48%;
+            transform: translateY(48%);
+            margin: 0 auto;
+            cursor: pointer;
+            transition: background-color, border .3s ease-in;
+            &:hover{
+                border: 0.125rem solid rgba(63, 1, 90, 0.374);  
+                background-color: #5a67d875;
+            }
+
         }
         .search-send button{
             position: absolute;
@@ -689,6 +712,7 @@
                     }else if(res.status === 226){
                         res.json()
                         .then(data => {
+                            send.insertAdjacentHTML('beforeend',` <figure class="active"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(63, 1, 90, 0.374);"><path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"></path></svg></figure>`);
                             data.forEach( user=>{
                                 const amistad = `
                                     <div class="friend-item-search ${user.user_name}">
@@ -723,6 +747,9 @@
                                 })
                                 
                             }) 
+                            document.querySelector('.search-send .active').addEventListener('click',()=>{
+                                send.innerHTML = '';
+                            });
                         })
                         .catch(err => console.log(err))
                     }
@@ -750,7 +777,7 @@
                 </form>
             </section>
             <div class="search-send">
-
+               
             </div>
             
 
