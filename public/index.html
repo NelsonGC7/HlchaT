@@ -738,8 +738,12 @@
                                             body:JSON.stringify({addFriend:userr})
                                             })
                                         const result = await data.json()
-                                        if(result) return newsoli.remove();
-                                    }
+                                        if(result) newsoli.remove();
+                                        console.log(document.querySelectorAll('.friend-item-search').length)
+                                        if(document.querySelectorAll('.friend-item-search').length === 0){
+                                            send.innerHTML = '';
+                                        }
+                                    }   
                                     catch{
                                         console.log("error en la soilictud")
                                     }
