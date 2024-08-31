@@ -488,6 +488,7 @@ io.on('connection',async(socket)=>{
     console.log(`user connected`);
     let room = null;
     const  tk = socket.handshake.auth.token;
+   try{
     if(!tk){
         socket.disconnect()
         return;
@@ -526,12 +527,16 @@ io.on('connection',async(socket)=>{
 
         })
         socket.on('privmsj', async(data)=>{
-            const { msj } = data;
-            const result = await verAmistad(usC,data.recive_id)
-            if(result.length === 0) return console.log("no eres amigo");
-            room = result[0].ab_id
-            const newDate =  date.format('HH:mm')
-            io.to(room).emit('privmsj',msj,newDate,usC)
+            try{
+                const { msj } = data;
+                const result = await verAmistad(usC,data.recive_id)
+                if(result.length === 0) return console.log("no eres amigo");
+                room = result[0].ab_id
+                const newDate =  date.format('HH:mm')
+                io.to(room).emit('privmsj',msj,newDate,usC)
+            }catch(e){
+                console.log({"error":e})
+            }
            
         })
 
@@ -539,6 +544,12 @@ io.on('connection',async(socket)=>{
      console.log(`user disconnected`);
     })
 
+
+
+   }
+   catch(e){
+    console.log(e)
+   }
 
 
 })

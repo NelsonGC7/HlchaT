@@ -27,7 +27,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        /* barra lateral */
+        /* mi side */
         .sidebar {
             width: 30%;
             border-right: 1px solid #e0e0e0;
@@ -38,7 +38,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px;
-            transition: all .8 ease-in-out infinite;
+            transition: all .8 ease-in-out infinite; 
         }
 
         .sidebar-header h1 {
@@ -284,7 +284,7 @@
             color: #2d3748;
         }
         .sent .message-content {
-            background-color: #667eea;
+            background-color: #667eeaea;
             color: white;
         }
         .message-time {
@@ -294,7 +294,7 @@
             text-align: right;
         }
 
-        /* Estilos para el área de entrada de mensajes */
+        /* area de mensajes */
         .chat-input {
             display: flex;
             padding: 15px;
@@ -324,6 +324,28 @@
         }
         footer{
             display: none;
+        }
+
+
+        @media (width <=43.75rem){
+           
+            .sidebar{
+                width: 100%;
+            }
+            .main-chat{
+                display: none;
+            }
+            .sidebar.none{
+                display: none;
+            }
+            .main-chat.active{
+                display: flex;
+                width: 100%;
+            }
+            .chat-header h2{
+                text-align: center;
+
+            }     
         }
     </style>
 
@@ -719,7 +741,7 @@
 </head>
 <body>
     <section  class="chat-container">
-        <sidebar class="sidebar">
+        <sidebar class="sidebar none">
             <section class="sidebar-header">
                 <h1>-----</h1>
                 <form type="submit" class="search-container">
@@ -747,7 +769,7 @@
                 </div>
             </section>
         </sidebar>
-        <section class="main-chat">
+        <section class="main-chat active">
 
            
             
