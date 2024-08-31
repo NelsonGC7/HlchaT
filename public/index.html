@@ -277,6 +277,9 @@
             color: #2d3748;
             font-size: 20px;
         }
+        .chat-header figure{
+            display: none;
+        }
         .chat-messages {
             flex-grow: 1;
             overflow-y: auto;
@@ -366,10 +369,27 @@
                 display: flex;
                 width: 100%;
             }
+            .chat-header{
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                justify-content: space-between;
+                
+            }
             .chat-header h2{
                 text-align: center;
+                color: #aaebde;
 
-            }     
+            } 
+            .chat-header figure{
+                display: block;
+                height: 1.8rem;
+                width: 1.8rem;
+                border-radius: 50%;
+                border: 1.8px solid  #aaebde;
+                display: grid;
+                place-items: center;
+                cursor: pointer;
+            }    
         }
     </style>
 
@@ -625,10 +645,13 @@
                     let cluster = document.querySelector(`.cluster-${user.user_name}`);
                     cluster.addEventListener("click",()=>{
                         IO.emit('joinC',{recive_id:user.user_id})
+                        document.querySelector('.sidebar').classList.add('none');
+                        document.querySelector('.main-chat').classList.add('active');
                         conteiner.innerHTML= "";
                         const newChat = `
                          <div class="chat-header">
                             <h2>${user.user_name}</h2>
+                            <figure class="active"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill:  #aaebde;"><path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"></path></svg></figure>
                         </div>
                         <div class="chat-messages">
                         </div>
@@ -643,6 +666,14 @@
                         conteiner.innerHTML = newChat;
                         const formularioChat = document.querySelector('.chat-input');//chek
                         const inputChat = document.querySelector('.chat-input input');
+                        document.querySelector('.chat-header figure').addEventListener('click',
+                            ()=>{
+                                document.querySelector('.sidebar').classList.remove('none')
+                                document.querySelector('.main-chat').classList.remove('active')
+                                contains.innerHTML = '';
+
+                            }
+                        )
                         formularioChat.addEventListener('submit',(e)=>{
                             e.preventDefault()
                             const messaje = inputChat.value;
