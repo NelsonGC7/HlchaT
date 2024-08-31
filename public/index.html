@@ -98,7 +98,7 @@
             height: 2rem;
             width: 2rem;
             border-radius: 50%;
-            border: 0.125rem solid white;
+            border: 0.125rem solid rgba(167, 167, 167, 0.663);
             background-color: transparent;
             z-index: 10;
             display: grid;
@@ -686,6 +686,7 @@
         }
         
         serchfriend.addEventListener('submit',(e)=>{
+            console.log("search")
             e.preventDefault();
             if(send.children.length  != 0){
                 console.log({"1":send.children.length})
@@ -725,8 +726,7 @@
                                     </div>
                                 `
                                 send.insertAdjacentHTML('beforeend', amistad)
-                                
-                                document.querySelector(`.${user.user_name}`).addEventListener('click',async()=>{
+                                document.querySelector(`.${user.user_name} button`).addEventListener('click',async()=>{
                                     try{
                                         let newsoli = document.querySelector(`.${user.user_name}`)
                                         const userr = newsoli.children[1].children[0].innerText
