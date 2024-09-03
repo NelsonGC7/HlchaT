@@ -326,26 +326,26 @@ body {
 
     <div class="form-wrapper">
       <button type="button" class="switcher switcher-signup">
-        Sign Up
+        Rejister
         <span class="underline"></span>
       </button>
       <form class="form form-signup">
         <fieldset>
           <div class="input-block">
             <label  for="sigup-user">User</label>
-            <input id="sigup-user" placeholder="ingrse un Usuario" required>
+            <input id="sigup-user" placeholder="ingrese un Usuario" required>
           </div>
           <div class="input-block">
             <label for="signup-email">E-mail</label>
-            <input id="signup-email" type="email" placeholder="ingrese correoE" required>
+            <input id="signup-email" type="email" placeholder="Correo Electronico" required>
           </div>
           <div class="input-block">
             <label for="signup-password" >Password</label>
-            <input id="signup-password" type="password" placeholder="mayusculas/min/numeros" required>
+            <input id="signup-password" type="password" placeholder="Constraseña" required>
           </div>
           <div class="input-block">
             <label for="signup-password-confirm">Confirm password</label>
-            <input id="signup-password-confirm" type="password"  placeholder="mayusculas/min/numeros" required>
+            <input id="signup-password-confirm" type="password"  placeholder="Contraseña" required>
           </div>
         </fieldset>
         <button type="submit" class="btn-signup" id="btn-signup">Continue</button>
@@ -397,11 +397,19 @@ send.addEventListener('click',(e)=>{
 				window.location.href = `/${newUsuario.user}/chat`;
             }else if (res.status === 401){
 				input.password.style.border= "1px red solid";
-				input.user.style.border= "1px red solid";
+				input.password.placeholder = "Contraseña incorrecta";
 				setTimeout(()=>{
 				input.password.style.border= "none";
-				input.user.style.border= "none" 
-			},800)
+				input.password.placeholder = "Contraseña";	
+				},1200);
+			}else if(res.status === 404){
+				input.user.style.border= "1px red solid";
+				input.user.value = "";
+				input.user.placeholder = "Usuario no existe";
+				setTimeout(()=>{
+					input.user.style.border= "none";
+					input.user.placeholder = "Usuario";	
+				},1200);
 			}
 
         }).catch(err=>{
@@ -452,6 +460,42 @@ sendR.addEventListener('click',(e)=>{
         correo: inputR.correo.value,
         password: inputR.password.value
     }
+	if(newU.user.length < 3){
+		inputR.user.style.border= "1px red solid";
+		inputR.user.value= "";
+		inputR.user.placeholder = "Usuario muy corto";
+		setTimeout(()=>{
+			inputR.user.style.border= "none";
+			inputR.user.placeholder = "ingrese un Usuario con mas de 3 caracteres";
+			
+		},800)
+	};
+	if(!validarEmail(inputR.correo.value)){
+		inputR.correo.style.border = "1px red solid";
+		inputR.correo.value = ""
+		inputR.correo.placeholder = "Correo no valido";
+	};
+	if(!validarPass(inputR.password.value)){
+		inputR.password.style.border = "1px red solid";
+		inputR.password.value = ""
+		inputR.password.placeholder = "Contraseña no valida";
+		setTimeout(()=>{
+			inputR.password.style.border = "none";
+			inputR.password.placeholder = "Contraseña no valida";
+
+		},800)
+	};
+	if(!validarDobblePass(inputR.password.value,inputR.passwordConfirm.value)){
+		inputR.passwordConfirm.style.border = "1px red solid";
+		inputR.passwordConfirm.value = ""
+		inputR.passwordConfirm.placeholder = "Contraseñas no coinciden";
+		setTimeout(()=>{
+			inputR.passwordConfirm.style.border = "none";
+			inputR.passwordConfirm.value = "";
+			inputR.passwordConfirm.placeholder = "Contraseñas no coinciden";
+
+		},800)
+	}
     if(validarEmail(inputR.correo.value) && validarPass(inputR.password.value) && validarDobblePass(inputR.password.value,inputR.passwordConfirm.value)){
         
 		console.log(newU)
@@ -480,23 +524,20 @@ sendR.addEventListener('click',(e)=>{
 				})
 				
 
+			}else if(res.status === 409){
+				inputR.user.style.border= "1px red solid";
+				inputR.user.value= "";
+				inputR.user.placeholder= "Usuario ya existe";
+				
+				setTimeout(()=>{
+					inputR.user.style.border= "none"
+					inputR.user.placeholder= "ingrese un Usuario";
+				},1500)
 			}else{
-				console.log('User not created')
+				console.log('User not created2')
 			}
         })
         .catch(err => console.log(err,"user not created2"));
-    }else{
-        inputR.user.style.border= "1px red solid";
-        inputR.passwordConfirm.style.border= "1px red solid";
-        inputR.password.style.border= "1px red solid";
-        inputR.correo.style.border= "1px red solid";
-        setTimeout(()=>{
-            inputR.user.style.border= "none"
-            inputR.passwordConfirm.style.border= "none"
-            inputR.password.style.border= "none"
-            inputR.correo.style.border= "none" 
-
-        },800)
     }
 })
 

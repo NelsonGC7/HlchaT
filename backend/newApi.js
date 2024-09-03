@@ -141,6 +141,13 @@ app.post('/users', rejisterLimiter , async(req,res)=>{
         if(result.error){
             return res.status(400).send("invalid data")
         }
+        const resultUser = await db.execute({
+            sql:"SELECT user_name FROM users WHERE user_name = :user",
+            args:{
+                user:result.data.user
+            }
+        })
+        if(resultUser.rows.length > 0) return res.status(409).json({msg:"El usuario ya existe"})
         const hashedPassword = await bcrypt.hash(password,8);  
         await db.execute(
                 {
@@ -151,15 +158,13 @@ app.post('/users', rejisterLimiter , async(req,res)=>{
                         correo:result.data.correo,
                         password:hashedPassword,
                         status:"online"
-
-
                     },
                 },
         );
-        res.status(203).json({msg:"user created"});   
+        res.status(203).json({msg:"usuario creado"});   
     }
     catch(err){
-        res.status(409).json({msg:"user not created"})
+        res.status(401).json({msg:"error al crear Usuario"})
     }
 });
 app.post('/login', loginLimiter  ,async(req,res)=>{
@@ -196,11 +201,11 @@ app.post('/login', loginLimiter  ,async(req,res)=>{
                 .send({msg:"login success"})
             }
             else{
-                res.status(401).json({msg:"password incorrect"});
+                res.status(401).json({msg:"constraseña incorrecta"});
             }
             
             
-        }else{res.status(404).json({msg:"user not found"})};
+        }else{res.status(404).json({msg:"usuario no econtrado"})};
         
         
     }
