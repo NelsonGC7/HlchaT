@@ -529,7 +529,7 @@ io.on('connection',async(socket)=>{
             socket.join(room);
             
             const recarge = await db.execute({
-                sql:`SELECT send_id,rec_id,mesage 
+                sql:`SELECT send_id,rec_id,mesage,send_at
                     FROM mesages 
                     WHERE (send_id = :sendId AND rec_id = :reciveId )
                     OR (send_id = :reciveId AND rec_id = :sendId)
@@ -540,9 +540,7 @@ io.on('connection',async(socket)=>{
                 }
             })
             //console.log(recarge.rows)debug
-            const messages = [
-                ...recarge.rows
-        ]
+            const messages = [...recarge.rows]
             io.to(room).emit('todoMessages',messages)
 
             

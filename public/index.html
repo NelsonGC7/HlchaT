@@ -724,13 +724,16 @@
                 });
                 IO.on('todoMessages',(messages)=>{
                     messages.forEach(menssage => {
+                        
+                        const H = menssage.send_at.split("-")[1];
+                        console.log(H)
                         const dx = menssage.send_id === udId ? 'sent': 'received'
                         const template2 = ` 
                         <div class="message ${dx}">
                                         <div class="message-content">
                                             <p>${menssage.mesage}</p>
                                         </div>
-                                        <div class="message-time">---</div>
+                                        <div class="message-time">${H.split(':')[0]}:${H.split(':')[1]}</div>
                                     </div>
                         `;
                         const chat = document.querySelector('.chat-messages');
