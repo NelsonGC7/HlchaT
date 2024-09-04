@@ -644,7 +644,8 @@
                     
                     let cluster = document.querySelector(`.cluster-${user.user_name}`);
                     cluster.addEventListener("click",()=>{
-                        IO.emit('joinC',{recive_id:user.user_id})
+                        IO.emit('joinC',{recive_id:user.user_id})//entrada de sala<-----
+                        
                         document.querySelector('.sidebar').classList.add('none');
                         document.querySelector('.main-chat').classList.add('active');
                         conteiner.innerHTML= "";
@@ -686,12 +687,31 @@
 
                     
                 });
+                IO.on('todoMessages',(messages)=>{
+                    messages.forEach(menssage => {
+                        console.log(menssage)
+                        const dx = menssage.send_id === udId ? 'sent': 'received'
+                        
+                        console.log(udId)
+                        const template2 = ` 
+                        <div class="message ${dx}">
+                                        <div class="message-content">
+                                            <p>${menssage.mesage}</p>
+                                        </div>
+                                        <div class="message-time">---</div>
+                                    </div>
+                        `;
+                        const chat = document.querySelector('.chat-messages');
+                        chat.insertAdjacentHTML('beforeend',template2)
+                        
+                    })
+                })
                 IO.on('privmsj',(msj,newDate,usc)=>{
                
                 const xd =  usc === udId ? 'sent' : 'received';
                 console.log(xd)
                 const template1 = ` 
-                <div class="message ${xd } "}">
+                <div class="message ${xd}">
                                 <div class="message-content">
                                     <p>${msj}</p>
                                 </div>
@@ -712,8 +732,6 @@
         
     
         if(US.length === 2){
-            
-           
             document.querySelector('.sidebar-header h1').textContent = user;
         }
         

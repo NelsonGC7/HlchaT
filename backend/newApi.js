@@ -524,10 +524,29 @@ io.on('connection',async(socket)=>{
         
         socket.on('joinC',async(data)=>{
             if(room) socket.leave(room);//si ya esta en una sala la deja 
-           const result = await verAmistad(usC,data.recive_id)
-            if(result.length === 0) return console.log("no eres amigo")          
-            room = result[0].ab_id
-            socket.join(room)
+           const result = await verAmistad(usC,data.recive_id);
+            if(result.length === 0) return console.log("no eres amigo");        
+            room = result[0].ab_id;
+            socket.join(room);
+            
+            const recarge = await db.execute({
+                sql:`SELECT send_id,rec_id,mesage 
+                    FROM mesages 
+                    WHERE (send_id = :sendId AND rec_id = :reciveId )
+                    OR (send_id = :reciveId AND rec_id = :sendId)
+                `,
+                args:{
+                    sendId:usC,
+                    reciveId:data.recive_id
+                }
+            })
+            //console.log(recarge.rows)debug
+            const messages = [
+                ...recarge.rows
+        ]
+            io.to(room).emit('todoMessages',messages)
+
+            
             
 
         })
@@ -539,6 +558,18 @@ io.on('connection',async(socket)=>{
                 room = result[0].ab_id
                 const newDate =  date.format('HH:mm')
                 io.to(room).emit('privmsj',msj,newDate,usC)
+                await db.execute({
+                    sql:`
+                    INSERT INTO mesages 
+                    (send_id,rec_id,mesage)
+                    VALUES (:envia,:recive,:msj)`,
+                    args:{
+                        envia:usC,
+                        recive:data.recive_id,
+                        msj:msj
+                    }
+                });
+              
             }catch(e){
                 console.log({"error":e})
             }
