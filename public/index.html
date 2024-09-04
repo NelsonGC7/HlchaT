@@ -722,9 +722,9 @@
 
                     
                 });
-                IO.on('todoMessages',(messages)=>{
-                    messages.forEach(menssage => {
-                        
+                IO.on(udId,(messages)=>{
+                    const chat = document.querySelector('.chat-messages')
+                    messages.forEach(menssage =>{
                         const H = menssage.send_at.split("-")[1];
                         const dx = menssage.send_id === udId ? 'sent': 'received'
                         const template2 = ` 
@@ -761,18 +761,13 @@
                
 
             }).catch(err=> err)
-        
-
-
      }
+
      llamada()
-            //mensajes 
-        
-    
+            //mensajes
         if(US.length === 2){
             document.querySelector('.sidebar-header h1').textContent = user;
         }
-        
         serchfriend.addEventListener('submit',(e)=>{
             console.log("search")
             e.preventDefault();
