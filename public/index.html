@@ -445,6 +445,15 @@
 
         */
         const US  = document.cookie.split(';')//
+        const HoraLocal = ()=>{
+                    const aora = new Date()
+                    const mes = aora.getMonth()
+                    const dia = aora.getDay();
+                    const hora = aora.getHours();
+                    const minuto = aora.getMinutes();
+                    const segundos = aora.getSeconds();
+                    return `${mes}/${dia}-${hora}:${minuto}:${segundos}` 
+        }
         console.log(US)
         if(US[0].split('=')[0] === "user"){
                 var user = US[0].split('=')[1].split("%20%3D%20")[0];
@@ -705,7 +714,7 @@
                             e.preventDefault()
                             const messaje = inputChat.value;
                             
-                            IO.emit('privmsj',{recive_id:user.user_id,msj:messaje})
+                            IO.emit('privmsj',{recive_id:user.user_id,msj:messaje,time:HoraLocal()})
                             inputChat.value = '';
                         })  
                         
@@ -715,7 +724,6 @@
                 });
                 IO.on('todoMessages',(messages)=>{
                     messages.forEach(menssage => {
-                        
                         const dx = menssage.send_id === udId ? 'sent': 'received'
                         const template2 = ` 
                         <div class="message ${dx}">
@@ -732,10 +740,10 @@
                     })
                     document.querySelector('.chat-messages').scrollTop = document.querySelector('.chat-messages').scrollHeight;
                 })
+               
                 IO.on('privmsj',(msj,newDate,usc)=>{
                
                 const xd =  usc === udId ? 'sent' : 'received';
-                console.log(xd)
                 const template1 = ` 
                 <div class="message ${xd}">
                                 <div class="message-content">

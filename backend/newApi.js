@@ -8,7 +8,6 @@ import cookieParser from 'cookie-parser';
 import { randomUUID } from 'node:crypto';
 import rateLimit from 'express-rate-limit';
 import  dayjs  from 'dayjs';
-const date = dayjs();
 const rejisterLimiter = rateLimit({
     windowMs: 2 * 60 * 1000, // 2 minutes
     max:6,
@@ -555,8 +554,9 @@ io.on('connection',async(socket)=>{
                 const { msj } = data;
                 const result = await verAmistad(usC,data.recive_id)
                 if(result.length === 0) return console.log("no eres amigo");
-                room = result[0].ab_id
-                const newDate =  date.format('HH:mm')
+                room = result[0].ab_id;
+                const  hora = data.time.split("-")[1];
+                const newDate = `${hora.split(":")[0]}:${hora.split(":")[1]}`
                 io.to(room).emit('privmsj',msj,newDate,usC)
                 await db.execute({
                     sql:`
