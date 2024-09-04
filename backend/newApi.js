@@ -555,18 +555,19 @@ io.on('connection',async(socket)=>{
                 const result = await verAmistad(usC,data.recive_id)
                 if(result.length === 0) return console.log("no eres amigo");
                 room = result[0].ab_id;
-                const  hora = data.time.split("-")[1];
+                const hora = data.time.split("-")[1];
                 const newDate = `${hora.split(":")[0]}:${hora.split(":")[1]}`
                 io.to(room).emit('privmsj',msj,newDate,usC)
                 await db.execute({
                     sql:`
                     INSERT INTO mesages 
-                    (send_id,rec_id,mesage)
-                    VALUES (:envia,:recive,:msj)`,
+                    (send_id,rec_id,mesage,send_at)
+                    VALUES (:envia,:recive,:msj,:date)`,
                     args:{
                         envia:usC,
                         recive:data.recive_id,
-                        msj:msj
+                        msj:msj,
+                        date:data.time
                     }
                 });
               
