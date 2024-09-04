@@ -726,7 +726,6 @@
                     messages.forEach(menssage => {
                         
                         const H = menssage.send_at.split("-")[1];
-                        console.log(H)
                         const dx = menssage.send_id === udId ? 'sent': 'received'
                         const template2 = ` 
                         <div class="message ${dx}">
