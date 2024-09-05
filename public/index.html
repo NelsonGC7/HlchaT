@@ -609,16 +609,17 @@
 
                                         }
                                         nuevosAs.forEach(user =>{
-                                            let nuevoUserN = ''
-                                            if(user.user_name.includes(" ")){
-                                                user.user_name.split(" ")
-                                                .forEach(word =>{
-                                                    nuevoUserN = nuevoUserN + `-${word}`
-                                                })
-                                                console.log(nuevoUser)
-                                            }else{nuevoUserN = user.user_name;};
+                                        let nuevoU = '';
+                                        if(user.user_name.includes(" ")){
+                                            user.user_name.split(" ")
+                                            .forEach(word =>{
+                                                nuevoU = nuevoU + `-${word}`
+                                            })
+                                        }else{
+                                            nuevoU = user.user_name;
+                                        }
                                         let amistad = `
-                                            <div class="friend-item cluster-${nuevoUserN}">
+                                            <div class="friend-item cluster-${nuevoU}">
                                                 <figure class="friend-figure"></figure>
                                                 <div class="friend-info">
                                                     <div class="friend-name">${user.user_name}</div>
@@ -627,7 +628,7 @@
                                             </div>
                                         `;
                                         mishoms.insertAdjacentHTML('beforeend',amistad);
-                                        const status =  document.querySelector(`.cluster-${nuevoUserN} .friend-figure `)
+                                        const status =  document.querySelector(`.cluster-${nuevoU} .friend-figure `)
 
                                     
                                         if(user.user_status === 'online'){
@@ -636,15 +637,17 @@
                                             status.style.backgroundColor = "red";
                                         }
                                         
-                                        let cluster = document.querySelector(`.cluster-${nuevoUserN}`);
+                                        let cluster = document.querySelector(`.cluster-${nuevoU}`);
                                         cluster.addEventListener("click",()=>{
-                                            IO.emit('joinC',{recive_id:user.user_id})
+                                            IO.emit('joinC',{recive_id:user.user_id})//entrada de sala<-----
+                                            
                                             document.querySelector('.sidebar').classList.add('none');
                                             document.querySelector('.main-chat').classList.add('active');
                                             conteiner.innerHTML= "";
                                             const newChat = `
                                             <div class="chat-header">
-                                                <h2>${nuevoUserN}</h2>
+                                                <h2>${user.user_name}</h2>
+                                                <figure class="active"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill:  #aaebde;"><path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"></path></svg></figure>
                                             </div>
                                             <div class="chat-messages">
                                             </div>
@@ -659,21 +662,32 @@
                                             conteiner.innerHTML = newChat;
                                             const formularioChat = document.querySelector('.chat-input');//chek
                                             const inputChat = document.querySelector('.chat-input input');
+                                            document.querySelector('.chat-header figure').addEventListener('click',
+                                                ()=>{
+                                                    document.querySelector('.sidebar').classList.remove('none')
+                                                    document.querySelector('.main-chat').classList.remove('active')
+                                                    conteiner.innerHTML = '';
+
+                                                }
+                                            )
                                             formularioChat.addEventListener('submit',(e)=>{
                                                 e.preventDefault()
                                                 const messaje = inputChat.value;
                                                 
-                                                IO.emit('privmsj',{recive_id:user.user_id,msj:messaje})
+                                                IO.emit('privmsj',{recive_id:user.user_id,msj:messaje,time:HoraLocal()})
                                                 inputChat.value = '';
                                             })  
-                        
-                                    })
+                                            
+                                        })
 
-                    
-                            });
-                                          
+                                        
+                                    });
+                                   
+                                
+                                        
+                                                            
 
-                    });
+                                    });
 
                                     
 
