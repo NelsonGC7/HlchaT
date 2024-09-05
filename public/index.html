@@ -529,6 +529,7 @@
                 const jsonPending= res.pending;
                 const jsonAssepted = res.assepted
                 if(jsonPending.length > 0){
+                console.log(jsonPending)
                   
                     const P = document.createElement('p');
                     P.id = "numSoli"
@@ -538,6 +539,7 @@
                 }
 
                 jsonPending.forEach(user =>{
+                    console.log(user)
                     const amistad = `
                         <div class="Contactos_users-user ${user.user_name}"> 
                             <figure class="Contactos_user-perfil">
@@ -553,7 +555,6 @@
                     const select = document.querySelector(`.${user.user_name}`)
                     const userFriend = select.children[1];
                     const btonFriend = select.children[2]
-                    
                     
                     btonFriend.addEventListener('click',async()=>{
                         try{
@@ -796,10 +797,24 @@
                     }else if(res.status === 226){
                         res.json()
                         .then(data => {
+    
                             send.insertAdjacentHTML('beforeend',` <figure class="active"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(63, 1, 90, 0.374);"><path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"></path></svg></figure>`);
                             data.forEach( user=>{
+                                let nuevo  = '';
+                                if(user.user_name.includes(" ")){
+                                    user.user_name.split(" ")
+                                    .forEach((word)=>{
+                                        console.log(word)
+                                        nuevo = nuevo + `-${word}`
+                                    })
+                                    console.log(nuevo)
+                                
+                                }else{
+                                    nuevo = user.user_name;
+                                }
+                              
                                 const amistad = `
-                                    <div class="friend-item-search ${user.user_name}">
+                                    <div class="friend-item-search ${nuevo}">
                                         <figure class="friend-figure"></figure>
                                         <div class="friend-info">
                                             <div class="friend-name">${user.user_name}</div>
@@ -809,9 +824,9 @@
                                     </div>
                                 `
                                 send.insertAdjacentHTML('beforeend', amistad)
-                                document.querySelector(`.${user.user_name} button`).addEventListener('click',async()=>{
+                                document.querySelector(`.${nuevo} button`).addEventListener('click',async()=>{
                                     try{
-                                        let newsoli = document.querySelector(`.${user.user_name}`)
+                                        let newsoli = document.querySelector(`.${nuevo}`)
                                         const userr = newsoli.children[1].children[0].innerText
                                         const data = await fetch('/addfriend',{
                                             method:'POST',
