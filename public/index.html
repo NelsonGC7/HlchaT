@@ -545,7 +545,7 @@
                 const jsonPending= res.pending;
                 const jsonAssepted = res.assepted
                 if(jsonPending.length > 0){
-                console.log(jsonPending)
+                
                   
                     const P = document.createElement('p');
                     P.id = "numSoli"
@@ -556,12 +556,10 @@
 
                 jsonPending.forEach(user =>{
                     let nuevoUser = ''
-                    console.log(user.user_name)
                     user.user_name.split(" ")
                     .forEach((word)=>{
                         nuevoUser = nuevoUser + `-${word}`;
                     })
-                    console.log(nuevoUser)
                     const amistad = `
                         <div class="Contactos_users-user ${nuevoUser}"> 
                             <figure class="Contactos_user-perfil">
@@ -589,9 +587,8 @@
                                     addFriend:userFriend.textContent
                                 })
                             })
-                            select.remove()
-                            const result = await fech.json()
-                            console.log(result)
+                            select.remove();
+                            const result = await fech.json();
                             setTimeout(()=>{
                                 mishoms.innerHTML = '';
                                 fetch('/friends')
@@ -600,7 +597,7 @@
                                         const nuevosAs =  user.assepted;
                                         const nuevosPe = user.pending
                                         if(nuevosPe.length > 0){
-                                            console.log(newTabs[1])
+                                           
                                            const  newP =  document.querySelector('#numSoli');
                                            newP.innerText = nuevosPe.length;
 
@@ -825,10 +822,10 @@
             document.querySelector('.sidebar-header h1').textContent = user;
         }
         serchfriend.addEventListener('submit',(e)=>{
-            console.log("search")
+          
             e.preventDefault();
             if(send.children.length  != 0){
-                console.log({"1":send.children.length})
+        
                 send.innerHTML = '';
             }
             if(serchfriend.children[0].value){
@@ -859,10 +856,10 @@
                                 if(user.user_name.includes(" ")){
                                     user.user_name.split(" ")
                                     .forEach((word)=>{
-                                        console.log(word)
+                                       
                                         nuevo = nuevo + `-${word}`
                                     })
-                                    console.log(nuevo)
+                                  
                                 
                                 }else{
                                     nuevo = user.user_name;
@@ -892,7 +889,7 @@
                                             })
                                         const result = await data.json()
                                         if(result) newsoli.remove();
-                                        console.log(document.querySelectorAll('.friend-item-search').length)
+                                        
                                         if(document.querySelectorAll('.friend-item-search').length === 0){
                                             send.innerHTML = '';
                                         }
