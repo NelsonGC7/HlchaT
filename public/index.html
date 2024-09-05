@@ -454,15 +454,31 @@
                     const segundos = aora.getSeconds();
                     return `${mes}/${dia}-${hora}:${minuto}:${segundos}` 
         }
-        console.log(US)
+        let antiguo = null;
+        let user = '';
+        let tk = null;
+        let udId = null;
+
         if(US[0].split('=')[0] === "user"){
-                var user = US[0].split('=')[1].split("%20%3D%20")[0];
-                var tk =  US[1].split('=')[1]
-                var udId = US[0].split('=')[1].split("%20%3D%20")[1]
+                antiguo = US[0].split('=')[1].split("%20%3D%20")[0];
+                tk =  US[1].split('=')[1]
+                udId = US[0].split('=')[1].split("%20%3D%20")[1]
         }else{
-                var user = US[1].split('=')[1].split("%20%3D%20")[0];
-                var tk =  US[0].split('=')[1]
-                var udId =  US[1].split('=')[1].split("%20%3D%20")[1]   
+                antiguo = US[1].split('=')[1].split("%20%3D%20")[0];
+                tk =  US[0].split('=')[1]
+                udId =  US[1].split('=')[1].split("%20%3D%20")[1]   
+        }
+
+
+ 
+        if(antiguo.includes("%20")){
+            antiguo.split("%20")
+            .forEach((word)=>{
+                user = user + ` ${word}`
+            })
+
+        }else{
+            user = antiguo;
         }
         const IO = io({
             auth:{
@@ -539,9 +555,15 @@
                 }
 
                 jsonPending.forEach(user =>{
-                    console.log(user)
+                    let nuevoUser = ''
+                    console.log(user.user_name)
+                    user.user_name.split(" ")
+                    .forEach((word)=>{
+                        nuevoUser = nuevoUser + `-${word}`;
+                    })
+                    console.log(nuevoUser)
                     const amistad = `
-                        <div class="Contactos_users-user ${user.user_name}"> 
+                        <div class="Contactos_users-user ${nuevoUser}"> 
                             <figure class="Contactos_user-perfil">
                             
                             </figure>
@@ -552,7 +574,7 @@
                         </div>
                     `
                     document.querySelector('.friend-soli').insertAdjacentHTML('beforeend',amistad)
-                    const select = document.querySelector(`.${user.user_name}`)
+                    const select = document.querySelector(`.${nuevoUser}`)
                     const userFriend = select.children[1];
                     const btonFriend = select.children[2]
                     
@@ -586,9 +608,17 @@
                                             document.querySelector('#numSoli').remove()
 
                                         }
-                                    nuevosAs.forEach(user =>{
+                                        nuevosAs.forEach(user =>{
+                                            let nuevoUserN = ''
+                                            if(user.user_name.includes(" ")){
+                                                user.user_name.split(" ")
+                                                .forEach(word =>{
+                                                    nuevoUserN = nuevoUserN + `-${word}`
+                                                })
+                                                console.log(nuevoUser)
+                                            }else{nuevoUserN = user.user_name;};
                                         let amistad = `
-                                            <div class="friend-item cluster-${user.user_name}">
+                                            <div class="friend-item cluster-${nuevoUserN}">
                                                 <figure class="friend-figure"></figure>
                                                 <div class="friend-info">
                                                     <div class="friend-name">${user.user_name}</div>
@@ -597,7 +627,7 @@
                                             </div>
                                         `;
                                         mishoms.insertAdjacentHTML('beforeend',amistad);
-                                        const status =  document.querySelector(`.cluster-${user.user_name} .friend-figure `)
+                                        const status =  document.querySelector(`.cluster-${nuevoUserN} .friend-figure `)
 
                                     
                                         if(user.user_status === 'online'){
@@ -606,13 +636,15 @@
                                             status.style.backgroundColor = "red";
                                         }
                                         
-                                        let cluster = document.querySelector(`.cluster-${user.user_name}`);
+                                        let cluster = document.querySelector(`.cluster-${nuevoUserN}`);
                                         cluster.addEventListener("click",()=>{
                                             IO.emit('joinC',{recive_id:user.user_id})
+                                            document.querySelector('.sidebar').classList.add('none');
+                                            document.querySelector('.main-chat').classList.add('active');
                                             conteiner.innerHTML= "";
                                             const newChat = `
                                             <div class="chat-header">
-                                                <h2>${user.user_name}</h2>
+                                                <h2>${nuevoUserN}</h2>
                                             </div>
                                             <div class="chat-messages">
                                             </div>
@@ -659,8 +691,17 @@
   
 
                 jsonAssepted.forEach(user =>{
+                    let nuevoU = '';
+                    if(user.user_name.includes(" ")){
+                        user.user_name.split(" ")
+                        .forEach(word =>{
+                            nuevoU = nuevoU + `-${word}`
+                        })
+                    }else{
+                        nuevoU = user.user_name;
+                    }
                     let amistad = `
-                        <div class="friend-item cluster-${user.user_name}">
+                        <div class="friend-item cluster-${nuevoU}">
                             <figure class="friend-figure"></figure>
                             <div class="friend-info">
                                 <div class="friend-name">${user.user_name}</div>
@@ -669,7 +710,7 @@
                         </div>
                     `;
                     mishoms.insertAdjacentHTML('beforeend',amistad);
-                    const status =  document.querySelector(`.cluster-${user.user_name} .friend-figure `)
+                    const status =  document.querySelector(`.cluster-${nuevoU} .friend-figure `)
 
                  
                     if(user.user_status === 'online'){
@@ -678,7 +719,7 @@
                         status.style.backgroundColor = "red";
                     }
                     
-                    let cluster = document.querySelector(`.cluster-${user.user_name}`);
+                    let cluster = document.querySelector(`.cluster-${nuevoU}`);
                     cluster.addEventListener("click",()=>{
                         IO.emit('joinC',{recive_id:user.user_id})//entrada de sala<-----
                         
@@ -707,7 +748,7 @@
                             ()=>{
                                 document.querySelector('.sidebar').classList.remove('none')
                                 document.querySelector('.main-chat').classList.remove('active')
-                                contains.innerHTML = '';
+                                conteiner.innerHTML = '';
 
                             }
                         )
