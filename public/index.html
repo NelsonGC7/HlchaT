@@ -572,8 +572,6 @@
                     (position) => {
                         const latJ = position.coords.latitude;
                         const lonj = position.coords.longitude;
-
-                       
                         IO.emit('maps',{latJ,lonj})
                     },
                     (error)=>{

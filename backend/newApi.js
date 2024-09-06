@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import { randomUUID } from 'node:crypto';
 import rateLimit from 'express-rate-limit';
-import  dayjs  from 'dayjs';
+
 const rejisterLimiter = rateLimit({
     windowMs: 2 * 60 * 1000, // 2 minutes
     max:6,
@@ -487,7 +487,40 @@ app.post('/logout',midelToken,(req,res)=>{
 });
 
 //sockets de comunicacion
+async function consulUbication (ubication){
+    const result = await db.execute(
+        {
+            sql:`SELECT ubication_id,ubication_name 
+            FROM ubications
+            WHERE ubication_name = :ubicacion
+            `,
+            args:{
+                ubicacion:ubication
+            }
+        }
+    )
+    if(result.rows.length === 0 ){
+        const resultado = await db.execute(
+            {
+                sql:
+                `
+                    INSERT INTO ubications
+                    (ubication_id,ubication_name)
+                    VALUES (:id,:name);
+                `,
+                args:{
+                    id:randomUUID(),
+                    name:ubication
+                }
+            }
+        )
+        return console.log(resultado)
 
+    }else{
+        console.log("ya existe")
+    }
+
+}
 io.on('connection',async(socket)=>{
     console.log(`user connected`);
     let room = null;
@@ -521,17 +554,21 @@ io.on('connection',async(socket)=>{
         }
        
         socket.on('maps',async(data)=>{
+            if(room) socket.leave(room);
             console.log(data.latJ,data.lonj)
             const result  = await fetch(`https://us1.locationiq.com/v1/reverse?key=${process.env.LOCATION_KEY}&lat=${data.latJ}&lon=${data.lonj}&format=json&`)
             const dat = await result.json()
             if(dat.address.county){
                 console.log(dat.address.county)
+                consulUbication(dat.address.county)
             }else if(dat.address.city){
                 console.log(dat.address.city);
+                consulUbication(dat.address.city)
             }else if(dat.address.state){
                 console.log(dat.address.state);
+                consulUbication(dat.address.state)
             }
-        })
+        });
 
         socket.on('joinC',async(data)=>{
             if(room) socket.leave(room);//si ya esta en una sala la deja 
@@ -550,12 +587,12 @@ io.on('connection',async(socket)=>{
                     sendId:usC,
                     reciveId:data.recive_id
                 }
-            })
+            });
             //console.log(recarge.rows)debug
             const messages = [...recarge.rows];
             io.to(room).emit(usC,messages);
 
-        })
+        });
         socket.on('privmsj', async(data)=>{
             try{
                 const { msj } = data;
@@ -582,11 +619,11 @@ io.on('connection',async(socket)=>{
                 console.log({"error":e})
             }
            
-        })
+        });
 
     socket.on('disconnect',()=>{
      console.log(`user disconnected`);
-    })
+    });
 
 
 
