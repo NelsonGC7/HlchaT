@@ -488,37 +488,61 @@ app.post('/logout',midelToken,(req,res)=>{
 
 //sockets de comunicacion
 async function consulUbication (ubication){
-    const result = await db.execute(
-        {
-            sql:`SELECT ubication_id,ubication_name 
-            FROM ubications
-            WHERE ubication_name = :ubicacion
-            `,
-            args:{
-                ubicacion:ubication
-            }
-        }
-    )
-    if(result.rows.length === 0 ){
-        const resultado = await db.execute(
+    let ubicacionTotal = null;
+   try{
+
+        const result = await db.execute(
             {
-                sql:
-                `
-                    INSERT INTO ubications
-                    (ubication_id,ubication_name)
-                    VALUES (:id,:name);
+                sql:`SELECT ubication_id,ubication_name 
+                FROM ubications
+                WHERE ubication_name = :ubicacion
                 `,
                 args:{
-                    id:randomUUID(),
-                    name:ubication
+                    ubicacion:ubication
                 }
             }
         )
-        return console.log(resultado)
-
-    }else{
-        console.log("ya existe")
-    }
+        if(result.rows.length === 0 ){
+            try{
+                const resultado = await db.execute(
+                    {
+                        sql:
+                        `
+                            INSERT INTO ubications
+                            (ubication_id,ubication_name)
+                            VALUES (:id,:name);
+                        `,
+                        args:{
+                            id:randomUUID(),
+                            name:ubication
+                        }
+                    }
+                )
+                if(resultado.rowsAffected === 1){
+                    const resultado2 = await db.execute({
+                        sql:`SELECT ubication_id,ubication_name 
+                            FROM ubications
+                            WHERE ubication_name = :ubicacion`,
+                        args:{
+                            ubicacion:ubication
+                        }
+                    })
+                   // console.log(resultado2.rows,"segundo")
+                   ubicacionTotal = resultado2.rows[0].ubication_id;
+                   
+                }
+            }catch(err){
+                console.log("err2",err)
+            }
+        }else{
+            //console.log(result.rows,"primer")
+            ubicacionTotal = result.rows[0].ubication_id
+            
+        }
+   }
+   catch(err){
+    console.log("err1",err)
+   }
 
 }
 io.on('connection',async(socket)=>{
