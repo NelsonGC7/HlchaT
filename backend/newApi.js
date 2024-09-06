@@ -520,7 +520,9 @@ io.on('connection',async(socket)=>{
             
         }
        
-        
+        socket.on('maps',async(data)=>{
+            console.log(data)
+        })
         socket.on('joinC',async(data)=>{
             if(room) socket.leave(room);//si ya esta en una sala la deja 
            const result = await verAmistad(usC,data.recive_id);
@@ -540,11 +542,8 @@ io.on('connection',async(socket)=>{
                 }
             })
             //console.log(recarge.rows)debug
-            const messages = [...recarge.rows]
-            io.to(room).emit(usC,messages)
-
-            
-            
+            const messages = [...recarge.rows];
+            io.to(room).emit(usC,messages);
 
         })
         socket.on('privmsj', async(data)=>{

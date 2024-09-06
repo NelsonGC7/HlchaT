@@ -491,16 +491,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js" integrity="sha512-11t8Q+vY9JlCrr+PveZKTYJq8n7O09Y5X/pk/aMd3vJugSvu4xOunGEUzaADqL3I8cZKE/pBwwCfXzDkRJh2sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="module" defer >
-        /*
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                console.log('Latitud:', position.coords.latitude);
-                console.log('Longitud:', position.coords.longitude);
-            });
-        } else {
-            console.log('La geolocalización no está disponible en este dispositivo.');
-        }
-            */
        /*
        const socket = io()
         const form = document.querySelector('form')
@@ -572,9 +562,33 @@
         
         const mishoms = document.querySelector('.friend-list')//xhek
         const serchfriend = document.querySelector('.sidebar-header form');
+        const btonMap = document.getElementById('rejion')
         const send = document.querySelector('.search-send')
         const tabs = document.querySelector('.tabs').children;
         const newTabs = [...tabs]
+        btonMap.addEventListener("click",async()=>{
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const LAT = position.coords.latitude;
+                        const LON = position.coords.longitude;
+                        IO.emit('maps',{LAT,LON})
+                    },
+                    (error)=>{
+                        if(error.code === error.PERMISSION_DENIED){
+                            console.log("el usuario no dio acceso a su ubicacion")
+                        }else{
+                            console.log('sin ubicacion',error.message)
+                        }
+                    }
+                );
+
+            } else {
+                console.log('La geolocalización no está disponible en este dispositivo.');
+            }
+
+
+        })
     
        newTabs.forEach(res=> 
         res.addEventListener('click',()=>{ 
