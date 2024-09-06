@@ -570,9 +570,11 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        const LAT = position.coords.latitude;
-                        const LON = position.coords.longitude;
-                        IO.emit('maps',{LAT,LON})
+                        const latJ = position.coords.latitude;
+                        const lonj = position.coords.longitude;
+
+                       
+                        IO.emit('maps',{latJ,lonj})
                     },
                     (error)=>{
                         if(error.code === error.PERMISSION_DENIED){

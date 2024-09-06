@@ -521,8 +521,18 @@ io.on('connection',async(socket)=>{
         }
        
         socket.on('maps',async(data)=>{
-            console.log(data)
+            console.log(data.latJ,data.lonj)
+            const result  = await fetch(`https://us1.locationiq.com/v1/reverse?key=${process.env.LOCATION_KEY}&lat=${data.latJ}&lon=${data.lonj}&format=json&`)
+            const dat = await result.json()
+            if(dat.address.county){
+                console.log(dat.address.county)
+            }else if(dat.address.city){
+                console.log(dat.address.city);
+            }else if(dat.address.state){
+                console.log(dat.address.state);
+            }
         })
+
         socket.on('joinC',async(data)=>{
             if(room) socket.leave(room);//si ya esta en una sala la deja 
            const result = await verAmistad(usC,data.recive_id);
