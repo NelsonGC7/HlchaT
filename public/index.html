@@ -945,9 +945,11 @@
                         
                         IO.on(`${udId}Map`,(location)=>{
                             console.log(location)
-                            mishoms.innerHTML = ''
+                            mishoms.style.display = 'none'
                             conteiner.innerHTML = ''
-                            document.querySelector('.tabs').innerHTML = '';
+                            document.querySelector('.tabs').style.display = 'none';
+                            document.querySelector('.sidebar').classList.add('none');
+                            document.querySelector('.main-chat').classList.add('active');
 
                             const component = 
                                             `
@@ -967,6 +969,7 @@
                                             `;
                             conteiner.innerHTML = component;
                             document.querySelector('.chat-header figure').style.display = 'block'
+                            document.querySelector('.chat-header figure')
                              const input = document.querySelector('.chat-input input')
                             document.querySelector('.chat-input')
                             .addEventListener("submit",(e)=>{
