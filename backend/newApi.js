@@ -528,7 +528,7 @@ async function consulUbication (ubication){
                         }
                     })
                    // console.log(resultado2.rows,"segundo")
-                   ubicacionTotal = resultado2.rows[0].ubication_id;
+                   return ubicacionTotal = resultado2.rows[0].ubication_id;
                    
                 }
             }catch(err){
@@ -536,8 +536,7 @@ async function consulUbication (ubication){
             }
         }else{
             //console.log(result.rows,"primer")
-            ubicacionTotal = result.rows[0].ubication_id
-            
+          return  ubicacionTotal = result.rows[0].ubication_id;
         }
    }
    catch(err){
@@ -578,20 +577,34 @@ io.on('connection',async(socket)=>{
         }
        
         socket.on('maps',async(data)=>{
+            let PLACE = null;
+         const datoo = {
+            hola:"weon"
+         }
             if(room) socket.leave(room);
             console.log(data.latJ,data.lonj)
             const result  = await fetch(`https://us1.locationiq.com/v1/reverse?key=${process.env.LOCATION_KEY}&lat=${data.latJ}&lon=${data.lonj}&format=json&`)
             const dat = await result.json()
             if(dat.address.county){
                 console.log(dat.address.county)
-                consulUbication(dat.address.county)
+                PLACE = await consulUbication(dat.address.county);
+                socket.join(PLACE);
+                
+                io.to(PLACE).emit('place',`Hola usuarios de ${dat.address.county}`)
+
             }else if(dat.address.city){
                 console.log(dat.address.city);
-                consulUbication(dat.address.city)
+                PLACE = await consulUbication(dat.address.city);
+                socket.join(PLACE);
+                io.to(PLACE).emit('place',`Hola usuarios de ${dat.address.city}`)
+                //io.to(consulUbication(dat.address.city)).emit('place',`hola a todos los de ${}`)
             }else if(dat.address.state){
                 console.log(dat.address.state);
-                consulUbication(dat.address.state)
-            }
+                PLACE = await consulUbication(dat.address.state);
+                socket.join(PLACE);
+                io.to(PLACE).emit('place',`Hola usuarios de ${dat.address.state}`)
+               
+            };
         });
 
         socket.on('joinC',async(data)=>{
@@ -615,6 +628,7 @@ io.on('connection',async(socket)=>{
             //console.log(recarge.rows)debug
             const messages = [...recarge.rows];
             io.to(room).emit(usC,messages);
+            console.log(data)
 
         });
         socket.on('privmsj', async(data)=>{
@@ -638,7 +652,6 @@ io.on('connection',async(socket)=>{
                         date:data.time
                     }
                 });
-              
             }catch(e){
                 console.log({"error":e})
             }

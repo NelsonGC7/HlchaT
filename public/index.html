@@ -573,6 +573,11 @@
                         const latJ = position.coords.latitude;
                         const lonj = position.coords.longitude;
                         IO.emit('maps',{latJ,lonj})
+                        IO.on('place',(data)=>{
+                            console.log(data)
+
+                        })
+
                     },
                     (error)=>{
                         if(error.code === error.PERMISSION_DENIED){
@@ -586,6 +591,8 @@
             } else {
                 console.log('La geolocalización no está disponible en este dispositivo.');
             }
+
+            
 
 
         })
@@ -827,7 +834,7 @@
                     
                     let cluster = document.querySelector(`.cluster-${nuevoU}`);
                     cluster.addEventListener("click",()=>{
-                        IO.emit('joinC',{recive_id:user.user_id})//entrada de sala<-----
+                        IO.emit('joinC',{recive_id:user.user_id})//in de sala<-----
                         
                         document.querySelector('.sidebar').classList.add('none');
                         document.querySelector('.main-chat').classList.add('active');
@@ -848,7 +855,7 @@
                         </form>
                         `
                         conteiner.innerHTML = newChat;
-                        const formularioChat = document.querySelector('.chat-input');//chek
+                        const formularioChat = document.querySelector('.chat-input');
                         const inputChat = document.querySelector('.chat-input input');
                         document.querySelector('.chat-header figure').addEventListener('click',
                             ()=>{
