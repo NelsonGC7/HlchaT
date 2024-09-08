@@ -945,8 +945,8 @@
                         
                         IO.on(`${udId}Map`,(location)=>{
                             console.log(location)
-                            mishoms.style.display = 'none'
-                            conteiner.innerHTML = ''
+                            mishoms.style.display = 'none';
+                            conteiner.innerHTML = '';
                             document.querySelector('.tabs').style.display = 'none';
                             document.querySelector('.sidebar').classList.add('none');
                             document.querySelector('.main-chat').classList.add('active');
@@ -968,9 +968,19 @@
                                             </form>
                                             `;
                             conteiner.innerHTML = component;
-                            document.querySelector('.chat-header figure').style.display = 'block'
+                            document.querySelector('.chat-header figure').style.display = 'block';
                             document.querySelector('.chat-header figure')
-                             const input = document.querySelector('.chat-input input')
+                            .addEventListener("click",
+                            ()=>{
+                                console.log("click") 
+                                document.querySelector('.sidebar').classList.remove('none')
+                                document.querySelector('.main-chat').classList.remove('active')
+                                mishoms.style.display = 'block';
+                                document.querySelector('.tabs').style.display = 'flex';
+                                conteiner.innerHTML = '';
+
+                            })
+                             const input = document.querySelector('.chat-input input');
                             document.querySelector('.chat-input')
                             .addEventListener("submit",(e)=>{
                                 e.preventDefault()
