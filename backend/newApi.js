@@ -578,14 +578,12 @@ io.on('connection',async(socket)=>{
             
         }
         socket.on('maps',async(data)=>{
-          
             if(room2) socket.leave(room);
             console.log(data.latJ,data.lonj)
             const result  = await fetch(`https://us1.locationiq.com/v1/reverse?key=${process.env.LOCATION_KEY}&lat=${data.latJ}&lon=${data.lonj}&format=json&`)
             const dat = await result.json()
             if(dat.address.county){
                 location =  dat.address.county
-                console.log(1)
                 room2 = await consulUbication(dat.address.county);
                 console.log(room2)
                 socket.join(room2);
@@ -593,13 +591,12 @@ io.on('connection',async(socket)=>{
 
             }else if(dat.address.city){
                 location = dat.address.city;
-                console.log(2)
                 room2 = await consulUbication(dat.address.city);
                 socket.join(room2);
                 io.to(room2).emit(`${usC}Map`,location)
                 //io.to(consulUbication(dat.address.city)).emit('place',`hola a todos los de ${}`)
             }else if(dat.address.state){
-                console.log(3)
+              
                 location = dat.address.state;
                 room2 = await consulUbication(dat.address.state);
                 socket.join(room2);
@@ -608,8 +605,7 @@ io.on('connection',async(socket)=>{
             };
         });
         socket.on('place',async(data)=>{
-            console.log(data)
-            console.log(room2)
+          
             io.to(room2).emit('place',data)
          
         })
