@@ -547,6 +547,8 @@ async function consulUbication (ubication){
 io.on('connection',async(socket)=>{
     console.log(`user connected`);
     let room = null;
+    let room2 = null;
+    let location = null;
     const  tk = socket.handshake.auth.token;
    try{
     if(!tk){
@@ -575,37 +577,43 @@ io.on('connection',async(socket)=>{
 
             
         }
-       
         socket.on('maps',async(data)=>{
-            let PLACE = null;
-         const datoo = {
-            hola:"weon"
-         }
-            if(room) socket.leave(room);
+          
+            if(room2) socket.leave(room);
             console.log(data.latJ,data.lonj)
             const result  = await fetch(`https://us1.locationiq.com/v1/reverse?key=${process.env.LOCATION_KEY}&lat=${data.latJ}&lon=${data.lonj}&format=json&`)
             const dat = await result.json()
             if(dat.address.county){
-                console.log(dat.address.county)
-                PLACE = await consulUbication(dat.address.county);
-                socket.join(PLACE);
-                
-                io.to(PLACE).emit('place',`Hola usuarios de ${dat.address.county}`)
+                location =  dat.address.county
+                console.log(1)
+                room2 = await consulUbication(dat.address.county);
+                console.log(room2)
+                socket.join(room2);
+                io.to(room2).emit(`${usC}Map`,location)
 
             }else if(dat.address.city){
-                console.log(dat.address.city);
-                PLACE = await consulUbication(dat.address.city);
-                socket.join(PLACE);
-                io.to(PLACE).emit('place',`Hola usuarios de ${dat.address.city}`)
+                location = dat.address.city;
+                console.log(2)
+                room2 = await consulUbication(dat.address.city);
+                socket.join(room2);
+                io.to(room2).emit(`${usC}Map`,location)
                 //io.to(consulUbication(dat.address.city)).emit('place',`hola a todos los de ${}`)
             }else if(dat.address.state){
-                console.log(dat.address.state);
-                PLACE = await consulUbication(dat.address.state);
-                socket.join(PLACE);
-                io.to(PLACE).emit('place',`Hola usuarios de ${dat.address.state}`)
+                console.log(3)
+                location = dat.address.state;
+                room2 = await consulUbication(dat.address.state);
+                socket.join(room2);
+                io.to(room2).emit(`${usC}Map`,location)
                
             };
         });
+        socket.on('place',async(data)=>{
+            console.log(data)
+            console.log(room2)
+            io.to(room2).emit('place',data)
+         
+        })
+
 
         socket.on('joinC',async(data)=>{
             if(room) socket.leave(room);//si ya esta en una sala la deja 

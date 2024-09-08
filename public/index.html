@@ -559,44 +559,13 @@
 ///resolver error de usuarios en diferentes navegadoress
         const formSearch = document.querySelector('.form-search');
         const conteiner =document.querySelector(".main-chat")
-        
         const mishoms = document.querySelector('.friend-list')//xhek
         const serchfriend = document.querySelector('.sidebar-header form');
         const btonMap = document.getElementById('rejion')
         const send = document.querySelector('.search-send')
         const tabs = document.querySelector('.tabs').children;
         const newTabs = [...tabs]
-        btonMap.addEventListener("click",async()=>{
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const latJ = position.coords.latitude;
-                        const lonj = position.coords.longitude;
-                        IO.emit('maps',{latJ,lonj})
-                        IO.on('place',(data)=>{
-                            console.log(data)
-
-                        })
-
-                    },
-                    (error)=>{
-                        if(error.code === error.PERMISSION_DENIED){
-                            console.log("el usuario no dio acceso a su ubicacion")
-                        }else{
-                            console.log('sin ubicacion',error.message)
-                        }
-                    }
-                );
-
-            } else {
-                console.log('La geolocalización no está disponible en este dispositivo.');
-            }
-
-            
-
-
-        })
-    
+     
        newTabs.forEach(res=> 
         res.addEventListener('click',()=>{ 
             if(res.nextElementSibling){
@@ -637,7 +606,7 @@
         })
        )
         
-     const llamada = ()=>{
+     
         fetch('/friends',{
             method:'GET',
         })
@@ -752,7 +721,7 @@
                                             </div>
 
 
-                                        
+    
                                             <form class="chat-input">
                                                 <input type="text" placeholder="Escribe un mensaje...">
                                                 <button>Enviar</button>
@@ -878,6 +847,7 @@
                     
                 });
                 IO.on(udId,(messages)=>{
+                   
                     const chat = document.querySelector('.chat-messages')
                     messages.forEach(menssage =>{
                         const H = menssage.send_at.split("-")[1];
@@ -913,16 +883,105 @@
                 chat.insertAdjacentHTML('beforeend',template1)
                 chat.scrollTop = chat.scrollHeight;     
                 });
+                
                
 
             }).catch(err=> err)
-     }
+        btonMap.addEventListener("click",async()=>{
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latJ = position.coords.latitude;
+                        const lonj = position.coords.longitude;
+                        IO.emit('maps',{latJ,lonj})
+                        
+                        IO.on(`${udId}Map`,(location)=>{
+                            console.log(location)
+                            mishoms.innerHTML = ''
+                            conteiner.innerHTML = ''
+                            document.querySelector('.tabs').innerHTML = '';
 
-     llamada()
+                            const component = 
+                                            `
+                                            <div class="chat-header">
+                                                <h2>${location}</h2>
+                                                <figure class="active"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill:  #aaebde;"><path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"></path></svg></figure>
+                                            </div>
+                                            <div class="chat-messages">
+                                            </div>
+
+
+                                        
+                                            <form class="chat-input">
+                                                <input type="text" placeholder="Escribe un mensaje...">
+                                                <button>Enviar</button>
+                                            </form>
+                                            `;
+                            conteiner.innerHTML = component;
+                             const input = document.querySelector('.chat-input input')
+                            document.querySelector('.chat-input')
+                            .addEventListener("submit",(e)=>{
+                                e.preventDefault()
+                                const valor = document.querySelector('.chat-input input').value;
+                                if(valor.length === 0) return console.log("ingresa algo de texto")
+                                IO.emit('place',{valor,userr:user});
+                                document.querySelector('.chat-input input').value = "";
+                                
+                            });
+
+                        
+                        });
+                       
+                        
+
+                    },
+                    (error)=>{
+                        if(error.code === error.PERMISSION_DENIED){
+                            console.log("el usuario no dio acceso a su ubicacion")
+                        }else{
+                            console.log('sin ubicacion',error.message)
+                        }
+                    }
+                );
+
+            } else {
+                console.log('La geolocalización no está disponible en este dispositivo.');
+            }
+
+            
+
+
+        })
+        IO.on('place',(data)=>{
+                            console.log(data)
+                            const quien  = data.userr === user ? 'sent' : 'received'
+                            const chat2 = document.querySelector('.chat-messages')
+                            console.log(chat2)
+                            const component = 
+                            ` 
+                            <div class="message ${quien}">
+                                <div class="message-content">
+                                    <p>${data.valor}</p>
+                                </div>
+                                    <div class="message-time">${HoraLocal()}</div>
+                            </div>
+                            `;
+                            chat2.insertAdjacentHTML('beforeend',component);
+
+
+        })
+
+    
+   
             //mensajes
         if(US.length === 2){
             document.querySelector('.sidebar-header h1').textContent = user;
         }
+        
+
+
+
         serchfriend.addEventListener('submit',(e)=>{
           
             e.preventDefault();
