@@ -347,6 +347,8 @@
             padding: 20px;
             background-color: #fff;
             border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
         }
         .chat-header h2 {
             margin: 0;
@@ -355,6 +357,13 @@
         }
         .chat-header figure{
             display: none;
+            height: 1.8rem;
+            width: 1.8rem;
+            border-radius: 50%;
+            border: 1.8px solid  #aaebde;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
         }
         .chat-messages {
             height: 100%;
@@ -379,6 +388,7 @@
                 top: -.7rem;
                 left: .1rem;
             }
+          
         }
         .message.sent {
             float: right;
@@ -940,6 +950,7 @@
                                             </form>
                                             `;
                             conteiner.innerHTML = component;
+                            document.querySelector('.chat-header figure').style.display = 'block'
                              const input = document.querySelector('.chat-input input')
                             document.querySelector('.chat-input')
                             .addEventListener("submit",(e)=>{
