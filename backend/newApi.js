@@ -544,6 +544,25 @@ async function consulUbication (ubication){
    }
 
 }
+async function consultaMensajes(idSala,nameSala){
+    console.log(idSala,nameSala)
+    const result = await db.execute({
+        sql:
+        `
+        SELECT message,sender_name FROM messages_ubications
+        WHERE ubication_id = :id
+        AND ubication_name = :name
+        `,
+        args:{
+            id:idSala,
+            name:nameSala
+        }
+    })
+    return console.log(result)
+
+}
+
+
 io.on('connection',async(socket)=>{
     console.log(`user connected`);
     let room = null;
@@ -587,18 +606,21 @@ io.on('connection',async(socket)=>{
                 room2 = await consulUbication(dat.address.county);
                 socket.join(room2);
                 io.to(room2).emit(`${usC}Map`,location)
+                consultaMensajes(room2,location)
 
             }else if(dat.address.city){
                 location = dat.address.city;
                 room2 = await consulUbication(dat.address.city);
                 socket.join(room2);
                 io.to(room2).emit(`${usC}Map`,location);
+                consultaMensajes(room2,location)
                 //io.to(consulUbication(dat.address.city)).emit('place',`hola a todos los de ${}`)
             }else if(dat.address.state){
                 location = dat.address.state;
                 room2 = await consulUbication(dat.address.state);
                 socket.join(room2);
                 io.to(room2).emit(`${usC}Map`,location);
+                consultaMensajes(room2,location)
                
             };
         });
