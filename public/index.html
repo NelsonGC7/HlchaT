@@ -973,7 +973,7 @@
                                 messages.forEach(mennsaje=>{
                                     const quien  = mennsaje.sender_name === user ? 'sent' : 'received';
                                     const chat2 = document.querySelector('.chat-messages')
-                                    console.log(chat2)
+                                  
                                     const component = 
                                     ` 
                                     <div class="message ${quien}">
@@ -986,12 +986,12 @@
                                     </div>
                                     `;
                                     chat2.insertAdjacentHTML('beforeend',component);
+                                    
 
 
                             }
                             );
-
-
+                            document.querySelector('.chat-messages').scrollTop = document.querySelector('.chat-messages').scrollHeight;
                             };
 
 
@@ -1002,7 +1002,7 @@
                             document.querySelector('.chat-header figure')
                             .addEventListener("click",
                             ()=>{
-                                console.log("click") 
+                               
                                 document.querySelector('.sidebar').classList.remove('none')
                                 document.querySelector('.main-chat').classList.remove('active')
                                 mishoms.style.display = 'block';
@@ -1045,10 +1045,10 @@
 
         })
         IO.on('place',(data)=>{
-                            console.log(data)
+
                             const quien  = data.userr === user ? 'sent' : 'received';
                             const chat2 = document.querySelector('.chat-messages')
-                            console.log(chat2)
+
                             const component = 
                             ` 
                             <div class="message ${quien}">
@@ -1061,6 +1061,7 @@
                             </div>
                             `;
                             chat2.insertAdjacentHTML('beforeend',component);
+                            chat2.scrollTop = chat2.scrollHeight;
 
 
         })

@@ -545,7 +545,6 @@ async function consulUbication (ubication){
 
 }
 async function consultaMensajes(idSala,nameSala){
-    console.log(idSala,nameSala)
     const result = await db.execute({
         sql:
         `
@@ -598,7 +597,7 @@ io.on('connection',async(socket)=>{
         }
         socket.on('maps',async(data)=>{
             if(room2) socket.leave(room);
-            console.log(data.latJ,data.lonj)
+         
             const result  = await fetch(`https://us1.locationiq.com/v1/reverse?key=${process.env.LOCATION_KEY}&lat=${data.latJ}&lon=${data.lonj}&format=json&`)
             const dat = await result.json()
             if(dat.address.county){
@@ -628,20 +627,8 @@ io.on('connection',async(socket)=>{
             };
         });
         socket.on('place',async(data)=>{
-       
-            
-          
             io.to(room2).emit('place',data)
-            /*
-            console.log({
-                sender_id:usC,
-                ubi_id:room2,
-                message:data.valor,
-                message_at:data.time,
-                location,
-                usuario:data.userr
-            })*/
-           console.log(data.time)
+    
             try{
                 const result = await db.execute({
                     sql:
