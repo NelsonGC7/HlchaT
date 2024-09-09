@@ -558,7 +558,7 @@ async function consultaMensajes(idSala,nameSala){
             name:nameSala
         }
     })
-    return console.log(result)
+    return result.rows
 
 }
 
@@ -605,22 +605,25 @@ io.on('connection',async(socket)=>{
                 location =  dat.address.county
                 room2 = await consulUbication(dat.address.county);
                 socket.join(room2);
-                io.to(room2).emit(`${usC}Map`,location)
-                consultaMensajes(room2,location)
+                const messages = await consultaMensajes(room2,location)
+                io.to(room2).emit(`${usC}Map`,messages,location)
+               
 
             }else if(dat.address.city){
                 location = dat.address.city;
                 room2 = await consulUbication(dat.address.city);
                 socket.join(room2);
-                io.to(room2).emit(`${usC}Map`,location);
-                consultaMensajes(room2,location)
+                const messages = await consultaMensajes(room2,location)
+                io.to(room2).emit(`${usC}Map`,messages,location);
+             
                 //io.to(consulUbication(dat.address.city)).emit('place',`hola a todos los de ${}`)
             }else if(dat.address.state){
                 location = dat.address.state;
                 room2 = await consulUbication(dat.address.state);
                 socket.join(room2);
-                io.to(room2).emit(`${usC}Map`,location);
+                const messages = await consultaMensajes(room2,location)
                 consultaMensajes(room2,location)
+                io.to(room2).emit(`${usC}Map`,messages,location);
                
             };
         });

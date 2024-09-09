@@ -943,8 +943,8 @@
                         const lonj = position.coords.longitude;
                         IO.emit('maps',{latJ,lonj})
                         
-                        IO.on(`${udId}Map`,(location)=>{
-                            console.log(location)
+                        IO.on(`${udId}Map`,(messages,location)=>{
+                        
                             mishoms.style.display = 'none';
                             conteiner.innerHTML = '';
                             document.querySelector('.tabs').style.display = 'none';
@@ -968,6 +968,36 @@
                                             </form>
                                             `;
                             conteiner.innerHTML = component;
+                            
+                            if(messages.length !== 0 ){
+                                messages.forEach(mennsaje=>{
+                                    const quien  = mennsaje.sender_name === user ? 'sent' : 'received';
+                                    const chat2 = document.querySelector('.chat-messages')
+                                    console.log(chat2)
+                                    const component = 
+                                    ` 
+                                    <div class="message ${quien}">
+                                    
+                                        <div class="message-content">
+                                            <h6>${mennsaje.sender_name}</h6>
+                                            <p>${mennsaje.message}</p>
+                                        </div>
+                                            <div class="message-time">${HoraLocal()}</div>
+                                    </div>
+                                    `;
+                                    chat2.insertAdjacentHTML('beforeend',component);
+
+
+                            }
+                            );
+
+
+                            };
+
+
+                            
+
+
                             document.querySelector('.chat-header figure').style.display = 'block';
                             document.querySelector('.chat-header figure')
                             .addEventListener("click",
