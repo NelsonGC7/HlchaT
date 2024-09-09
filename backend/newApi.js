@@ -585,7 +585,6 @@ io.on('connection',async(socket)=>{
             if(dat.address.county){
                 location =  dat.address.county
                 room2 = await consulUbication(dat.address.county);
-                console.log(room2)
                 socket.join(room2);
                 io.to(room2).emit(`${usC}Map`,location)
 
@@ -593,20 +592,53 @@ io.on('connection',async(socket)=>{
                 location = dat.address.city;
                 room2 = await consulUbication(dat.address.city);
                 socket.join(room2);
-                io.to(room2).emit(`${usC}Map`,location)
+                io.to(room2).emit(`${usC}Map`,location);
                 //io.to(consulUbication(dat.address.city)).emit('place',`hola a todos los de ${}`)
             }else if(dat.address.state){
-              
                 location = dat.address.state;
                 room2 = await consulUbication(dat.address.state);
                 socket.join(room2);
-                io.to(room2).emit(`${usC}Map`,location)
+                io.to(room2).emit(`${usC}Map`,location);
                
             };
         });
         socket.on('place',async(data)=>{
+       
+            
           
             io.to(room2).emit('place',data)
+            /*
+            console.log({
+                sender_id:usC,
+                ubi_id:room2,
+                message:data.valor,
+                message_at:data.time,
+                location,
+                usuario:data.userr
+            })*/
+           console.log(data.time)
+            try{
+                const result = await db.execute({
+                    sql:
+                    `
+                    INSERT INTO messages_ubications
+                    (ubication_id,ubication_name,message,sender_id,sender_name,message_at)
+                    VALUES(:ubication_id,:ubication_name,:message,:sender_id,:sender_name,:message_at);
+                    `,
+                    args:{
+                        ubication_id:room2,
+                        ubication_name:location,
+                        message:data.valor,
+                        sender_id:usC,
+                        sender_name:data.userr,
+                        message_at:data.time,
+  
+                    }
+                })
+            }
+            catch(e){
+                console.log({erroraddbmesaje:e})
+            }
          
         })
 
