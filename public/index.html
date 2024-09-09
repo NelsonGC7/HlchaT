@@ -986,7 +986,7 @@
                                 e.preventDefault()
                                 const valor = document.querySelector('.chat-input input').value;
                                 if(valor.length === 0) return console.log("ingresa algo de texto")
-                                IO.emit('place',{valor,userr:user});
+                                IO.emit('place',{valor,userr:user,time:HoraLocal()});
                                 document.querySelector('.chat-input input').value = "";
                                 
                             });
