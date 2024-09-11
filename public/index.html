@@ -56,16 +56,19 @@
             position: absolute;
             display: flex;
             align-items: center;
-            padding-left: 3.5px;
+            justify-content: center;
             width: 2.5rem;
+            height: 2.2rem;
             right: 0;
             border-radius: 1rem 0 0 1rem;
-            top:18%;
+            top:16%;
             background-color: #2d3748;
 
         }
         .sidebar-header svg{
             cursor: pointer;
+            height: 80%;
+            width: 80%;
         }
         .sidebar-header svg path + path{
             animation: locationColors 1s infinite ease-in-out
@@ -356,6 +359,7 @@
             font-size: 20px;
         }
         .chat-header figure{
+            position: relative;
             display: none;
             height: 1.8rem;
             width: 1.8rem;
@@ -364,6 +368,10 @@
             display: grid;
             place-items: center;
             cursor: pointer;
+        }
+        .chat-header figure svg{
+            height: 100%;
+            width: 100%;
         }
         .chat-messages {
             height: 100%;
