@@ -568,6 +568,7 @@
         let user = '';
         let tk = null;
         let udId = null;
+        let LOCALIDAD = null;
       
 
         if(US[0].split('=')[0] === "user"){
@@ -931,7 +932,6 @@
                 chat.scrollTop = chat.scrollHeight;     
                 });
                 
-               
 
             }).catch(err=> err)
         btonMap.addEventListener("click",async()=>{
@@ -941,9 +941,10 @@
                     (position) => {
                         const latJ = position.coords.latitude;
                         const lonj = position.coords.longitude;
-                        IO.emit('maps',{latJ,lonj})
+                        IO.emit('maps',{latJ,lonj,user})
                         
                         IO.on(`${udId}Map`,(messages,location)=>{
+                            
                         
                             mishoms.style.display = 'none';
                             conteiner.innerHTML = '';
@@ -1021,11 +1022,13 @@
                                 
                             });
 
-                        
+                            IO.on(location,data =>{
+                                console.log(data)
+                            })
                         });
                        
+                       
                         
-
                     },
                     (error)=>{
                         if(error.code === error.PERMISSION_DENIED){

@@ -561,6 +561,8 @@ async function consultaMensajes(idSala,nameSala){
 
 }
 
+const usuarios_en_salas= {};//almacenamiento de usuarios conectados  para todas las salas
+
 
 io.on('connection',async(socket)=>{
     console.log(`user connected`);
@@ -604,26 +606,43 @@ io.on('connection',async(socket)=>{
                 location =  dat.address.county
                 room2 = await consulUbication(dat.address.county);
                 socket.join(room2);
-                const messages = await consultaMensajes(room2,location)
-                io.to(room2).emit(`${usC}Map`,messages,location)
+                if(!usuarios_en_salas[room2]){//<-- creando almacenamiento de usuarios conectados para la sala
+                    usuarios_en_salas[room2] = []
+                };
+                usuarios_en_salas[room2].push(data.user);
+                const messages = await consultaMensajes(room2,location);
+                io.to(room2).emit(`${usC}Map`,messages,location);
+
+
+                io.to(room2).emit(location, usuarios_en_salas[room2]);
                
 
             }else if(dat.address.city){
                 location = dat.address.city;
                 room2 = await consulUbication(dat.address.city);
                 socket.join(room2);
-                const messages = await consultaMensajes(room2,location)
+                if(!usuarios_en_salas[room2]){//<-- creando almacenamiento de usuarios conectados  para la sala
+                    usuarios_en_salas[room2] = []
+                };
+                usuarios_en_salas[room2].push(data.user)
+                const messages = await consultaMensajes(room2,location);
                 io.to(room2).emit(`${usC}Map`,messages,location);
+
+
+                io.to(room2).emit(location, usuarios_en_salas[room2]);
              
-                //io.to(consulUbication(dat.address.city)).emit('place',`hola a todos los de ${}`)
             }else if(dat.address.state){
                 location = dat.address.state;
                 room2 = await consulUbication(dat.address.state);
                 socket.join(room2);
-                const messages = await consultaMensajes(room2,location)
-                consultaMensajes(room2,location)
+                if(!usuarios_en_salas[room2]){//creando almacenamiento de usuarios conectados solo para la sala;
+                    usuarios_en_salas[room2] = []
+                };
+                usuarios_en_salas[room2].push(data.user)
+                const messages = await consultaMensajes(room2,location);
                 io.to(room2).emit(`${usC}Map`,messages,location);
-               
+
+                io.to(room2).emit(location, usuarios_en_salas[room2]);               
             };
         });
         socket.on('place',async(data)=>{
