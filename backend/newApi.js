@@ -612,7 +612,7 @@ io.on('connection',async(socket)=>{
                 };
                 if(usuarios_en_salas[room2].includes(data.user)){
                    const indexDelete =  usuarios_en_salas[room2].indexOf(data.user);
-                   console.log(indexDelete)
+                    usuarios_en_salas[room2].splice(indexDelete,1)
                 };
                 usuarios_en_salas[room2].push(data.user);
                 const messages = await consultaMensajes(room2,location);
@@ -632,7 +632,7 @@ io.on('connection',async(socket)=>{
                 };
                 if(usuarios_en_salas[room2].includes(data.user)){
                     const indexDelete = usuarios_en_salas[room2].indexOf(data.user);
-                    console.log(indexDelete)
+                   usuarios_en_salas[room2].splice(indexDelete,1)
                 }
                 usuarios_en_salas[room2].push(data.user)
                 const messages = await consultaMensajes(room2,location);
@@ -651,7 +651,7 @@ io.on('connection',async(socket)=>{
                 };
                 if(usuarios_en_salas[room2].includes(data.user)){
                     const indexDelete =  usuarios_en_salas[room2].indexOf(data.user)
-                    console.log(indexDelete)
+                    usuarios_en_salas[room2].splice(indexDelete,1)
                 }
                 
                 usuarios_en_salas[room2].push(data.user)
