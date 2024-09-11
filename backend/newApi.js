@@ -666,6 +666,10 @@ io.on('connection',async(socket)=>{
         });
         socket.on('place',async(data)=>{
             io.to(room2).emit('place',data)
+            if(data.valor.length === 0){
+                return console.log("intento de mensaje vacio")
+            }
+            const newMesage = data.valor.trim()
     
             try{
                 await db.execute({
@@ -678,7 +682,7 @@ io.on('connection',async(socket)=>{
                     args:{
                         ubication_id:room2,
                         ubication_name:location,
-                        message:data.valor,
+                        message:newMesage,
                         sender_id:usC,
                         sender_name:data.userr,
                         message_at:data.time,
@@ -719,6 +723,7 @@ io.on('connection',async(socket)=>{
         socket.on('privmsj', async(data)=>{
             try{
                 const { msj } = data;
+                if(msj.length === 0 ) return console.log("intento de mensaje vacio");
                 const result = await verAmistad(usC,data.recive_id)
                 if(result.length === 0) return console.log("no eres amigo");
                 room = result[0].ab_id;
@@ -733,7 +738,7 @@ io.on('connection',async(socket)=>{
                     args:{
                         envia:usC,
                         recive:data.recive_id,
-                        msj:msj,
+                        msj:msj.trim(),
                         date:data.time
                     }
                 });

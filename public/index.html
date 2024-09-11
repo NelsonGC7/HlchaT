@@ -835,7 +835,7 @@
                                             )
                                             formularioChat.addEventListener('submit',(e)=>{
                                                 e.preventDefault()
-                                                const messaje = inputChat.value;
+                                                const messaje = inputChat.value.trim();
                                                 if(messaje.length !== 0 || messaje !== ""){
                                                     IO.emit('privmsj',{recive_id:user.user_id,msj:messaje,time:HoraLocal()})
                                                     inputChat.value = '';
@@ -938,9 +938,9 @@
                         )
                         formularioChat.addEventListener('submit',(e)=>{
                             e.preventDefault()
-                            const messaje = inputChat.value;
-                            if(messaje.length !== 0 ||  messaje !== ""){
-                                IO.emit('privmsj',{recive_id:user.user_id,msj:messaje,time:HoraLocal()})
+                            const messaje = inputChat.value.trim();
+                            if(messaje.length !== 0 &&  messaje !== " "){
+                                IO.emit('privmsj',{recive_id:user.user_id,msj:messaje.trim(),time:HoraLocal()})
                                 inputChat.value = '';
 
                             }
@@ -1080,8 +1080,8 @@
                             document.querySelector('.chat-input')
                             .addEventListener("submit",(e)=>{
                                 e.preventDefault()
-                                const valor = document.querySelector('.chat-input input').value;
-                                if(valor.length === 0 || valor === "") return ;
+                                const valor = document.querySelector('.chat-input input').value.trim();
+                                if(valor.length === 0 || valor === " ") return ;
                                 IO.emit('place',{valor,userr:user,time:HoraLocal()});
                                 document.querySelector('.chat-input input').value = "";
                                 

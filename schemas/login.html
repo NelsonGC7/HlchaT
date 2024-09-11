@@ -160,14 +160,14 @@ body {
 @keyframes hideLogin {
 	0% {
 		background-color: #fff;
-		transform: translate(35%, -20px);
+		transform: translate(35%, -1.25rem);
 	}
 	50% {
 		transform: translate(0, 0);
 	}
 	100% {
 		background: #d7e7f1;
-		transform: translate(40%, 10px);
+		transform: translate(40%, 0.625rem);
 	}
 }
 
@@ -182,28 +182,28 @@ body {
 @keyframes showSignup {
 	0% {
 		background: #d7e7f1;
-		transform: translate(-40%, 10px) scaleY(.8);
+		transform: translate(-40%, 0.625rem) scaleY(.8);
 	}
 	50% {
 		transform: translate(0, 0) scaleY(.8);
 	}
 	100% {
 		background-color: #fff;
-		transform: translate(-35%, -20px) scaleY(1);
+		transform: translate(-35%, -1.25rem) scaleY(1);
 	}
 }
 
 @keyframes hideSignup {
 	0% {
 		background-color: #fff;
-		transform: translate(-35%, -20px) scaleY(1);
+		transform: translate(-35%, -1.25rem) scaleY(1);
 	}
 	50% {
 		transform: translate(0, 0) scaleY(.8);
 	}
 	100% {
 		background: #d7e7f1;
-		transform: translate(-40%, 10px) scaleY(.8);
+		transform: translate(-40%, 0.625rem) scaleY(.8);
 	}
 }
 
@@ -256,9 +256,13 @@ body {
 	font-size: 16px;
 	line-height: 40px;
 	color: #3b4465;
-  background: #eef9fe;
-  border: 1px solid #cddbef;
-  border-radius: 2px;
+  	background: #eef9fe;
+  	border: 1px solid #cddbef;
+  	border-radius: 2px;
+	&::placeholder{
+		font-size: small;
+		font-weight: 100;
+	}
 }
 
 .form [type='submit'] {
@@ -311,12 +315,12 @@ body {
       <form class="form form-login">
         <fieldset>
           <div class="input-block">
-            <label for="login-user">User</label>
+            <label for="login-user">Usuario</label>
             <input id="login-user" required placeholder="Usuario">
           </div>
           <div class="input-block">
             <label for="login-password">Password</label>
-            <input id="login-password" type="password" placeholder="A/b numeros" required>
+            <input id="login-password" type="password" placeholder="Contraseña" required>
           </div>
         </fieldset>
         <button type="submit" class="btn-login" id="send">Login</button>
@@ -332,7 +336,7 @@ body {
       <form class="form form-signup">
         <fieldset>
           <div class="input-block">
-            <label  for="sigup-user">User</label>
+            <label  for="sigup-user">Usuario</label>
             <input id="sigup-user" placeholder="ingrese un Usuario" required>
           </div>
           <div class="input-block">
@@ -340,12 +344,12 @@ body {
             <input id="signup-email" type="email" placeholder="Correo Electronico" required>
           </div>
           <div class="input-block">
-            <label for="signup-password" >Password</label>
-            <input id="signup-password" type="password" placeholder="Constraseña" required>
+            <label for="signup-password" >Contraseña</label>
+            <input id="signup-password" type="password" placeholder="una mayúscula y un número +8" required>
           </div>
           <div class="input-block">
-            <label for="signup-password-confirm">Confirm password</label>
-            <input id="signup-password-confirm" type="password"  placeholder="Contraseña" required>
+            <label for="signup-password-confirm">Confirmar Contraseña</label>
+            <input id="signup-password-confirm" type="password"  placeholder="una mayúscula y un número +8" required>
           </div>
         </fieldset>
         <button type="submit" class="btn-signup" id="btn-signup">Continue</button>
