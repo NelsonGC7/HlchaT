@@ -378,6 +378,8 @@
             color: #718096;
         }
 
+
+
         /* Estilos para el área principal de chat */
         .main-chat {
             width: 70%;
@@ -926,6 +928,9 @@
                                 document.querySelector('.sidebar').classList.remove('none')
                                 document.querySelector('.main-chat').classList.remove('active')
                                 conteiner.innerHTML = '';
+                                if(document.querySelector("#allUsers")){
+                                    document.querySelector("#allUsers").remove()
+                                }
 
                             }
                         )
@@ -1059,6 +1064,9 @@
                                 mishoms.style.display = 'block';
                                 document.querySelector('.tabs').style.display = 'flex';
                                 conteiner.innerHTML = '';
+                                if(document.querySelector("#allUsers")){
+                                    document.querySelector("#allUsers").remove()
+                                }
 
                             })
                              const input = document.querySelector('.chat-input input');
