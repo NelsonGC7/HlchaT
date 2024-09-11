@@ -825,22 +825,22 @@
                                                     document.querySelector('.sidebar').classList.remove('none')
                                                     document.querySelector('.main-chat').classList.remove('active')
                                                     conteiner.innerHTML = '';
+                                                    if(document.querySelector("#allUsers")){
+                                                        document.querySelector("#allUsers").remove()
+                                                        containerComplete.style.display = "grid";
 
-                                                }
-                                            )
-                                            document.querySelector('.chat-header figure').addEventListener('click',
-                                                ()=>{
-                                                    document.querySelector('.sidebar').classList.remove('none')
-                                                    document.querySelector('.main-chat').classList.remove('active')
-                                                    conteiner.innerHTML = '';
+                                                    }
 
                                                 }
                                             )
                                             formularioChat.addEventListener('submit',(e)=>{
                                                 e.preventDefault()
                                                 const messaje = inputChat.value;
-                                                IO.emit('privmsj',{recive_id:user.user_id,msj:messaje,time:HoraLocal()})
-                                                inputChat.value = '';
+                                                if(messaje.length !== 0 || messaje !== ""){
+                                                    IO.emit('privmsj',{recive_id:user.user_id,msj:messaje,time:HoraLocal()})
+                                                    inputChat.value = '';
+                                                }
+                                                
                                             })  
                                             
                                         })
@@ -930,6 +930,8 @@
                                 conteiner.innerHTML = '';
                                 if(document.querySelector("#allUsers")){
                                     document.querySelector("#allUsers").remove()
+                                    containerComplete.style.display = "grid"
+
                                 }
 
                             }
@@ -937,9 +939,13 @@
                         formularioChat.addEventListener('submit',(e)=>{
                             e.preventDefault()
                             const messaje = inputChat.value;
+                            if(messaje.length !== 0 ||  messaje !== ""){
+                                IO.emit('privmsj',{recive_id:user.user_id,msj:messaje,time:HoraLocal()})
+                                inputChat.value = '';
+
+                            }
                             
-                            IO.emit('privmsj',{recive_id:user.user_id,msj:messaje,time:HoraLocal()})
-                            inputChat.value = '';
+                            
                         })  
                         
                     })
@@ -1066,6 +1072,7 @@
                                 conteiner.innerHTML = '';
                                 if(document.querySelector("#allUsers")){
                                     document.querySelector("#allUsers").remove()
+                                    containerComplete.style.display = "grid"
                                 }
 
                             })
@@ -1074,7 +1081,7 @@
                             .addEventListener("submit",(e)=>{
                                 e.preventDefault()
                                 const valor = document.querySelector('.chat-input input').value;
-                                if(valor.length === 0) return console.log("ingresa algo de texto")
+                                if(valor.length === 0 || valor === "") return ;
                                 IO.emit('place',{valor,userr:user,time:HoraLocal()});
                                 document.querySelector('.chat-input input').value = "";
                                 
@@ -1101,7 +1108,7 @@
                                         
                                         `;
                                         useres.insertAdjacentHTML("beforeend",componentUser)
-                                        
+                                        // <-- error de  diplicado jsjsj de usuario
                                     }
 
                                     )
