@@ -253,6 +253,22 @@
             border-bottom: 2px solid #667eea;
             color: #667eea;
         }
+        
+        #allUsers{
+            height: 100%;
+            width: 100%;
+        }
+        #allUsers h5{
+            color: #8bcdc0;
+            background-color: #f5f7fa;
+            height: 2.5rem;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            font-size: large;
+        }
        
         .Contactos_users-user{
             display: flex;
@@ -308,6 +324,28 @@
             border-bottom: 1px solid #e0e0e0;
             transition: background-color 0.3s ease;
 
+        }
+        .friend-item.maps{
+            padding: 0 1rem;
+            height: 2rem;
+            .friend-info{
+                display: flex;
+                height: 100%;
+                gap: .3rem;
+                align-items: center;
+                .friend-name{
+                    margin: 0;
+                    display: grid;
+                    place-items: center;
+
+                }
+                .friend-status{
+                    display: none;
+                }
+            }
+            .friend-figure{
+                background-color: green;
+            }
         }
         .friend-item-search{
             position: relative;
@@ -612,7 +650,8 @@
         const serchfriend = document.querySelector('.sidebar-header form');
         const btonMap = document.getElementById('rejion')
         const send = document.querySelector('.search-send')
-        const tabs = document.querySelector('.tabs').children;
+        const tabs = document.querySelector('.tabs').children
+        const containerComplete = document.querySelector(".Container-complete")
         const newTabs = [...tabs]
      
        newTabs.forEach(res=> 
@@ -943,7 +982,16 @@
 
             }).catch(err=> err)
         btonMap.addEventListener("click",async()=>{
+
+            const allUsers = 
+            `
+            <section id ="allUsers">
+               
+
+            </section>
+            `
             
+
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -995,17 +1043,11 @@
                                     </div>
                                     `;
                                     chat2.insertAdjacentHTML('beforeend',component);
-                                    
-
-
+                    
                             }
                             );
                             document.querySelector('.chat-messages').scrollTop = document.querySelector('.chat-messages').scrollHeight;
                             };
-
-
-                            
-
 
                             document.querySelector('.chat-header figure').style.display = 'block';
                             document.querySelector('.chat-header figure')
@@ -1031,7 +1073,31 @@
                             });
                             IO.off(location)
                             IO.on(location,data =>{
-                                console.log(data)
+                                
+                                if(data.length !== 0){
+                                    containerComplete.style.display = "block"
+                                    containerComplete.insertAdjacentHTML("beforeend",allUsers)
+                                    const useres = document.querySelector("#allUsers")
+                                    useres.insertAdjacentHTML("beforeend",' <h5>Usuarios Conectados</h5>')
+                                    data.forEach(
+                                    (usuario)=>{
+                                        const componentUser = 
+                                        `
+                                         <div class="friend-item maps">
+                                            <figure class="friend-figure"></figure>
+                                                <div class="friend-info">
+                                                    <div class="friend-name">${usuario}</div>
+                                                    <div class="friend-status">online</div>
+                                                </div>
+                                        </div>
+                                        
+                                        `;
+                                        useres.insertAdjacentHTML("beforeend",componentUser)
+                                        
+                                    }
+
+                                    )
+                                };
                             });
                         });
                        

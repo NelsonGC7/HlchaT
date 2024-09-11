@@ -662,16 +662,13 @@ io.on('connection',async(socket)=>{
                 
                 
             };
-            socket.on('disconnect',()=>{
-                console.log("usuario de grupos desconectado")
-                    
-            })
+
         });
         socket.on('place',async(data)=>{
             io.to(room2).emit('place',data)
     
             try{
-                const result = await db.execute({
+                await db.execute({
                     sql:
                     `
                     INSERT INTO messages_ubications
@@ -717,7 +714,6 @@ io.on('connection',async(socket)=>{
             //console.log(recarge.rows)debug
             const messages = [...recarge.rows];
             io.to(room).emit(usC,messages);
-            console.log(data)
 
         });
         socket.on('privmsj', async(data)=>{
