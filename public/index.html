@@ -1150,11 +1150,13 @@
 
         })
         IO.on('place',(data)=>{
+            const hora = data.time.split('-')[1];
+            const minHora = hora.split(":")
 
-                            const quien  = data.userr === user ? 'sent' : 'received';
-                            const chat2 = document.querySelector('.chat-messages')
+            const quien  = data.userr === user ? 'sent' : 'received';
+            const chat2 = document.querySelector('.chat-messages')
 
-                            const component = 
+            const component = 
                             ` 
                             <div class="message ${quien}">
                                
@@ -1162,11 +1164,11 @@
                                     <h6>${data.userr}</h6>
                                     <p>${data.valor}</p>
                                 </div>
-                                    <div class="message-time">${HoraLocal()}</div>
+                                    <div class="message-time">${minHora[0]}:${minHora[1]}</div>
                             </div>
                             `;
-                            chat2.insertAdjacentHTML('beforeend',component);
-                            chat2.scrollTop = chat2.scrollHeight;
+            chat2.insertAdjacentHTML('beforeend',component);
+            chat2.scrollTop = chat2.scrollHeight;
 
 
         })
