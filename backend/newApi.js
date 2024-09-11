@@ -548,7 +548,7 @@ async function consultaMensajes(idSala,nameSala){
     const result = await db.execute({
         sql:
         `
-        SELECT message,sender_name FROM messages_ubications
+        SELECT message,sender_name,message_at FROM messages_ubications
         WHERE ubication_id = :id
         AND ubication_name = :name
         `,
@@ -607,9 +607,8 @@ io.on('connection',async(socket)=>{
                 room2 = await consulUbication(dat.address.county);
                 if(room2) socket.leave(room2);
                 socket.join(room2);
-                if(!usuarios_en_salas[room2]){//<-- creando almacenamiento de usuarios conectados para la sala
-                    usuarios_en_salas[room2] = []
-                };
+                if(!usuarios_en_salas[room2]) usuarios_en_salas[room2] = [];
+                
                 if(usuarios_en_salas[room2].includes(data.user)){
                    const indexDelete =  usuarios_en_salas[room2].indexOf(data.user);
                     usuarios_en_salas[room2].splice(indexDelete,1)
@@ -627,9 +626,8 @@ io.on('connection',async(socket)=>{
                 room2 = await consulUbication(dat.address.city);
                 if(room2) socket.leave(room2);
                 socket.join(room2);
-                if(!usuarios_en_salas[room2]){//<-- creando almacenamiento de usuarios conectados  para la sala
-                    usuarios_en_salas[room2] = []
-                };
+                if(!usuarios_en_salas[room2])usuarios_en_salas[room2] = [];
+
                 if(usuarios_en_salas[room2].includes(data.user)){
                     const indexDelete = usuarios_en_salas[room2].indexOf(data.user);
                    usuarios_en_salas[room2].splice(indexDelete,1)
@@ -646,14 +644,11 @@ io.on('connection',async(socket)=>{
                 room2 = await consulUbication(dat.address.state);
                 if(room2) socket.leave(room2);
                 socket.join(room2);
-                if(!usuarios_en_salas[room2]){//creando almacenamiento de usuarios conectados solo para la sala;
-                    usuarios_en_salas[room2] = []
-                };
+                if(!usuarios_en_salas[room2])usuarios_en_salas[room2] = [];
                 if(usuarios_en_salas[room2].includes(data.user)){
                     const indexDelete =  usuarios_en_salas[room2].indexOf(data.user)
                     usuarios_en_salas[room2].splice(indexDelete,1)
                 }
-                
                 usuarios_en_salas[room2].push(data.user)
                 const messages = await consultaMensajes(room2,location);
                 io.to(room2).emit(`${usC}Map`,messages,location);

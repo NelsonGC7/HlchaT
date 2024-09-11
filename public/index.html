@@ -435,6 +435,7 @@
                 text-align: left;
                 top: -.7rem;
                 left: .1rem;
+                width: max-content;
             }
             .message-time{
                 text-align: left;
@@ -449,6 +450,7 @@
                 text-align: right;
                 top: -.7rem;
                 right: .1rem;
+                width: max-content;
             }
         }
         .sent .message-content {
@@ -500,7 +502,8 @@
             height: min-content; 
         }
         .message-time {
-            font-size: 0.75em;
+            font-size: 0.61rem;
+            font-weight: 100;
             color: #a0aec0;
             margin-top: 5px;
             text-align: right;
@@ -1043,8 +1046,12 @@
                             if(messages.length !== 0 ){
                                 messages.forEach(mennsaje=>{
                                     const quien  = mennsaje.sender_name === user ? 'sent' : 'received';
+                                    const hora = mennsaje.message_at.split('-')[1];
+                                    const minHora = hora.split(":")
+                                    const amPM = Number(minHora[0]) > 12 ? "PM" : "AM";
+                                    
                                     const chat2 = document.querySelector('.chat-messages')
-                                  
+                                   console.log(mennsaje);
                                     const component = 
                                     ` 
                                     <div class="message ${quien}">
@@ -1053,7 +1060,7 @@
                                             <h6>${mennsaje.sender_name}</h6>
                                             <p>${mennsaje.message}</p>
                                         </div>
-                                            <div class="message-time">${HoraLocal()}</div>
+                                            <div class="message-time">${minHora[0]}:${minHora[1]}</div>
                                     </div>
                                     `;
                                     chat2.insertAdjacentHTML('beforeend',component);
@@ -1096,6 +1103,7 @@
                                     containerComplete.style.display = "block"
                                     containerComplete.insertAdjacentHTML("beforeend",allUsers)
                                     const useres = document.querySelector("#allUsers")
+                                    useres.innerHTML = "";
                                     useres.insertAdjacentHTML("beforeend",' <h5>Usuarios Conectados</h5>')
                                     data.forEach(
                                     (usuario)=>{
