@@ -598,16 +598,21 @@ io.on('connection',async(socket)=>{
             
         }
         socket.on('maps',async(data)=>{
-            if(room2) socket.leave(room);
+            if(room2) socket.leave(room2);
          
             const result  = await fetch(`https://us1.locationiq.com/v1/reverse?key=${process.env.LOCATION_KEY}&lat=${data.latJ}&lon=${data.lonj}&format=json&`)
             const dat = await result.json()
             if(dat.address.county){
                 location =  dat.address.county
                 room2 = await consulUbication(dat.address.county);
+                if(room2) socket.leave(room2);
                 socket.join(room2);
                 if(!usuarios_en_salas[room2]){//<-- creando almacenamiento de usuarios conectados para la sala
                     usuarios_en_salas[room2] = []
+                };
+                if(usuarios_en_salas[room2].includes(data.user)){
+                   const indexDelete =  usuarios_en_salas[room2].indexOf(data.user);
+                   console.log(indexDelete)
                 };
                 usuarios_en_salas[room2].push(data.user);
                 const messages = await consultaMensajes(room2,location);
@@ -620,10 +625,15 @@ io.on('connection',async(socket)=>{
             }else if(dat.address.city){
                 location = dat.address.city;
                 room2 = await consulUbication(dat.address.city);
+                if(room2) socket.leave(room2);
                 socket.join(room2);
                 if(!usuarios_en_salas[room2]){//<-- creando almacenamiento de usuarios conectados  para la sala
                     usuarios_en_salas[room2] = []
                 };
+                if(usuarios_en_salas[room2].includes(data.user)){
+                    const indexDelete = usuarios_en_salas[room2].indexOf(data.user);
+                    console.log(indexDelete)
+                }
                 usuarios_en_salas[room2].push(data.user)
                 const messages = await consultaMensajes(room2,location);
                 io.to(room2).emit(`${usC}Map`,messages,location);
@@ -634,16 +644,28 @@ io.on('connection',async(socket)=>{
             }else if(dat.address.state){
                 location = dat.address.state;
                 room2 = await consulUbication(dat.address.state);
+                if(room2) socket.leave(room2);
                 socket.join(room2);
                 if(!usuarios_en_salas[room2]){//creando almacenamiento de usuarios conectados solo para la sala;
                     usuarios_en_salas[room2] = []
                 };
+                if(usuarios_en_salas[room2].includes(data.user)){
+                    const indexDelete =  usuarios_en_salas[room2].indexOf(data.user)
+                    console.log(indexDelete)
+                }
+                
                 usuarios_en_salas[room2].push(data.user)
                 const messages = await consultaMensajes(room2,location);
                 io.to(room2).emit(`${usC}Map`,messages,location);
 
-                io.to(room2).emit(location, usuarios_en_salas[room2]);               
+                io.to(room2).emit(location, usuarios_en_salas[room2]); 
+                
+                
             };
+            socket.on('disconnect',()=>{
+                console.log("usuario de grupos desconectado")
+                    
+            })
         });
         socket.on('place',async(data)=>{
             io.to(room2).emit('place',data)

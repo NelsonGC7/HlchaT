@@ -1021,10 +1021,10 @@
                                 document.querySelector('.chat-input input').value = "";
                                 
                             });
-
+                            IO.off(location)
                             IO.on(location,data =>{
                                 console.log(data)
-                            })
+                            });
                         });
                        
                        
