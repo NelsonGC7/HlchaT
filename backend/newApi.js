@@ -694,7 +694,6 @@ io.on('connection',async(socket)=>{
 
         
         socket.on(usC,async(data)=>{
-            console.log(data)
             if(usuarios_en_salas[room2]){
                 if(usuarios_en_salas[room2].includes(data.user)){
                    const indexDelete = usuarios_en_salas[room2].indexOf(data.user);
