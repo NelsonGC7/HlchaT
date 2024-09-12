@@ -593,13 +593,12 @@ io.on('connection',async(socket)=>{
                     reciId:recive
                 }
             });
-            return result.rows
+            return result.rows;
 
             
         }
         socket.on('maps',async(data)=>{
             if(room2) socket.leave(room2);
-         
             const result  = await fetch(`https://us1.locationiq.com/v1/reverse?key=${process.env.LOCATION_KEY}&lat=${data.latJ}&lon=${data.lonj}&format=json&`)
             const dat = await result.json()
             if(dat.address.county){
@@ -657,6 +656,8 @@ io.on('connection',async(socket)=>{
                 
                 
             };
+            
+            
 
         });
         socket.on('place',async(data)=>{
@@ -690,6 +691,21 @@ io.on('connection',async(socket)=>{
             }
          
         })
+
+        
+        socket.on(usC,async(data)=>{
+            console.log(data)
+            if(usuarios_en_salas[room2]){
+                if(usuarios_en_salas[room2].includes(data.user)){
+                   const indexDelete = usuarios_en_salas[room2].indexOf(data.user);
+                   usuarios_en_salas[room2].splice(indexDelete,1)
+                }
+            }
+            io.to(room2).emit(location, usuarios_en_salas[room2])
+
+        })
+  
+       
 
 
         socket.on('joinC',async(data)=>{

@@ -998,6 +998,7 @@
                 
 
             }).catch(err=> err)
+            let location2 = null;
         btonMap.addEventListener("click",async()=>{
 
             const allUsers = 
@@ -1017,8 +1018,10 @@
                         IO.emit('maps',{latJ,lonj,user})
                         
                         IO.on(`${udId}Map`,(messages,location)=>{
+                            location2 = location;
+                            console.log(messages)
                             
-                        
+                           
                             mishoms.style.display = 'none';
                             conteiner.innerHTML = '';
                             document.querySelector('.tabs').style.display = 'none';
@@ -1051,7 +1054,6 @@
                                     const amPM = Number(minHora[0]) > 12 ? "PM" : "AM";
                                     
                                     const chat2 = document.querySelector('.chat-messages')
-                                   console.log(mennsaje);
                                     const component = 
                                     ` 
                                     <div class="message ${quien}">
@@ -1071,10 +1073,24 @@
                             };
 
                             document.querySelector('.chat-header figure').style.display = 'block';
+                            
+                             const input = document.querySelector('.chat-input input');
+                            document.querySelector('.chat-input')
+                            .addEventListener("submit",(e)=>{
+                                e.preventDefault()
+                                const valor = document.querySelector('.chat-input input').value.trim();
+                                if(valor.length === 0 || valor === " ") return ;
+                                IO.emit('place',{valor,userr:user,time:HoraLocal()});
+                                document.querySelector('.chat-input input').value = "";
+                                
+                            });
+                            
                             document.querySelector('.chat-header figure')
                             .addEventListener("click",
                             ()=>{
                                
+                                IO.emit(udId,{user})
+                                IO.off(location)
                                 document.querySelector('.sidebar').classList.remove('none')
                                 document.querySelector('.main-chat').classList.remove('active')
                                 mishoms.style.display = 'block';
@@ -1086,16 +1102,6 @@
                                 }
 
                             })
-                             const input = document.querySelector('.chat-input input');
-                            document.querySelector('.chat-input')
-                            .addEventListener("submit",(e)=>{
-                                e.preventDefault()
-                                const valor = document.querySelector('.chat-input input').value.trim();
-                                if(valor.length === 0 || valor === " ") return ;
-                                IO.emit('place',{valor,userr:user,time:HoraLocal()});
-                                document.querySelector('.chat-input input').value = "";
-                                
-                            });
                             IO.off(location)
                             IO.on(location,data =>{
                                 
