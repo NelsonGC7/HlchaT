@@ -627,12 +627,12 @@
 
         if(US[0].split('=')[0] === "user"){
                 antiguo = US[0].split('=')[1].split("%20%3D%20")[0];
-                tk =  US[1].split('=')[1]
-                udId = US[0].split('=')[1].split("%20%3D%20")[1]
+                tk =  US[1].split('=')[1];
+                udId = US[0].split('=')[1].split("%20%3D%20")[1];
         }else{
                 antiguo = US[1].split('=')[1].split("%20%3D%20")[0];
-                tk =  US[0].split('=')[1]
-                udId =  US[1].split('=')[1].split("%20%3D%20")[1]   
+                tk =  US[0].split('=')[1];
+                udId =  US[1].split('=')[1].split("%20%3D%20")[1];
         }
 
 
@@ -654,14 +654,14 @@
 ///resolver error de usuarios en diferentes navegadoress
         const formSearch = document.querySelector('.form-search');
         const conteiner =document.querySelector(".main-chat")
-        const mishoms = document.querySelector('.friend-list')//xhek
+        const mishoms = document.querySelector('.friend-list')
         const serchfriend = document.querySelector('.sidebar-header form');
         const btonMap = document.getElementById('rejion')
         const send = document.querySelector('.search-send')
         const tabs = document.querySelector('.tabs').children
         const containerComplete = document.querySelector(".Container-complete")
         const newTabs = [...tabs]
-     
+     // cleaqueo de tabs<--- contactos y solicitudes
        newTabs.forEach(res=> 
         res.addEventListener('click',()=>{ 
             if(res.nextElementSibling){
@@ -708,27 +708,23 @@
         })
         .then(res => res.json())
             .then(res=> {
-                
                 const jsonPending= res.pending;
-                const jsonAssepted = res.assepted
+                const jsonAssepted = res.assepted;
+                console.log(jsonPending)
                 if(jsonPending.length > 0){
-                
                   
                     const P = document.createElement('p');
                     P.id = "numSoli"
-                    P.textContent = jsonPending.length;           
+                    P.textContent = jsonPending.length;  
+                    console.log(P)         
                     newTabs[1].insertAdjacentElement('beforeend',P);
 
                 }
 
                 jsonPending.forEach(user =>{
-                    let nuevoUser = ''
-                    user.user_name.split(" ")
-                    .forEach((word)=>{
-                        nuevoUser = nuevoUser + `-${word}`;
-                    })
+                    let nUsr =  String(user.user_name.split(" ").join("-"))
                     const amistad = `
-                        <div class="Contactos_users-user ${nuevoUser}"> 
+                        <div class="Contactos_users-user"  id="${nUsr}"> 
                             <figure class="Contactos_user-perfil">
                             
                             </figure>
@@ -738,13 +734,19 @@
                             </div>
                         </div>
                     `
-                    document.querySelector('.friend-soli').insertAdjacentHTML('beforeend',amistad)
-                    const select = document.querySelector(`.${nuevoUser}`)
+                   const select2 =  document.querySelector('.friend-soli');
+                   select2.insertAdjacentHTML('beforeend',amistad);
+                //    .insertAdjacentHTML('beforeend',amistad)
+                    let select = document.getElementById(`${nUsr}`);
+                    console.log(select)
                     const userFriend = select.children[1];
                     const btonFriend = select.children[2]
+                    console.log(userFriend)
+                    console.log(btonFriend)
                     
                     btonFriend.addEventListener('click',async()=>{
                         try{
+                            console.log("funciono")
                             const fech = await fetch('/addfriend',{
                                 method:'POST',
                                 headers:{
@@ -777,7 +779,7 @@
                                         if(user.user_name.includes(" ")){
                                             user.user_name.split(" ")
                                             .forEach(word =>{
-                                                nuevoU = nuevoU + `-${word}`
+                                                nuevoU = nuevoU + `${word}-`
                                             })
                                         }else{
                                             nuevoU = user.user_name;
@@ -802,6 +804,7 @@
                                         }
                                         
                                         let cluster = document.querySelector(`.cluster-${nuevoU}`);
+                                        console.log(cluster)
                                         cluster.addEventListener("click",()=>{
                                             IO.emit('joinC',{recive_id:user.user_id})//entrada de sala<-----
                                             
@@ -852,17 +855,8 @@
                                         })
 
                                         
+                                     });
                                     });
-                                   
-                                
-                                        
-                                                            
-
-                                    });
-
-                                    
-
-
 
                             },200);
                         }catch{
@@ -880,7 +874,7 @@
                     if(user.user_name.includes(" ")){
                         user.user_name.split(" ")
                         .forEach(word =>{
-                            nuevoU = nuevoU + `-${word}`
+                            nuevoU = nuevoU + `${word}-`
                         })
                     }else{
                         nuevoU = user.user_name;
