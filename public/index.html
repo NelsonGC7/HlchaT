@@ -688,13 +688,11 @@
             .then(res=> {
                 const jsonPending= res.pending;
                 const jsonAssepted = res.assepted;
-                console.log(jsonPending)
                 if(jsonPending.length > 0){
                   
                     const P = document.createElement('p');
                     P.id = "numSoli"
-                    P.textContent = jsonPending.length;  
-                    console.log(P)         
+                    P.textContent = jsonPending.length;       
                     newTabs[1].insertAdjacentElement('beforeend',P);
 
                 }
@@ -716,15 +714,11 @@
                    select2.insertAdjacentHTML('beforeend',amistad);
                 //    .insertAdjacentHTML('beforeend',amistad)
                     let select = document.getElementById(`${nUsr}`);
-                    console.log(select)
                     const userFriend = select.children[1];
                     const btonFriend = select.children[2]
-                    console.log(userFriend)
-                    console.log(btonFriend)
                     
                     btonFriend.addEventListener('click',async()=>{
                         try{
-                            console.log("funciono")
                             const fech = await fetch('/addfriend',{
                                 method:'POST',
                                 headers:{
@@ -782,7 +776,7 @@
                                         }
                                         
                                         let cluster = document.querySelector(`.cluster-${nuevoU}`);
-                                        console.log(cluster)
+                                       
                                         cluster.addEventListener("click",()=>{
                                             IO.emit('joinC',{recive_id:user.user_id})//entrada de sala<-----
                                             
@@ -990,10 +984,7 @@
                         IO.emit('maps',{latJ,lonj,user})
                         
                         IO.on(`${udId}Map`,(messages,location)=>{
-                            location2 = location;
-                            console.log(messages)
-                            
-                           
+                            location2 = location; 
                             mishoms.style.display = 'none';
                             conteiner.innerHTML = '';
                             document.querySelector('.tabs').style.display = 'none';
