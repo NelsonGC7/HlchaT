@@ -585,29 +585,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js" integrity="sha512-11t8Q+vY9JlCrr+PveZKTYJq8n7O09Y5X/pk/aMd3vJugSvu4xOunGEUzaADqL3I8cZKE/pBwwCfXzDkRJh2sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="module" defer >
-       /*
-       const socket = io()
-        const form = document.querySelector('form')
-        const input = document.querySelector('input')
-        const mensajes = document.querySelector('ul');
-        socket.on('chat message', (msg) => {
-            const item = document.createElement('li')
-            item.textContent = msg
-            mensajes.appendChild(item)
-        })
-        
-        
-        form.addEventListener('submit', (e) => {
-            e.preventDefault()
-            if(input.value){
-                socket.emit('chat message', input.value)
-                input.value = ''
-                
 
-            }
-        })
-
-        */
         const US  = document.cookie.split(';')//
         const HoraLocal = ()=>{
                     const aora = new Date()
@@ -1214,18 +1192,7 @@
     
                             send.insertAdjacentHTML('beforeend',` <figure class="active"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(63, 1, 90, 0.374);"><path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"></path></svg></figure>`);
                             data.forEach( user=>{
-                                let nuevo  = '';
-                                if(user.user_name.includes(" ")){
-                                    user.user_name.split(" ")
-                                    .forEach((word)=>{
-                                       
-                                        nuevo = nuevo + `-${word}`
-                                    })
-                                  
-                                
-                                }else{
-                                    nuevo = user.user_name;
-                                }
+                                let nuevo  = `soli${String(user.user_name.split(" ").join())}`;
                               
                                 const amistad = `
                                     <div class="friend-item-search ${nuevo}">
